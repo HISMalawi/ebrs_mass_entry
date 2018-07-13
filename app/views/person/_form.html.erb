@@ -1,0 +1,243 @@
+<style>
+  label{
+      margin-left: 20px;
+      margin-right: 10px;
+      min-width: 100px;
+      text-align: left;
+  }
+
+  input, select{
+      width: 200px;
+      background: lightblue;
+      font-weight: bold;
+      padding: 5px;
+  }
+  .row{
+      margin-bottom: 15px;
+  }
+  .form-error{
+      display: none;
+  }
+</style>
+<script src="/js/jquery.form-validator.min.js"></script>
+
+  <form enctype="multipart/form-data" id="form-create-person" accept-charset="UTF-8"
+        action="<%= @action%>" method="POST"><input type="hidden">
+
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
+
+    <fieldset>
+      <legend>DETAILS OF CHILD</legend>
+      <div data-row-span="2" class="row">
+        <div data-field-span="1">
+          <label>Surname:</label>
+          <input type="text" name="last_name" data-validation="required">
+        </div>
+        <div data-field-span="1">
+          <label>First Name:</label>
+          <input type="text" name="first_name" data-validation="required">
+        </div>
+        <div data-field-span="1">
+          <label>Other Names:</label>
+          <input type="text" name="middle_name">
+        </div>
+      </div>
+
+      <div data-row-span="2" class="row">
+
+        <div data-field-span="1">
+          <label>Date of Birth:</label>
+          <input type="text" name="date_of_birth"
+                 class="datepicker" data-validation="required">
+        </div>
+
+        <div data-field-span="1">
+          <label>Sex:</label>
+          <div>
+            <select name="gender" data-validation="required">
+              <option></option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div data-row-span="2" class="row" style="margin-bottom: 0px;">
+        <label style="color: gray;text-decoration: underline;">Place of Birth</label>
+      </div>
+
+      <div data-row-span="2" class="row" style="margin-bottom: 35px;">
+        <div data-field-span="1">
+          <label>District:</label>
+          <input type="text" name="last_name" data-validation="required">
+        </div>
+        <div data-field-span="1">
+          <label>TA:</label>
+          <input type="text" name="first_name" data-validation="required">
+        </div>
+        <div data-field-span="1">
+          <label>Village:</label>
+          <input type="text" name="middle_name">
+        </div>
+      </div>
+
+      <div data-row-span="2" class="row" style="border-top: 1px dotted ghostwhite;padding-top: 5px;">
+        <label style="width: 280px;">Are the parents married to each other?:</label>
+        <div data-field-span="1">
+          <select name="parents_married" data-validation="required">
+            <option></option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+      </div>
+
+      <div data-row-span="2" class="row">
+        <label style="width: 280px;">If yes, date of marriage:</label>
+        <div data-field-span="1">
+          <input type="text" name="date_of_birth"
+                 class="datepicker" data-validation="required">
+        </div>
+      </div>
+
+    </fieldset>
+
+
+    <fieldset>
+      <legend>DETAILS OF MOTHER</legend>
+      <div data-row-span="2" class="row">
+        <div data-field-span="1">
+          <label>Surname:</label>
+          <input type="text" name="mother_last_name" data-validation="required">
+        </div>
+        <div data-field-span="1">
+          <label>First Name:</label>
+          <input type="text" name="mother_first_name" data-validation="required">
+        </div>
+        <div data-field-span="1">
+          <label>Other Names:</label>
+          <input type="text" name="mother_middle_name">
+        </div>
+      </div>
+
+      <div data-row-span="2" class="row">
+        <div data-field-span="1">
+          <label>Nationality:</label>
+          <input type="text" name="mother_nationality" data-validation="required">
+        </div>
+        <div data-field-span="1">
+          <label>ID Number:</label>
+          <input type="text" name="mother_id_number" data-validation="required">
+        </div>
+      </div>
+
+    </fieldset>
+
+    <fieldset>
+      <legend>DETAILS OF FATHER</legend>
+      <div data-row-span="2" class="row">
+        <div data-field-span="1">
+          <label>Surname:</label>
+          <input type="text" name="father_last_name">
+        </div>
+        <div data-field-span="1">
+          <label>First Name:</label>
+          <input type="text" name="father_first_name" >
+        </div>
+        <div data-field-span="1">
+          <label>Other Names:</label>
+          <input type="text" name="father_middle_name">
+        </div>
+      </div>
+
+      <div data-row-span="2" class="row">
+        <div data-field-span="1">
+          <label>Nationality:</label>
+          <input type="text" name="father_nationality">
+        </div>
+        <div data-field-span="1">
+          <label>ID Number:</label>
+          <input type="text" name="father_id_number">
+        </div>
+      </div>
+
+    </fieldset>
+
+    <fieldset>
+      <legend>INFORMANTS DETAILS</legend>
+      <div data-row-span="2" class="row">
+        <div data-field-span="1">
+          <label>Surname:</label>
+          <input type="text" name="informant_last_name">
+        </div>
+        <div data-field-span="1">
+          <label>First Name:</label>
+          <input type="text" name="informant_first_name" >
+        </div>
+        <div data-field-span="1">
+          <label>Other Names:</label>
+          <input type="text" name="informant_middle_name">
+        </div>
+      </div>
+
+      <div data-row-span="2" class="row">
+        <div data-field-span="1">
+          <label>Informant Relationship to Child:</label>
+          <select name="parents_married" data-validation="required">
+            <option></option>
+            <option>Mother</option>
+            <option>Father</option>
+          </select>
+        </div>
+      </div>
+
+    </fieldset>
+
+    <div class="form-group actions-row">
+      <button type="button submit" class="btn btn-next"><span class="glyphicon glyphicon-save"></span> Next </button>
+      <button type="button submit" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Save</button>
+    </div>
+
+  </form>
+
+<script>
+    $.validate({
+        modules : 'security',
+        onError : function(){
+
+        }
+    });
+
+    $.validate({
+        onError : function(){
+
+        }
+    });
+
+    datepicker = jQuery('.datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        endDate: '0y'
+    });
+
+    function districts(id){
+        var node = __$(id);
+        jQuery(node).clear();
+
+        jQuery.ajax({
+            url: "/districts",
+            success: function(results){
+                var opts = JSON.parse(results);
+                for(var i in opts){
+                    var option = document.createElement("option");
+                    option.innerHTML = opts[i];
+                    option.setAttribute("value", opts[i]);
+                }
+
+            },
+            error: function(){
+
+            }
+        })
+    }
+</script>
