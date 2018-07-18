@@ -98,5 +98,8 @@ Rails.application.routes.draw do
   get "/outcomes/:client_id"  => "encounter#outcomes"
 
   get "/districts" => "location#districts"
+  get "/tas" => "location#tas"
+  get "/villages" => "location#villages"
+  post "/save_record" => "person#save_record"
 
 end

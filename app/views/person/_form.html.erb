@@ -11,22 +11,32 @@
       background: lightblue;
       font-weight: bold;
       padding: 5px;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      -ms-box-sizing:content-box;
+      -moz-box-sizing:content-box;
+      -webkit-box-sizing:content-box;
+      box-sizing:content-box;
   }
   .row{
-      margin-bottom: 15px;
+      margin-bottom: 20px;
   }
   .form-error{
       display: none;
   }
+fieldset{
+    height: 50vh;
+}
 </style>
 <script src="/js/jquery.form-validator.min.js"></script>
 
   <form enctype="multipart/form-data" id="form-create-person" accept-charset="UTF-8"
-        action="<%= @action%>" method="POST"><input type="hidden">
+        action="/save_record" method="POST"><input type="hidden">
 
     <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
 
-    <fieldset>
+    <fieldset id="child">
       <legend>DETAILS OF CHILD</legend>
       <div data-row-span="2" class="row">
         <div data-field-span="1">
@@ -67,18 +77,20 @@
         <label style="color: gray;text-decoration: underline;">Place of Birth</label>
       </div>
 
-      <div data-row-span="2" class="row" style="margin-bottom: 35px;">
-        <div data-field-span="1">
+      <div data-row-span="2" class="row " style="margin-bottom: 35px;">
+        <div data-field-span="1" class="form-inline col-lg-4">
           <label>District:</label>
-          <input type="text" name="last_name" data-validation="required">
+          <select id="birth_district" type="text" name="birth_district" data-validation="required"
+          onchange="tas('birth_ta', this.value, ['birth_village'])"></select>
         </div>
-        <div data-field-span="1">
+        <div data-field-span="1"  class="form-inline col-lg-4">
           <label>TA:</label>
-          <input type="text" name="first_name" data-validation="required">
+          <select id="birth_ta" type="text" name="birth_ta" data-validation="required"
+          onchange="villages('birth_village', document.getElementById('birth_district').value, document.getElementById('birth_ta').value)"> </select>
         </div>
-        <div data-field-span="1">
+        <div data-field-span="1"  class="form-inline col-lg-4">
           <label>Village:</label>
-          <input type="text" name="middle_name">
+          <select id="birth_village" type="text" name="birth_village"></select>
         </div>
       </div>
 
@@ -104,7 +116,7 @@
     </fieldset>
 
 
-    <fieldset>
+    <fieldset id="mother" style="display: none">
       <legend>DETAILS OF MOTHER</legend>
       <div data-row-span="2" class="row">
         <div data-field-span="1">
@@ -134,7 +146,7 @@
 
     </fieldset>
 
-    <fieldset>
+    <fieldset id="father" style="display: none">
       <legend>DETAILS OF FATHER</legend>
       <div data-row-span="2" class="row">
         <div data-field-span="1">
@@ -164,7 +176,7 @@
 
     </fieldset>
 
-    <fieldset>
+    <fieldset id="informant" style="display: none">
       <legend>INFORMANTS DETAILS</legend>
       <div data-row-span="2" class="row">
         <div data-field-span="1">
@@ -184,24 +196,97 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1">
           <label>Informant Relationship to Child:</label>
-          <select name="parents_married" data-validation="required">
+          <select name="informant_relationship" data-validation="required">
             <option></option>
-            <option>Mother</option>
-            <option>Father</option>
+            <option>Grandmother/Grandfather</option>
+            <option>Brother/Sister</option>
+            <option>Aunt/Uncle</option>
+            <option>Mother-in-law/Father-in-law</option>
+            <option>Sister-in-marriage/Brother-in-marriage</option>
+            <option>Other</option>
           </select>
+        </div>
+      </div>
+
+      <div data-row-span="2" class="row" style="margin-bottom: 0px;border-top: 1px dotted gray;">
+        <label style="color: gray;text-decoration: underline;">Informant Address </label>
+      </div>
+
+      <div data-row-span="2" class="row " style="margin-bottom: 35px;">
+        <div data-field-span="1" class="form-inline col-lg-4">
+          <label>District:</label>
+          <select id="informant_district" type="text" name="informant_district" data-validation="required"
+                  onchange="tas('informant_ta', this.value, ['informant_village'])"></select>
+        </div>
+        <div data-field-span="1"  class="form-inline col-lg-4">
+          <label>TA:</label>
+          <select id="informant_ta" type="text" name="informant_ta" data-validation="required"
+                  onchange="villages('informant_village', document.getElementById('informant_district').value, document.getElementById('informant_ta').value)"> </select>
+        </div>
+        <div data-field-span="1"  class="form-inline col-lg-4">
+          <label>Village:</label>
+          <select id="informant_village" type="text" name="informant_village"></select>
+        </div>
+      </div>
+
+      <div data-row-span="1" class="row">
+        <div data-field-span="1">
+          <label>Postal Address:</label>
+          <input type="text" name="informant_address_line1" placeholder="e.g CodeBuild Systems">
+        </div>
+
+        <div data-field-span="1">
+          <label>&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Telephone Number:</label>
+          <input type="text" name="informant_address_line2" placeholder="e.g 0991763413">
+        </div>
+      </div>
+
+      <div data-row-span="1" class="row">
+        <div data-field-span="1">
+          <label style="color: white;">Postal Address:</label>
+          <input type="text" name="informant_address_line2" placeholder="e.g P.O Box 31777">
+        </div>
+
+        <div data-field-span="1">
+          <label>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;Form Signed?:</label>
+          <select id="form_signed" name="form_signed" data-validation="required">
+            <option></option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+      </div>
+
+      <div data-row-span="1" class="row">
+        <div data-field-span="1">
+          <label style="color: white;">Postal Address:</label>
+          <input type="text" name="informant_address_line3" placeholder="e.g Balaka">
+        </div>
+
+        <div data-field-span="1">
+          <label>&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date of Reporting:</label>
+          <input id="date_reported" type="text" class="datepicker" name="date_reported">
         </div>
       </div>
 
     </fieldset>
 
     <div class="form-group actions-row">
-      <button type="button submit" class="btn btn-next"><span class="glyphicon glyphicon-save"></span> Next </button>
       <button type="button submit" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Save</button>
+      <div type="next" style="font-weight: bold;" class="btn btn-next btn-success" onclick="next()" ><span></span> Next >> </div>
+      <div type="back" style="font-weight: bold;" class="btn btn-next btn-success" onclick="back()"><span></span> << Back </div>
     </div>
 
   </form>
 
 <script>
+
+    var sets = document.getElementsByTagName("fieldset");
+    var cur_pos = 0;
+
     $.validate({
         modules : 'security',
         onError : function(){
@@ -220,18 +305,45 @@
         endDate: '0y'
     });
 
-    function districts(id){
-        var node = __$(id);
-        jQuery(node).clear();
+    function next(){
+        if(cur_pos < sets.length -1){
+            for(var i = 0; i < sets.length; i++){
+                sets[i].style.display = "none";
+            }
+            cur_pos += 1;
+            sets[cur_pos].style.display = "block";
+        }
+    }
+
+    function back(){
+        if(cur_pos > 0){
+            for(var i = 0; i < sets.length; i++){
+                sets[i].style.display = "none";
+            }
+            cur_pos -= 1;
+            sets[cur_pos].style.display = "block";
+        }
+    }
+
+    function districts(id, dep){
+        for(var i = 0; i < dep.length; i++){
+            jQuery("#" + dep[i]).val("");
+            jQuery(document.getElementById(dep[i])).empty();
+        }
+
+        var node = document.getElementById(id);
+        jQuery(node).empty();
 
         jQuery.ajax({
             url: "/districts",
             success: function(results){
+
                 var opts = JSON.parse(results);
                 for(var i in opts){
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
                     option.setAttribute("value", opts[i]);
+                    node.appendChild(option);
                 }
 
             },
@@ -240,4 +352,61 @@
             }
         })
     }
+
+    function tas(id, parent, dep){
+        for(var i = 0; i < dep.length; i++){
+            jQuery("#" + dep[i]).val("");
+            jQuery(document.getElementById(dep[i])).empty();
+        }
+
+        var node = document.getElementById(id);
+        jQuery(node).empty();
+
+        jQuery.ajax({
+            url: ("/tas?parent=" + parent),
+            success: function(results){
+
+                var opts = JSON.parse(results);
+                for(var i in opts){
+                    var option = document.createElement("option");
+                    option.innerHTML = opts[i];
+                    option.setAttribute("value", opts[i]);
+                    node.appendChild(option);
+                }
+
+            },
+            error: function(){
+
+            }
+        })
+    }
+
+    function villages(id, district, ta){
+
+        var node = document.getElementById(id);
+        jQuery(node).empty();
+
+        jQuery.ajax({
+            url: ("/villages?district=" + district + "&ta=" + ta),
+            success: function(results){
+
+                var opts = JSON.parse(results);
+                console.log(opts)
+                for(var i in opts){
+                    var option = document.createElement("option");
+                    option.innerHTML = opts[i];
+                    option.setAttribute("value", opts[i]);
+                    node.appendChild(option);
+                }
+
+            },
+            error: function(){
+            }
+        })
+    }
+
+    districts("birth_district", ['birth_ta', 'birth_village'])
+    districts("informant_district", ['informant_ta', 'informant_village'])
+
+
 </script>

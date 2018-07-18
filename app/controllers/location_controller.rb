@@ -137,4 +137,59 @@ class LocationController < ApplicationController
         "data" => @records}.to_json and return
   end
 
+  def districts
+    tag_id = LocationTag.where(name: "District").first.id;
+    locations = Location.find_by_sql(
+        "SELECT l.name FROM location l INNER JOIN location_tag_map m ON l.location_id = m.location_id  WHERE m.location_tag_id = #{tag_id} ").map(&:name)
+
+    render text: ([""] + locations).to_json
+  end
+
+  def tas
+    district = params[:parent]
+    district_tag_id = LocationTag.where(name: "District").first.id
+    tag_id = LocationTag.where(name: "Traditional Authority").first.id
+
+    district_id = Location.find_by_sql(
+        "SELECT l.location_id FROM location l
+          INNER JOIN location_tag_map m ON l.location_id = m.location_id
+          WHERE m.location_tag_id = #{district_tag_id} AND l.name = '#{district}' "
+    ).last.location_id
+
+    locations = Location.find_by_sql(
+        "SELECT l.name FROM location l
+          INNER JOIN location_tag_map m ON l.location_id = m.location_id
+          WHERE m.location_tag_id = #{tag_id} AND l.parent_location = #{district_id}").map(&:name)
+
+    render text: ([""] + locations).to_json
+  end
+
+  def villages
+    district = params[:district]
+    ta = params[:ta]
+
+    district_tag_id = LocationTag.where(name: "District").first.id
+    tag_id = LocationTag.where(name: "Village").first.id
+    ta_tag_id = LocationTag.where(name: "Traditional Authority").first.id
+
+    district_id = Location.find_by_sql(
+        "SELECT l.location_id FROM location l
+          INNER JOIN location_tag_map m ON l.location_id = m.location_id
+          WHERE m.location_tag_id = #{district_tag_id} AND l.name = '#{district}' "
+    ).last.location_id
+
+    ta_id = Location.find_by_sql(
+        "SELECT l.location_id FROM location l
+          INNER JOIN location_tag_map m ON l.location_id = m.location_id
+          WHERE m.location_tag_id = #{ta_tag_id} AND l.name = \"#{ta}\" AND l.parent_location = #{district_id} "
+    ).last.location_id
+
+    locations = Location.find_by_sql(
+        "SELECT l.name FROM location l
+          INNER JOIN location_tag_map m ON l.location_id = m.location_id
+          WHERE m.location_tag_id = #{tag_id} AND l.parent_location = #{ta_id}").map(&:name)
+
+    render text: ([""] + locations).to_json
+  end
+
 end

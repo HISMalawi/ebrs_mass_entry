@@ -107,8 +107,9 @@ ActiveRecord::Schema.define(version: 0) do
     t.string   "ta_of_birth",          			limit: 255
     t.string   "village_of_birth", 					limit: 255
 		t.string   "parents_married",						limit: 255
+    t.string   "date_of_marriage",					limit: 255
 
-		t.string   "mother_first_name",					limit: 255
+    t.string   "mother_first_name",					limit: 255
 		t.string   "mother_middle_name",				limit: 255
 		t.string   "mother_last_name",					limit: 255
 		t.string   "mother_nationality",				limit: 255
