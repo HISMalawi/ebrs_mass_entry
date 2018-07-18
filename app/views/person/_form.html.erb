@@ -1,3 +1,33 @@
+<script>
+    (function($){
+        $.fn.serializeHash = function() {
+            var hash = {}
+
+            function stringKey(key, value) {
+                var beginBracket = key.lastIndexOf('[');
+                if (beginBracket == -1) {
+                    var hash = {};
+                    hash[key] = value;
+                    return hash;
+                }
+                var newKey = key.substr(0, beginBracket);
+                var newValue = {};
+                newValue[key.substring(beginBracket + 1, key.length - 1)] = value;
+                return stringKey(newKey, newValue);
+            }
+
+            var els = $(this).find(':input').get();
+            $.each(els, function() {
+                if (this.name && !this.disabled && (this.checked || /select|textarea/i.test(this.nodeName) || /hidden|text|search|tel|url|email|password|datetime|date|month|week|time|datetime-local|number|range|color/i.test(this.type))) {
+                    var val = $(this).val();
+                    $.extend(true, hash, stringKey(this.name, val));
+                }
+            });
+            return hash;
+        };
+    })(jQuery);
+</script>
+
 <style>
   label{
       margin-left: 20px;
@@ -20,14 +50,38 @@
       box-sizing:content-box;
   }
   .row{
-      margin-bottom: 20px;
+      margin-bottom: 10px;
   }
-  .form-error{
+  fieldset .form-error{
       display: none;
   }
-fieldset{
-    height: 50vh;
-}
+    fieldset{
+        min-height: 50vh;
+    }
+
+  #completeness_details tr{
+      border-top: 1px dotted lightgray
+  }
+
+  .labell{
+      text-align: left;
+      font-weight: bold !important;
+      padding: 0px;
+  }
+  .modal-header{
+      background: #006f95 none repeat scroll 0 0;
+      padding: 12px;
+  }
+  #completeness_details td{
+      padding: 8px;
+      border: 1px dotted ghostwhite;
+  }
+  #completeness_details .labell{
+  }
+  #mother_id_number, #father_id_number{
+      text-transform: uppercase;
+  }
+
 </style>
 <script src="/js/jquery.form-validator.min.js"></script>
 
@@ -39,32 +93,32 @@ fieldset{
     <fieldset id="child">
       <legend>DETAILS OF CHILD</legend>
       <div data-row-span="2" class="row">
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input type="text" name="last_name" data-validation="required">
+          <input id="last_name" type="text" name="last_name" data-validation="required length" data-validation-length="2-55">
         </div>
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input type="text" name="first_name" data-validation="required">
+          <input id="first_name" type="text" name="first_name" data-validation="required length" data-validation-length="2-55">
         </div>
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input type="text" name="middle_name">
+          <input id="middle_name" type="text" name="middle_name" >
         </div>
       </div>
 
       <div data-row-span="2" class="row">
 
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Date of Birth:</label>
-          <input type="text" name="date_of_birth"
-                 class="datepicker" data-validation="required">
+          <input id="date_of_birth" type="text" name="date_of_birth"
+                 class="datepicker" data-validation="required, date" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy">
         </div>
 
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Sex:</label>
           <div>
-            <select name="gender" data-validation="required">
+            <select id="gender" name="gender" data-validation="required">
               <option></option>
               <option>Male</option>
               <option>Female</option>
@@ -78,38 +132,36 @@ fieldset{
       </div>
 
       <div data-row-span="2" class="row " style="margin-bottom: 35px;">
-        <div data-field-span="1" class="form-inline col-lg-4">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>District:</label>
           <select id="birth_district" type="text" name="birth_district" data-validation="required"
           onchange="tas('birth_ta', this.value, ['birth_village'])"></select>
         </div>
-        <div data-field-span="1"  class="form-inline col-lg-4">
+        <div data-field-span="1"  class="form-inline col-lg-3">
           <label>TA:</label>
           <select id="birth_ta" type="text" name="birth_ta" data-validation="required"
           onchange="villages('birth_village', document.getElementById('birth_district').value, document.getElementById('birth_ta').value)"> </select>
         </div>
-        <div data-field-span="1"  class="form-inline col-lg-4">
+        <div data-field-span="1"  class="form-inline col-lg-3">
           <label>Village:</label>
-          <select id="birth_village" type="text" name="birth_village"></select>
+          <select id="birth_village" type="text" name="birth_village" data-validation="required"></select>
         </div>
       </div>
 
       <div data-row-span="2" class="row" style="border-top: 1px dotted ghostwhite;padding-top: 5px;">
-        <label style="width: 280px;">Are the parents married to each other?:</label>
-        <div data-field-span="1">
-          <select name="parents_married" data-validation="required">
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>Parents married to each other?:</label>
+          <select id="married" name="parents_married" data-validation="required" onchange="checkMarriage()">
             <option></option>
             <option>Yes</option>
             <option>No</option>
           </select>
         </div>
-      </div>
 
-      <div data-row-span="2" class="row">
-        <label style="width: 280px;">If yes, date of marriage:</label>
-        <div data-field-span="1">
-          <input type="text" name="date_of_birth"
-                 class="datepicker" data-validation="required">
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>If yes, date of marriage:</label>
+          <input type="text" name="date_of_birth" id="date_of_marriage" disabled="disabled"
+                 class="datepicker" data-validation="date" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy">
         </div>
       </div>
 
@@ -119,28 +171,31 @@ fieldset{
     <fieldset id="mother" style="display: none">
       <legend>DETAILS OF MOTHER</legend>
       <div data-row-span="2" class="row">
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input type="text" name="mother_last_name" data-validation="required">
+          <input type="text" name="mother_last_name" data-validation="required length" data-validation-length="2-55">
         </div>
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input type="text" name="mother_first_name" data-validation="required">
+          <input type="text" name="mother_first_name" data-validation="required length" data-validation-length="2-55">
         </div>
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input type="text" name="mother_middle_name">
+          <input type="text" name="mother_middle_name" >
         </div>
       </div>
 
       <div data-row-span="2" class="row">
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Nationality:</label>
-          <input type="text" name="mother_nationality" data-validation="required">
+          <select id="mother_nationality" name="mother_nationality" data-validation="required">
+            <option></option>
+          </select>
         </div>
-        <div data-field-span="1">
-          <label>ID Number:</label>
-          <input type="text" name="mother_id_number" data-validation="required">
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label >ID Number:</label>
+          <input id="mother_id_number" type="text" name="mother_id_number" data-validation="required length" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
+                 data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
         </div>
       </div>
 
@@ -149,28 +204,31 @@ fieldset{
     <fieldset id="father" style="display: none">
       <legend>DETAILS OF FATHER</legend>
       <div data-row-span="2" class="row">
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input type="text" name="father_last_name">
+          <input type="text" name="father_last_name"  data-validation="father" id="father_last_name">
         </div>
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input type="text" name="father_first_name" >
+          <input type="text" name="father_first_name" id="father_first_name"  data-validation="father" >
         </div>
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input type="text" name="father_middle_name">
+          <input type="text" name="father_middle_name" id="father_middle_name"  data-validation="father" >
         </div>
       </div>
 
       <div data-row-span="2" class="row">
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Nationality:</label>
-          <input type="text" name="father_nationality">
+          <select id="father_nationality" name="father_nationality"  data-validation="father" >
+            <option></option>
+          </select>
         </div>
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>ID Number:</label>
-          <input type="text" name="father_id_number">
+          <input id="father_id_number" type="text" name="father_id_number" data-validation="father_id" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
+                 data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
         </div>
       </div>
 
@@ -179,22 +237,22 @@ fieldset{
     <fieldset id="informant" style="display: none">
       <legend>INFORMANTS DETAILS</legend>
       <div data-row-span="2" class="row">
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
           <input type="text" name="informant_last_name">
         </div>
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
           <input type="text" name="informant_first_name" >
         </div>
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
           <input type="text" name="informant_middle_name">
         </div>
       </div>
 
       <div data-row-span="2" class="row">
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Informant Relationship to Child:</label>
           <select name="informant_relationship" data-validation="required">
             <option></option>
@@ -213,44 +271,42 @@ fieldset{
       </div>
 
       <div data-row-span="2" class="row " style="margin-bottom: 35px;">
-        <div data-field-span="1" class="form-inline col-lg-4">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>District:</label>
           <select id="informant_district" type="text" name="informant_district" data-validation="required"
                   onchange="tas('informant_ta', this.value, ['informant_village'])"></select>
         </div>
-        <div data-field-span="1"  class="form-inline col-lg-4">
+        <div data-field-span="1"  class="form-inline col-lg-3">
           <label>TA:</label>
           <select id="informant_ta" type="text" name="informant_ta" data-validation="required"
                   onchange="villages('informant_village', document.getElementById('informant_district').value, document.getElementById('informant_ta').value)"> </select>
         </div>
-        <div data-field-span="1"  class="form-inline col-lg-4">
+        <div data-field-span="1"  class="form-inline col-lg-3">
           <label>Village:</label>
-          <select id="informant_village" type="text" name="informant_village"></select>
+          <select id="informant_village" data-validation="required" type="text" name="informant_village"></select>
         </div>
       </div>
 
       <div data-row-span="1" class="row">
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Postal Address:</label>
           <input type="text" name="informant_address_line1" placeholder="e.g CodeBuild Systems">
         </div>
 
-        <div data-field-span="1">
-          <label>&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Telephone Number:</label>
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>Telephone Number:</label>
           <input type="text" name="informant_address_line2" placeholder="e.g 0991763413">
         </div>
       </div>
 
       <div data-row-span="1" class="row">
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label style="color: white;">Postal Address:</label>
           <input type="text" name="informant_address_line2" placeholder="e.g P.O Box 31777">
         </div>
 
-        <div data-field-span="1">
-          <label>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;Form Signed?:</label>
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>Form Signed?:</label>
           <select id="form_signed" name="form_signed" data-validation="required">
             <option></option>
             <option>Yes</option>
@@ -260,58 +316,223 @@ fieldset{
       </div>
 
       <div data-row-span="1" class="row">
-        <div data-field-span="1">
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label style="color: white;">Postal Address:</label>
           <input type="text" name="informant_address_line3" placeholder="e.g Balaka">
         </div>
 
-        <div data-field-span="1">
-          <label>&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date of Reporting:</label>
-          <input id="date_reported" type="text" class="datepicker" name="date_reported">
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>Date of Reporting:</label>
+          <input id="date_reported" type="text" class="datepicker" name="date_reported" data-validation="required">
         </div>
       </div>
 
     </fieldset>
 
     <div class="form-group actions-row">
-      <button type="button submit" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Save</button>
-      <div type="next" style="font-weight: bold;" class="btn btn-next btn-success" onclick="next()" ><span></span> Next >> </div>
-      <div type="back" style="font-weight: bold;" class="btn btn-next btn-success" onclick="back()"><span></span> << Back </div>
+      <button type="button" onclick="validateForm()" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Save</button>
+      <button type="button" onclick="clearForm()" class="btn btn-warning" ><span></span> Clear </button>
+      <button type="button" class="btn btn-danger" style="margin-left: 450px;" onclick="window.location = '/person/index?active_tab=person'; " ><b>Cancel</b></button>
+
+      <div type="next submit" style="font-weight: bold;" class="btn btn-next btn-success" onclick="next()" ><span></span> Next >> </div>
+      <div type="back submit" style="font-weight: bold;" class="btn btn-next btn-success" onclick="back()"><span></span> << Back </div>
+
+
     </div>
+
+
+
+  <div class="modal fade" id="completenessModal" tabindex="-1" role="dialog" aria-labelledby="completenessModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="printerModalLabel" style="text-align: left; color: white; font-weight: bold; text-align: center;">
+            Check Completeness
+          </h4>
+        </div>
+        <div class="modal-body">
+        <span style="text-align:center;">
+          <table align="center" id="completeness_details">
+
+            <tr>
+              <td class="labell">Child Name</td>
+              <td style="text-align: left; padding-left:50px;" id="child_name"></td>
+            </tr>
+            <tr>
+              <td class="labell">Child Gender</td>
+              <td style="text-align: left; padding-left:50px;" id="child_gender">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Child Date of Birth</td>
+              <td style="text-align: left; padding-left:50px;" id="child_date_of_birth">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Child Place of Birth</td>
+              <td style="text-align: left; padding-left:50px;" id="child_place_of_birth">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Mother Name</td>
+              <td style="text-align: left; padding-left:50px;" id="mother_name">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Nationality of Mother</td>
+              <td style="text-align: left; padding-left:50px;" id="mother_nationality">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Mother National ID</td>
+              <td style="text-align: left; padding-left:50px;" id="mother_id_number">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Father Name</td>
+              <td style="text-align: left; padding-left:50px;" id="father_name">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Nationality of Father</td>
+              <td style="text-align: left; padding-left:50px;" id="father_nationality">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Father National ID</td>
+              <td style="text-align: left; padding-left:50px;" id="father_id_number">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Parents Married to each Other?</td>
+              <td style="text-align: left; padding-left:50px;" id="parents_married">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Parents signed?</td>
+              <td style="text-align: left; padding-left:50px;" id="form_signed">&nbsp;</td>
+            </tr>
+
+          </table>
+        </span>
+
+          <div class="modal-footer">
+            <button type="button submit" class="btn btn-primary" ><b>Save Record</b></button>
+            <button type="button" class="btn btn-warning" data-dismiss="modal"><b>Keep Editing</b></button>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   </form>
 
 <script>
+    function __$(id){
+        return document.getElementById(id);
+    }
 
     var sets = document.getElementsByTagName("fieldset");
     var cur_pos = 0;
 
-    $.validate({
-        modules : 'security',
-        onError : function(){
+    $.formUtils.addValidator({
+        name : 'father',
+        validatorFunction : function(value, $el, config, language, $form) {
+            var validate;
+            var id = $el.attr("id");
 
-        }
+            if ((__$("father_first_name").value.trim().length > 0 ||
+                    __$("father_last_name").value.trim().length > 0 ||
+                    __$("father_middle_name").value.trim().length > 0 ||
+                    __$("father_nationality").value.trim().length > 0 ||
+                    __$("father_id_number").value.trim().length > 0)){
+
+                validate = true;
+            }else{
+                validate = false
+            }
+
+            if (validate && value.trim().length == 0){
+                return false;
+            }else {
+                return true;
+            }
+        },
+        errorMessage : 'Field is required',
+        errorMessageKey: 'FatherNotComplete'
+    });
+
+    $.formUtils.addValidator({
+        name : 'father_id',
+        validatorFunction : function(value, $el, config, language, $form) {
+            var validate;
+            var id = $el.attr("id");
+
+            if ((__$("father_first_name").value.trim().length > 0 ||
+                    __$("father_last_name").value.trim().length > 0 ||
+                    __$("father_middle_name").value.trim().length > 0 ||
+                    __$("father_nationality").value.trim().length > 0 ||
+                    __$("father_id_number").value.trim().length > 0)){
+
+                validate = true;
+            }else{
+                validate = false
+            }
+
+            if (validate && ((__$("father_id_number").value.trim().length != 8) ||
+                    (__$("father_id_number").value.trim().match(/\i|o|I|O/g)))){
+                return false;
+            }else {
+                return true;
+            }
+        },
+        errorMessage : 'ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead',
+        errorMessageKey: 'IDNotComplete'
     });
 
     $.validate({
+        validateOnBlur : true,
+        showHelpOnFocus : true,
+        addSuggestions : true,
+        errorMessagePosition : 'top',
+        scrollToTopOnError : false,
         onError : function(){
-
+            alert("Could not validate some input elements")
         }
     });
+
+    <% (["Malawian"] + @nationalities).uniq.each do |n|
+    next if n.blank?
+    %>
+        var opt = document.createElement("option");
+        opt.value = "<%=n%>";
+        opt.innerHTML = "<%=n%>";
+        __$("mother_nationality").appendChild(opt);
+    <% end %>
+
+    <% (["Malawian"] + @nationalities).uniq.each do |n|
+    next if n.blank?
+    %>
+        var opt = document.createElement("option");
+        opt.value = "<%=n%>";
+        opt.innerHTML = "<%=n%>";
+        __$("father_nationality").appendChild(opt);
+    <% end %>
 
     datepicker = jQuery('.datepicker').datepicker({
         format: 'dd/mm/yyyy',
         endDate: '0y'
     });
 
-    function next(){
-        if(cur_pos < sets.length -1){
-            for(var i = 0; i < sets.length; i++){
-                sets[i].style.display = "none";
+    function next() {
+
+        jQuery(sets[cur_pos]).find("input, select").validate();
+        if (jQuery(sets[cur_pos]).find(".error").length > 0) {
+            jQuery(".form-error").show();
+            jQuery("fieldset .form-error").hide();
+        }else {
+
+            if (cur_pos < sets.length - 1) {
+                for (var i = 0; i < sets.length; i++) {
+                    sets[i].style.display = "none";
+                }
+                cur_pos += 1;
+                sets[cur_pos].style.display = "block";
             }
-            cur_pos += 1;
-            sets[cur_pos].style.display = "block";
         }
     }
 
@@ -323,6 +544,10 @@ fieldset{
             cur_pos -= 1;
             sets[cur_pos].style.display = "block";
         }
+    }
+
+    function clearForm(){
+        jQuery(sets[cur_pos]).find("input, select").val("");
     }
 
     function districts(id, dep){
@@ -381,6 +606,17 @@ fieldset{
         })
     }
 
+    function checkMarriage(){
+        if (__$("married").value.trim() == "Yes"){
+            __$("date_of_marriage").removeAttribute("disabled");
+            __$("date_of_marriage").setAttribute("data-validation", "required date")
+        }else{
+            __$("date_of_marriage").removeAttribute("data-validation");
+            __$("date_of_marriage").setAttribute("disabled", "disabled");
+            __$("date_of_marriage").value = "";
+        }
+    }
+
     function villages(id, district, ta){
 
         var node = document.getElementById(id);
@@ -391,7 +627,7 @@ fieldset{
             success: function(results){
 
                 var opts = JSON.parse(results);
-                console.log(opts)
+
                 for(var i in opts){
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
@@ -405,8 +641,59 @@ fieldset{
         })
     }
 
+    function validateForm(){
+
+        var hash = jQuery("#form-create-person").serializeHash();
+        for(var k in hash){
+            if (hash[k] == null){
+                hash[k] = "";
+            }
+        }
+
+        $("#completeness_details #child_name").html(hash['first_name'] + " " + hash['middle_name'] + " " + hash["last_name"]);
+        $("#completeness_details #child_gender").html(hash['gender']);
+        $("#completeness_details #child_date_of_birth").html(hash['date_of_birth']);
+        $("#completeness_details #child_place_of_birth").html(hash['birth_village'] + " " + hash["birth_ta"] + " " + hash["birth_district"]);
+
+        $("#completeness_details #mother_name").html(hash['mother_first_name'] + " " + hash['mother_middle_name'] + " " + hash["mother_last_name"]);
+        $("#completeness_details #father_name").html(hash['father_first_name'] + " " + hash['father_middle_name'] + " " + hash["father_last_name"]);
+
+        $("#completeness_details #mother_nationality").html(hash['mother_nationality']);
+        $("#completeness_details #father_nationality").html(hash['father_nationality']);
+
+        $("#completeness_details #mother_id_number").html(hash['mother_id_number']);
+        $("#completeness_details #father_id_number").html(hash['father_id_number']);
+
+        $("#completeness_details #parents_married").html(hash['parents_married']);
+        $("#completeness_details #form_signed").html(hash['form_signed']);
+
+        jQuery('#completenessModal').modal('show');
+    }
+
+    jQuery('#form-create-person').submit(function(e){
+        e.preventDefault();
+        jQuery.ajax(
+                {
+                    url: "/save_record",
+                    type: "POST",
+                    data: $("#form-create-person").serialize(),
+                    success: function(response){
+                        if (response == "OK") {
+                            window.location = "/person/new?active_tab=home";
+                        }else{
+                            alert("something Went Wrong!!")
+                        }
+                    },
+                    error: function(){
+                        alert("Something Went Wrong!!");
+                    }
+                }
+        )
+    })
+
+
     districts("birth_district", ['birth_ta', 'birth_village'])
     districts("informant_district", ['informant_ta', 'informant_village'])
 
-
+    $("select option").css("background-color","red");
 </script>

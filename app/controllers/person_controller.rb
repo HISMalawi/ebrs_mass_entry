@@ -10,6 +10,12 @@ class PersonController < ApplicationController
     end
 
     @user = Person.new
+
+    tag_id = LocationTag.where(name: "Country").first.id;
+    locations = Location.find_by_sql(
+        "SELECT l.country FROM location l INNER JOIN location_tag_map m ON l.location_id = m.location_id  WHERE m.location_tag_id = #{tag_id} ")
+
+    @nationalities = locations.map(&:country)
     @action = '/person/new'
   end
 
@@ -77,5 +83,7 @@ class PersonController < ApplicationController
     person.created_at              = DateTime.now
     person.updated_at              = DateTime.now
     person.save
+
+    render :text => "OK";
   end
 end

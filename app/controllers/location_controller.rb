@@ -137,6 +137,20 @@ class LocationController < ApplicationController
         "data" => @records}.to_json and return
   end
 
+  def nationalities(cizenships=false)
+    tag_id = LocationTag.where(name: "Country").first.id;
+    locations = Location.find_by_sql(
+        "SELECT l.name, l.country FROM location l INNER JOIN location_tag_map m ON l.location_id = m.location_id  WHERE m.location_tag_id = #{tag_id} ")
+
+    if cizenships == true
+      locations.map(&:country)
+    else
+      locations.map(&:name)
+    end
+
+    render text: ([""] + locations).to_json
+  end
+
   def districts
     tag_id = LocationTag.where(name: "District").first.id;
     locations = Location.find_by_sql(

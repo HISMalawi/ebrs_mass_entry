@@ -116,9 +116,6 @@ class UserController < ApplicationController
 
     if request.post? and params[:email].present? && params[:password].present?
       user = User.where(:username => params[:email]).first
-      if user.blank?
-        user = User.where(:email => params[:email]).first
-      end
 
       if user.present? && user.password_matches?(params[:password]) && user.deleted_at.blank?
         session[:user_id] = user.id
