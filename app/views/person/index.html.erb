@@ -6,6 +6,60 @@
       background-color: #d59392;
       color: #000;
   }
+
+  #example{
+      background-color: #d3d3d3;
+  }
+  #example tr td{
+      border-left: 0.5px dotted lightgray;
+      padding: 7px;
+  }
+
+  .action-btn .fa{
+      min-width: 35px;
+      font-size: 18px;
+
+  }
+
+  .checkbox{
+      margin-left: 5px;
+
+  }
+
+  th{
+      background: lightsteelblue;
+      color: black;
+  }
+
+  .panel-heading{
+      margin-bottom: 20px;
+  }
+
+  .action-btn{
+      border: none !important;
+      margin-top: 0px;
+      min-width: 50px;
+      padding: 3px;
+      margin-left: 5px;
+
+  }
+
+  .fix-middle{
+      position: fixed;
+      z-index: 2000;
+      left: 55%;
+      top: 40%;
+  }
+
+  #roll-options{
+      width: 100%;
+  }
+
+  #roll-options td{
+      padding-right: 20px;
+  }
+
+
 </style>
 
 <div>
@@ -25,50 +79,29 @@
         </a>
       </div>
     </div>
+
+
+
     <div class="panel-body">
 
-        <table style="width: 100%;" class="data-table table table-condensed table-striped">
-            <thead>
-            <tr role="row">
-              <th>Username</th>
-              <th>Name</th>
-              <th>E-mail</th>
-              <th>Sex</th>
-              <th>Designation</th>
-              <th>Status</th>
-              <th>&nbsp;</th>
-            </tr>
-            </thead>
+
+      <table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+          <th style="text-align: left;">Name</th>
+          <th style="text-align: center;">Birthdate</th>
+          <th style="text-align: left;">Gender</th>
+          <th style="text-align: left;">Place Of Birth</th>
+          <th style="text-align: left;">Mother Name</th>
+          <th style="text-align: left;">Father Name</th>
+          <th>&nbsp;</th>
+        </tr>
+        </thead>
+
         <tbody>
-        <% @people.each do |u|%>
-
-              <tr class="odd" role="row" >
-
-
-              <td class="sorting_1"><%= u.username%></td>
-              <td><%= u.name%></td>
-              <td><%= u.email%></td>
-              <td><%= u.sex%></td>
-              <td class="status"><%= u.deleted_at.present? ? 'Blocked' : 'Active'%></td>
-              <td>
-
-                <!-- edit this user (uses the edit method found at GET /user/{id}/edit -->
-                <a class="btn btn-sm btn-info" href="/user/edit?user_id=<%=u.person_id%>">
-                  <span class="glyphicon glyphicon-edit"></span>
-                  Edit
-                </a>
-
-                <!-- show the user (uses the show method found at GET /user/{id} -->
-                <a class="btn btn-sm btn-success" href="/user/view?user_id=<%=u.person_id%>">
-                  <span class="glyphicon glyphicon-eye-open"></span>
-                  View
-                </a>
-
-              </td>
-            </tr>
-            <% end %>
         </tbody>
-        </table>
+      </table>
+
     </div>
 </div>
 
@@ -94,20 +127,65 @@
   </div>
 </div>
 
+
 <script>
+
+  function __$(id){
+    return document.createElement(id);
+  }
+
     $(document).ready(function() {
-        $('.data-table').DataTable({
-            responsive: true
-        });
+        initTable();
     });
 
-   function deletes(link){
+    function deletes(link){
        __$('modal').setAttribute('link', link)
        $('#modal').modal('show');
-   }
+    }
 
-   function doDelete(){
-       window.location = __$('modal').getAttribute('link');
-   }
+    var url = "<%= request.url%>";
+    function initTable(){
 
+        table =  jQuery('#example').DataTable(
+                {
+                    "processing": true,
+                    "serverSide": true,
+                    "ordering": false,
+                    "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+
+                       // jQuery('td .action-btn', nRow).parent().parent().css('background', 'white');
+                    },
+                    "ajax": {
+                        "url": "",
+                        "data": function(d){
+
+                        },
+                        dataFilter: function(data){
+                            var json = jQuery.parseJSON( data );
+
+                            for(var i = 0; i < json['data'].length; i ++){
+
+                                var last_index = json['data'][i].length - 1;
+                                var person_id = json['data'][i][last_index]
+
+                                var clas = "nonid";
+                                var popup = "";
+                                json['data'][i][last_index] =   '<td> ' +
+                                        '<button onclick="javascript:location=\'/edit/' + person_id + popup + ' \'"     ' +
+
+                                        '    class="action-btn btn btn-warning btn-xs ' + clas + '"><i class="fa fa-pencil"></i></button>' +
+                                        '<button onclick="javascript:location=\'/show_person/' + person_id + popup + ' \'"     ' +
+
+                                        '    class="action-btn btn btn-success btn-xs ' + clas + '"><i class="fa fa-eye"></i></button></td>';
+                            }
+                            return JSON.stringify( json );
+                        }
+                    }}
+        );
+    }
+
+    function reloadDataTable(node){
+        type = __$('birth_type').value;
+        table.ajax.reload();
+    }
 </script>

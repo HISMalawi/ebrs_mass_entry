@@ -148,7 +148,7 @@ class LocationController < ApplicationController
       locations.map(&:name)
     end
 
-    render text: ([""] + locations).to_json
+    render text: ([""] + locations.sort).to_json
   end
 
   def districts
@@ -156,7 +156,7 @@ class LocationController < ApplicationController
     locations = Location.find_by_sql(
         "SELECT l.name FROM location l INNER JOIN location_tag_map m ON l.location_id = m.location_id  WHERE m.location_tag_id = #{tag_id} ").map(&:name)
 
-    render text: ([""] + locations).to_json
+    render text: ([""] + locations.sort).to_json
   end
 
   def tas
@@ -175,7 +175,7 @@ class LocationController < ApplicationController
           INNER JOIN location_tag_map m ON l.location_id = m.location_id
           WHERE m.location_tag_id = #{tag_id} AND l.parent_location = #{district_id}").map(&:name)
 
-    render text: ([""] + locations).to_json
+    render text: ([""] + locations.sort).to_json
   end
 
   def villages
@@ -203,7 +203,7 @@ class LocationController < ApplicationController
           INNER JOIN location_tag_map m ON l.location_id = m.location_id
           WHERE m.location_tag_id = #{tag_id} AND l.parent_location = #{ta_id}").map(&:name)
 
-    render text: ([""] + locations).to_json
+    render text: ([""] + locations.sort).to_json
   end
 
 end

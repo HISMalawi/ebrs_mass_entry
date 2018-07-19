@@ -80,8 +80,8 @@ Rails.application.routes.draw do
   get "person/new"
   post "person/new"
 
-  get "person/edit"
-  post "person/edit"
+  get "/edit/:person_id"  => "person#edit"
+  post "/edit/:person_id"  => "person#edit"
 
   get "person/view"
   get "module/view_module"
@@ -100,6 +100,7 @@ Rails.application.routes.draw do
   get "/districts" => "location#districts"
   get "/tas" => "location#tas"
   get "/villages" => "location#villages"
+  get '/show_person/:person_id' => 'person#show'
   post "/save_record" => "person#save_record"
 
 end

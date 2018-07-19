@@ -89,21 +89,22 @@
         action="/save_record" method="POST"><input type="hidden">
 
     <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
+    <%= hidden_field_tag :person_id, @person.person_id -%>
 
     <fieldset id="child">
       <legend>DETAILS OF CHILD</legend>
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input id="last_name" type="text" name="last_name" data-validation="required length" data-validation-length="2-55">
+          <input id="last_name" type="text" value="<%=@person.last_name%>" name="last_name" data-validation="required length" data-validation-length="2-55">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input id="first_name" type="text" name="first_name" data-validation="required length" data-validation-length="2-55">
+          <input id="first_name" type="text" value="<%=@person.first_name%>" name="first_name" data-validation="required length" data-validation-length="2-55">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input id="middle_name" type="text" name="middle_name" >
+          <input id="middle_name" type="text" name="middle_name" value="<%=@person.middle_name%>">
         </div>
       </div>
 
@@ -111,7 +112,7 @@
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Date of Birth:</label>
-          <input id="date_of_birth" type="text" name="date_of_birth"
+          <input id="date_of_birth" type="text" name="date_of_birth" value="<%=@person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil%>"
                  class="datepicker" data-validation="required, date" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy">
         </div>
 
@@ -173,28 +174,28 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input type="text" name="mother_last_name" data-validation="required length" data-validation-length="2-55">
+          <input id="mother_last_name" type="text" name="mother_last_name" data-validation="required length" data-validation-length="2-55" value="<%=@person.mother_last_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input type="text" name="mother_first_name" data-validation="required length" data-validation-length="2-55">
+          <input id="mother_first_name" type="text" name="mother_first_name" data-validation="required length" data-validation-length="2-55" value="<%=@person.mother_first_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input type="text" name="mother_middle_name" >
+          <input id="mother_middle_name" type="text" name="mother_middle_name" value="<%=@person.mother_middle_name%>">
         </div>
       </div>
 
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Nationality:</label>
-          <select id="mother_nationality" name="mother_nationality" data-validation="required">
+          <select id="mother_nationality" name="mother_nationality" data-validation="required" value="<%=@person.mother_nationality%>">
             <option></option>
           </select>
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label >ID Number:</label>
-          <input id="mother_id_number" type="text" name="mother_id_number" data-validation="required length" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
+          <input value="<%=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number" data-validation="required length" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
         </div>
       </div>
@@ -206,28 +207,28 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input type="text" name="father_last_name"  data-validation="father" id="father_last_name">
+          <input type="text" name="father_last_name"  data-validation="father" id="father_last_name" value="<%=@person.father_last_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input type="text" name="father_first_name" id="father_first_name"  data-validation="father" >
+          <input type="text" name="father_first_name" id="father_first_name"  data-validation="father" value="<%=@person.father_first_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input type="text" name="father_middle_name" id="father_middle_name"  data-validation="father" >
+          <input type="text" name="father_middle_name" id="father_middle_name" value="<%=@person.father_middle_name%>">
         </div>
       </div>
 
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Nationality:</label>
-          <select id="father_nationality" name="father_nationality"  data-validation="father" >
+          <select id="father_nationality" name="father_nationality"  data-validation="father" value="<%=@person.father_nationality%>">
             <option></option>
           </select>
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>ID Number:</label>
-          <input id="father_id_number" type="text" name="father_id_number" data-validation="father_id" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
+          <input value="<%=@person.father_id_number%>" id="father_id_number" type="text" name="father_id_number" data-validation="father_id" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
         </div>
       </div>
@@ -239,22 +240,22 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input type="text" name="informant_last_name">
+          <input type="text" name="informant_last_name" value="<%=@person.informant_last_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input type="text" name="informant_first_name" >
+          <input type="text" name="informant_first_name" value="<%=@person.informant_first_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input type="text" name="informant_middle_name">
+          <input type="text" name="informant_middle_name" value="<%=@person.informant_middle_name%>">
         </div>
       </div>
 
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Informant Relationship to Child:</label>
-          <select name="informant_relationship" data-validation="required">
+          <select id="informant_relationship" name="informant_relationship" data-validation="required" value="<%=@person.informant_relationship%>">
             <option></option>
             <option>Grandmother/Grandfather</option>
             <option>Brother/Sister</option>
@@ -290,24 +291,24 @@
       <div data-row-span="1" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Postal Address:</label>
-          <input type="text" name="informant_address_line1" placeholder="e.g CodeBuild Systems">
+          <input type="text" name="informant_address_line1" placeholder="e.g CodeBuild Systems" value="<%=@person.informant_address_line1%>">
         </div>
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Telephone Number:</label>
-          <input type="text" name="informant_address_line2" placeholder="e.g 0991763413">
+          <input type="text" name="informant_phone_number" placeholder="e.g 0991763413" value="<%=@person.informant_phone_number%>">
         </div>
       </div>
 
       <div data-row-span="1" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label style="color: white;">Postal Address:</label>
-          <input type="text" name="informant_address_line2" placeholder="e.g P.O Box 31777">
+          <input type="text" name="informant_address_line2" placeholder="e.g P.O Box 31777" value="<%=@person.informant_address_line2%>">
         </div>
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Form Signed?:</label>
-          <select id="form_signed" name="form_signed" data-validation="required">
+          <select id="form_signed" name="form_signed" data-validation="required" value="<%=@person.form_signed%>">
             <option></option>
             <option>Yes</option>
             <option>No</option>
@@ -318,12 +319,12 @@
       <div data-row-span="1" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label style="color: white;">Postal Address:</label>
-          <input type="text" name="informant_address_line3" placeholder="e.g Balaka">
+          <input type="text" name="informant_address_line3" placeholder="e.g Balaka" value="<%=@person.informant_address_line3%>">
         </div>
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Date of Reporting:</label>
-          <input id="date_reported" type="text" class="datepicker" name="date_reported" data-validation="required">
+          <input id="date_reported" type="text" class="datepicker" name="date_reported" data-validation="required" value="<%=@person.date_reported.to_date.strftime("%d/%m/%Y") rescue nil%>">
         </div>
       </div>
 
@@ -568,6 +569,18 @@
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
                     option.setAttribute("value", opts[i]);
+
+                    <% if request.path.match("/edit")%>
+                        if('<%= @person.district_of_birth%>' == opts[i] && id=="birth_district") {
+                            option.setAttribute("selected", "true");
+                            tas('birth_ta', opts[i], ['birth_village'])
+                        }
+
+                        if('<%= @person.informant_district%>' == opts[i] && id=="informant_district") {
+                            option.setAttribute("selected", "true");
+                            tas('informant_ta', opts[i], ['informant_village'])
+                        }
+                    <% end %>
                     node.appendChild(option);
                 }
 
@@ -596,6 +609,18 @@
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
                     option.setAttribute("value", opts[i]);
+                    <% if request.path.match("/edit")%>
+
+                        if('<%= @person.ta_of_birth%>' == opts[i] && id=="birth_ta") {
+                            option.setAttribute("selected", "true");
+                            villages('birth_village', __$('birth_district').value, opts[i]);
+                        }
+
+                        if('<%= @person.informant_ta%>' == opts[i] && id=="informant_ta") {
+                            option.setAttribute("selected", "true");
+                            villages('informant_village', __$('informant_district').value, opts[i]);
+                        }
+                    <% end %>
                     node.appendChild(option);
                 }
 
@@ -632,6 +657,16 @@
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
                     option.setAttribute("value", opts[i]);
+
+                    <% if request.path.match("/edit")%>
+                        if('<%= @person.village_of_birth%>' == opts[i] && id=="birth_village") {
+                            option.setAttribute("selected", "true");
+                        }
+
+                        if('<%= @person.informant_village%>' == opts[i] && id=="informant_village") {
+                            option.setAttribute("selected", "true");
+                        }
+                    <% end %>
                     node.appendChild(option);
                 }
 
@@ -692,8 +727,22 @@
     })
 
 
-    districts("birth_district", ['birth_ta', 'birth_village'])
-    districts("informant_district", ['informant_ta', 'informant_village'])
+    districts("birth_district", ['birth_ta', 'birth_village']);
+    districts("informant_district", ['informant_ta', 'informant_village']);
+
+   <% if request.path.match("/edit")%>
+
+    __$("gender").value = "<%= @person.gender%>";
+    __$("married").value = "<%= @person.parents_married%>";
+    __$("mother_nationality").value = "<%= @person.mother_nationality%>";
+    __$("father_nationality").value = "<%= @person.father_nationality%>";
+    __$("informant_relationship").value = "<%= @person.informant_relationship%>";
+    __$("informant_district").value = "<%= @person.informant_district%>";
+    __$("form_signed").value = "<%= @person.form_signed%>";
+    __$("date_of_marriage").value = "<%= @person.date_of_marriage%>";
+   <% else %>
+
+   <% end %>
 
     $("select option").css("background-color","red");
 </script>
