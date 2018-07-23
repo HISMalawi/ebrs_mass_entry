@@ -21,4 +21,16 @@ class Person < ActiveRecord::Base
   def place_of_birth
     "#{self.village_of_birth}, #{self.ta_of_birth}, #{self.district_of_birth}".gsub(/\s+/, " ")
   end
+
+  def self.dump
+    file = File.open("#{Rails.root}/dump.csv", "w"){|f|
+      f.write(Person.new.attributes.keys.join(","))
+    }
+
+    data = "\n"
+    Person.all.each do |person|
+      data = data + person.attributes.values.join(", ") + "\n"
+      data +=
+    end
+  end
 end

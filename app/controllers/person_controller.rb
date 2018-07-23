@@ -219,4 +219,8 @@ class PersonController < ApplicationController
         ]
     }
   end
+
+  def dump_data
+    csv = Person.dump
+  end
 end
