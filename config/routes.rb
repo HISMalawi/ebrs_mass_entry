@@ -102,6 +102,7 @@ Rails.application.routes.draw do
   get "/villages" => "location#villages"
   get '/show_person/:person_id' => 'person#show'
   post "/save_record" => "person#save_record"
+  get  "/dump_data" => "person#dump_data"
+  get  "/offload_rollback" => "person#offload_rollback"
   post "/dump_data" => "person#dump_data"
-
 end

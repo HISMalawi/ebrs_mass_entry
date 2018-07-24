@@ -2,12 +2,8 @@ class PersonController < ApplicationController
   def index
     search_val = params[:search][:value] rescue nil
     search_val = '_' if search_val.blank?
-    search_category = ''
 
     if !params[:start].blank?
-
-      loc_query = " "
-      locations = []
 
       d = Person.order(" person.created_at DESC, person.village_of_birth, person.ta_of_birth, person.district_of_birth, person.first_name ")
         .where(" concat_ws('_', person.first_name, person.last_name, person.middle_name,
@@ -221,6 +217,25 @@ class PersonController < ApplicationController
   end
 
   def dump_data
-    csv = Person.dump
+    File.open("#{Rails.root}/dump.csv", "w"){|f|
+      f.write("")
+    }
+
+    if Person.dump
+      #Send file to server
+      RestClient.put(params[:link], File.read("#{Rails.root}/dump.csv"), :content_type => 'text/plain')
+      render :text => "OK"
+    else
+      render :text => "FAILED"
+    end
+
+  end
+
+  def offload_rollback
+    if Person.offload_rollback
+      render :text => "OK"
+    else
+      render :text => "FAILED"
+    end
   end
 end
