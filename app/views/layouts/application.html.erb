@@ -186,6 +186,18 @@
     function __$(id){
         return document.getElementById(id)
     }
+
+    function alert(data, color){
+        try {
+            __$('alert-msg').innerHTML = data;
+            jQuery('#alert-modal').modal('show');
+            if(color){
+                __$('alert-mod').style.background = color;
+            }else{
+                __$('alert-mod').style.background = "#d9534f";
+            }
+        }catch(q) {};
+    }
 </script>
 
 <style>

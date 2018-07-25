@@ -1,0 +1,276 @@
+<style>
+
+.record td {
+  font-size: 16px;
+  color: #000;
+  padding: 10px;
+  text-align: left;
+}
+
+.record td strong {
+  font-size: 12px;
+  font-style: normal;
+  color: #333;
+  float: right;
+}
+
+#completeness_details tr{
+    border-top: 1px dotted lightgray
+}
+
+.labell{
+    text-align: left;
+    font-weight: bold !important;
+    padding: 0px;
+}
+.modal-header{
+    background: #006f95 none repeat scroll 0 0;
+    padding: 12px;
+}
+.comments-list .media{
+    border-bottom: 1px dotted #ccc;
+}
+#comments-list{
+    max-height: 300px;
+    overflow: auto;
+    width: 100%;
+}
+
+#trace-tbl td{
+    border: 1px solid #d3d3d3;
+    padding: 5px !important;
+}
+#trace-row td{
+    font-size: 1em !important;
+}
+#completeness_details td{
+    padding: 8px;
+    border: 1px dotted ghostwhite;
+}
+#completeness_details .labell{
+}
+#duplicates{
+   width: 98%;
+
+}
+
+#duplicates th , #duplicates td {
+   padding: 0.3em;
+   border: 1px solid gray;
+   text-align: center;
+   
+}
+#duplicates th{
+    background: #d9d8d7;
+}
+.red{
+    color:#c81414;
+    font-weight: bold;
+}
+</style>
+<script>
+  return_path = '/person/index?active_tab=person'
+</script>
+<%=javascript_include_tag "bootstrap/bootstrap.min" %>
+
+
+
+<div class="panel panel-default">
+    <div class="panel-heading" style="height: 50px;">
+      <table style="width: 100%;">
+        <tr>
+          <td>
+            <h3 style="padding-bottom: 15px;color:darkslategray; height: 40px;margin-top: 0px;">Record Details</h3>
+          </td>
+          <td colspan="8" style="width: 70%;">
+            <div class="pull-left" style="height: 40px; margin-top: 0px;">
+
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="stats" style="width: 100%; overflow: auto; border-bottom: 1px solid #ccc;padding: 12px;border: 1px solid lightsteelblue;">
+
+      <table width="85%;" style="margin: auto;border: 1px solid gray;padding: 0px;">
+
+
+        <% @record.each do |group, children| %>
+
+        <% r = 0 %>
+
+        <tr>
+          <td valign="top" style="font-size: 18px; text-align: left; padding: 10px;padding-top: 0px; background-color: lightsteelblue;
+          border-bottom: 1px solid #ccc;">
+          <%= group %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+
+
+          <table class="record" width="100%" cellpadding="10" cellspacing="0">
+
+            <% children.each do |child| %>
+
+            <% kids = child.keys %>
+
+            <tr>
+
+              <% (0..(kids.length - 1)).each do |i| %>
+
+              <td align="right" style="border-right: 1px solid #eee; <%= (r < children.length - 1 ? "border-bottom: 1px solid #eee" : "") %>">
+                <% unless kids[i].kind_of?(Array) %>
+                <strong style="color: #3465a4;;"><%= kids[i].html_safe %></strong>
+                <% else %>
+                    <% if  kids[i].second == "mandatory" %>
+                            <strong style="color: #3465a4;;"><%= kids[i].first %><span style='color: red;'> *</span></strong>
+                  <% elsif  kids[i].second == "sub" %>
+                            <strong style="color:#3465a4;;"><%= kids[i].first %><br /><span style='color: grey;font-size: smaller; font-style: italic;'>(<%= (child[kids[i]] == "Yes" ? "Registered after 42 days of birth" : "Registered within 42 days of birth") rescue nil %>)</span>
+                    <% end %>
+                <% end %>
+              </td>
+
+              <td style="<%= (r < children.length - 1 ? "border-bottom: 1px solid #eee" : "") %>" id='<%= kids[i].kind_of?(Array) ? "#{group.gsub(" ", "_").downcase}_#{kids[i].first.gsub(" ", "_").downcase}" : "#{group.gsub(" ", "_").downcase}_#{kids[i].gsub(" ", "_").downcase}" %>'>
+                <%= child[kids[i]] rescue nil %>
+              </td>
+
+              <% end %>
+
+              <% ((kids.length)..2).each do |i| %>
+
+              <td align="right" style="border-right: 1px solid #eee; <%= (r < children.length - 1 ? "border-bottom: 1px solid #eee" : "") %>">
+                <strong>&nbsp;</strong>
+              </td>
+              <td style="<%= (r < children.length - 1 ? "border-bottom: 1px solid #eee" : "") %>">
+                &nbsp;
+              </td>
+
+              <% end %>
+
+            </tr>
+
+            <% r += 1 %>
+
+            <% end %>
+
+          </table>
+
+        </td>
+      </tr>
+
+      <% end %>
+
+      <tr>
+        <td style="border-top: 1px solid #ccc;">
+          &nbsp;
+        </td>
+      </tr>
+
+    </table>
+
+        <div style="margin-right: 100px;margin-left:100px;margin-top: 5px;">
+        <button class="btn btn-danger pull-left"
+                onclick="window.parent.location = return_path ">
+          <b>Cancel</b>
+        </button>
+
+        <button class="btn btn-primary pull-right" onclick="jQuery('#completenessModal').modal('show')"
+              onclick="window.parent.location = return_path ">
+            <b>Check Completeness</b>
+        </button>
+       </div>
+
+
+            <div class="modal fade" id="completenessModal" tabindex="-1" role="dialog" aria-labelledby="completenessModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content"  style="width: 600px !important;">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="printerModalLabel" style="text-align: left;padding-left: 60px;color: white;">
+                      Check Completeness
+                    </h4>
+                  </div>
+                  <div class="modal-body"  style="width: 600px !important;">
+                    <span style="text-align:center;">
+                      <table align="center" id="completeness_details">
+
+                        <tr>
+                          <td class="labell">Child Name</td>
+                          <td style="text-align: left; padding-left:50px;"><%= "#{@person.name}" rescue nil%></td>
+                        </tr>
+                        <tr>
+                          <td class="labell">Child Gender</td>
+                          <td style="text-align: left; padding-left:50px;"><%= @person.gender %></td>
+                        </tr>
+                        <tr>
+                          <td class="labell">Child Date of Birth</td>
+                          <td style="text-align: left; padding-left:50px;"><%= @person.date_of_birth.to_date.strftime("%d/%b/%Y") %></td>
+                        </tr>
+                        <tr>
+                          <td class="labell">Child Place of Birth</td>
+                          <td style="text-align: left; padding-left:50px;"><%= @person.place_of_birth rescue nil%></td>
+                        </tr>
+                        <tr>
+                          <td class="labell">Mother</td>
+                          <td style="text-align: left; padding-left:50px;"><%= @person.mother_name rescue nil%></td>
+                        </tr>
+                        <tr>
+                          <td class="labell">Nationality of Mother</td>
+                          <td style="text-align: left; padding-left:50px;"><%= @person.mother_nationality rescue nil%></td>
+                        </tr>
+                        <tr>
+                          <td class="labell">Mother National ID</td>
+                          <td style="text-align: left; padding-left:50px;"><%= @person.mother_id_number rescue nil%></td>
+                        </tr>
+                        <tr>
+                          <td class="labell">Father</td>
+                          <td style="text-align: left; padding-left:50px;"><%=@person.father_name rescue nil rescue nil %></td>
+                        </tr>
+                        <tr>
+                          <td class="labell">Nationality of Father</td>
+                          <td style="text-align: left; padding-left:50px;"><%=  @person.father_name rescue nil %></td>
+                        </tr>
+                        <tr>
+                          <td class="labell">Father National ID</td>
+                          <td style="text-align: left; padding-left:50px;"><%= @person.father_id_number rescue nil%></td>
+                        </tr>
+                        <tr>
+                          <td class="labell">Parents Married to each Other?</td>
+                          <td style="text-align: left; padding-left:50px;"><%= @person.parents_married rescue nil %></td>
+                        </tr>
+                        <tr>
+                          <td class="labell">Form signed?</td>
+                          <td style="text-align: left; padding-left:50px;"><%=  @person.form_signed %></td>
+                        </tr>
+                      </table>
+                    </span>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><b>Close</b></button>
+                    <button type="button" style="width: 100px;" class="btn btn-primary" onclick="window.location='/edit/<%=@person.person_id%>' "><b>Edit Record</b></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+
+</script>
+
+<style>
+  .btn{
+    margin-left: 5px;
+      margin-right: 5px;
+  }
+</style>

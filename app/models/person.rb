@@ -27,7 +27,7 @@ class Person < ActiveRecord::Base
     data = Person.new.attributes.keys.join(",") + "\n"
     upload_number   = Person.find_by_sql(" SELECT MAX(upload_number) n FROM person ").last['n'].to_i + 1
     upload_datetime = Time.now
-    Person.where(upload_status: "NOT UPLOADED").limit(100).each do |person|
+    Person.where(upload_status: "NOT UPLOADED").each do |person|
       data = data + person.attributes.values.join(",") + "\n"
       person.upload_status   =  "UPLOADED"
       person.upload_number   = upload_number
@@ -52,6 +52,10 @@ class Person < ActiveRecord::Base
       person.upload_number      = nil
       person.upload_datetime    = nil
       person                    .save
+    }
+
+    File.open("#{Rails.root}/dump.csv", "w"){|f|
+      f.write("")
     }
 
     return true

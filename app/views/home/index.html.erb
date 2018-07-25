@@ -91,16 +91,33 @@
         <div id="rollback" class="progress" style="width: 100%;font-size: 18px;font-weight: bold;display: none;">
           <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40"
                aria-valuemin="0" aria-valuemax="100" style="width:50%; margin-left: 25%;">
-            Failed! Rolling back process
+            Offload Failed! Rolling Back Process
           </div>
         </div>
-
       </div>
 
       <div class="modal-footer" style="width: 100%;">
         <button type="button submit" class="btn btn-primary"
         onclick="offload()"
         ><b style="font-size: 20px;">Offload Data</b></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" class="alert-modal" id="alert-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div id="alert-mod" class="modal-body" style="background: #d9534f;color: white;">
+        <div style="width: 100%;height: 75px;">
+          <label id='alert-msg' style="font-size: 22px;width: 100%; text-align: center;">&nbsp;</label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-default pull-right"
+                onclick="__$('alert-msg').innerHTML = '&nbsp;'; jQuery('#alert-modal').modal('hide')" >&nbsp;&nbsp; OK &nbsp;&nbsp; </button>
       </div>
     </div>
   </div>
@@ -132,27 +149,42 @@
           success: function(result){
               if (result == "OK"){
                   __$("progress").style.display = "none";
-                  __$("success").style.display = "block"
+                  __$("rollback").style.display = "none";
+                  __$("success").style.display = "block";
               }else{
+                  __$("progress").style.display = "none";
+                  __$("rollback").style.display = "block";
+                  __$("success").style.display = "none";
+                  alert("Process Failed! Press OK to Roll Back");
+
                   jQuery.ajax({
                       url: "/offload_rollback",
                       success: function(){
-
+                          __$("progress").style.display = "none";
+                          __$("rollback").style.display = "none";
+                          __$("success").style.display = "none";
                       },
                       error: function(){
-
+                         alert("Something Went Wrong!");
                       }
                   })
               }
           },
           error: function(error){
+              __$("progress").style.display = "none";
+              __$("rollback").style.display = "block";
+              __$("success").style.display = "none";
+             alert("Process Failed! Press OK to Roll Back");
+
             jQuery.ajax({
                 url: "/offload_rollback",
-                success: function(){
-
+                success: function(r){
+                    __$("progress").style.display = "none";
+                    __$("rollback").style.display = "none";
+                    __$("success").style.display = "none";
                 },
-                error: function(){
-
+                error: function(e){
+                    alert("Something Went Wrong!");
                 }
             })
           }
@@ -160,13 +192,9 @@
     }
 
     $(document).ajaxStart(function(){
-        __$("success").style.display = "none"
-        __$("progress").style.display = "block"
-    });
-
-    $(document).ajaxStop(function(){
-
-
+        __$("success").style.display = "none";
+        __$("progress").style.display = "block";
+        __$("rollback").style.display = "none";
     });
 
 </script>
