@@ -62,6 +62,7 @@ Rails.application.routes.draw do
 
   get  "location/edit"
   post "location/edit"
+  get "location/set_current"
 
   get "location/ajax_locations"
   get "person/person_types"

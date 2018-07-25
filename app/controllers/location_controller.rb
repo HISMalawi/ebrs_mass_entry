@@ -206,4 +206,25 @@ class LocationController < ApplicationController
     render text: ([""] + locations.sort).to_json
   end
 
+  def set_current
+    if params[:district]
+      hash = {
+          'district' => params[:district],
+          'ta'       => params[:ta],
+          'village'  => params[:village]
+      }
+
+      File.open("#{Rails.root}/public/current.json", "w"){|f| f.write(hash.to_json)}
+
+      render :text => "OK"
+    else
+      @cur_location = JSON.parse(File.read("#{Rails.root}/public/current.json")) rescue {}
+      if @cur_location.blank?
+        @header = "Set Current Location"
+      else
+        @header = "Confirm Current Location"
+      end
+    end
+  end
+
 end

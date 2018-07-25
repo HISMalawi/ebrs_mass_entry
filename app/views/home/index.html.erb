@@ -17,16 +17,18 @@
         border: 1px dotted ghostwhite;
     }
 </style>
-
-<div style="width: 100%; max-height: 80vh;margin-top: 7vh;overflow: auto;border-top: 1px solid royalblue; padding-top: 10px;">
+ <div style="width: 100%;margin-top: 7vh;margin-left: 11%;">
+    <span><b><h3>Statistics by Village of Registration</h3></b></span>
+ </div>
+<div style="width: 100%; max-height: 80vh;overflow: auto;border-top: 1px solid royalblue; padding-top: 10px;">
 <table style="width: 98%; height: 100%; margin: auto; overflow: auto;">
 
   <tr>
     <td style="width: 100%;height: 55%;border-bottom: 1px solid cornflowerblue;">
         <table class="table table-responsive table-condensed table-bordered" style="width: 80%;font-weight: bold; margin-left: 10%;background: #f8f8ff;">
-          <tr style="background: lightsteelblue; font-weight: bold; font-size: 16px; ">
-            <td  style="text-align: center; ">Village Of Birth</td>
-            <td  style="padding: 3px; text-align: center; "> Total Entered</td>
+          <tr style="background: lightsteelblue; font-weight: bold; font-size: 14px; border-bottom: 2px solid white;">
+            <td  style="text-align: center; ">Village Of Registration</td>
+            <td  style="padding: 3px; text-align: center; "> Total Registered</td>
             <td  style="padding: 3px; text-align: center; ">Offloaded</td>
             <td  style="padding: 3px; text-align: center; ">Not Offloaded</td>
             <td  style="padding: 3px; text-align: center; ">&nbsp;</td>
@@ -40,7 +42,8 @@
                 <td style="padding: 3px; text-align: center;"><%=  dt['not_offloaded']%></td>
                 <td style="padding: 3px; text-align: center;">
                   <% if dt['not_offloaded'] > 0%>
-                      <button class="btn btn-primary" style="padding: 5px;font-size: 12px;" onclick="jQuery('#linkModal').modal('show'); set('<%= dt['village']%>')">
+                      <button class="btn btn-primary" style="padding: 5px;font-size: 12px;"
+                              onclick="jQuery('#linkModal').modal('show'); set('Village: <%= dt['village']%>'); set('Village: <%=dt['village']%>'); select('Village', '<%=dt['village']%>')">
                         <b>Offload</b>
                       </button>
                   <% else %>
@@ -59,11 +62,12 @@
             <td style="text-align: center"><%=@all['not_offloaded']%></td>
             <td>
               <% if @all['not_offloaded'] > 0%>
-                  <button class="btn btn-primary" style="padding: 5px;font-size: 12px;" onclick="jQuery('#linkModal').modal('show'); set('All Listed Villages')">
+                  <button class="btn btn-primary" style="padding: 5px;font-size: 12px;"
+                          onclick="jQuery('#linkModal').modal('show'); set('Village: All Listed Villages'); select('Village', 'all')">
                     <b>Offload All</b>
                   </button>
               <% else %>
-                  <button class="btn btn-primary" disabled="disabled" style="padding: 5px;font-size: 12px;" onclick="jQuery('#linkModal').modal('show')">
+                  <button class="btn btn-primary" disabled="disabled" style="padding: 5px;font-size: 12px;" onclick="jQuery('#linkModal').modal('show');">
                     <b>Offload All</b>
                   </button>
               <% end %>
@@ -83,12 +87,82 @@
 </table>
 </div>
 
+<div style="width: 100%;margin-top: 7vh;margin-left: 11%;">
+  <span><b><h3>Statistics by TA of Registration</h3></b></span>
+</div>
+<div style="width: 100%; max-height: 80vh;overflow: auto;border-top: 1px solid royalblue; padding-top: 10px;">
+  <table style="width: 98%; height: 100%; margin: auto; overflow: auto;">
+
+    <tr>
+      <td style="width: 100%;height: 55%;border-bottom: 1px solid cornflowerblue;">
+        <table class="table table-responsive table-condensed table-bordered" style="width: 80%;font-weight: bold; margin-left: 10%;background: #f8f8ff;">
+          <tr style="background: lightsteelblue; font-weight: bold; font-size: 14px; border-bottom: 2px solid white;">
+            <td  style="text-align: center; ">TA of Registration</td>
+            <td  style="padding: 3px; text-align: center; "> Total Registered</td>
+            <td  style="padding: 3px; text-align: center; ">Offloaded</td>
+            <td  style="padding: 3px; text-align: center; ">Not Offloaded</td>
+            <td  style="padding: 3px; text-align: center; ">&nbsp;</td>
+          </tr>
+          </tr>
+          <% @data2.each do |dt|%>
+              <tr>
+                <td style="background: white; font-weight: bold;padding-left: 20px; background: #f8f8ff "><%= dt['ta']%></td>
+                <td style="padding: 3px; text-align: center; "><%=  (dt['offloaded'] + dt['not_offloaded']) %></td>
+                <td style="padding: 3px; text-align: center; "><%=  dt['offloaded']%></td>
+                <td style="padding: 3px; text-align: center;"><%=  dt['not_offloaded']%></td>
+                <td style="padding: 3px; text-align: center;">
+                  <% if dt['not_offloaded'] > 0%>
+                      <button class="btn btn-primary" style="padding: 5px;font-size: 12px;"
+                              onclick="jQuery('#linkModal').modal('show'); set('TA: <%= dt['ta']%>'); select('TA', '<%=dt['ta']%>') ">
+                        <b>Offload</b>
+                      </button>
+                  <% else %>
+                      <button class="btn btn-primary" disabled="disabled" style="padding: 5px;font-size: 12px;">
+                        <b>Offload</b>
+                      </button>
+                  <% end %>
+                </td>
+              </tr>
+          <% end %>
+
+          <tr style="font-weight: bold;">
+            <td style="padding-left: 20px;">Total Registered</td>
+            <td style="text-align: center" ><%=(@all2['offloaded'] + @all['not_offloaded'])%></td>
+            <td style="text-align: center"><%=@all2['offloaded']%></td>
+            <td style="text-align: center"><%=@all2['not_offloaded']%></td>
+            <td>
+              <% if @all2['not_offloaded'] > 0%>
+                  <button class="btn btn-primary" style="padding: 5px;font-size: 12px;"
+                          onclick="jQuery('#linkModal').modal('show'); set('TA: All Listed TAs'); select('TA', 'all') ">
+                    <b>Offload All</b>
+                  </button>
+              <% else %>
+                  <button class="btn btn-primary" disabled="disabled" style="padding: 5px;font-size: 12px;" onclick="jQuery('#linkModal').modal('show')">
+                    <b>Offload All</b>
+                  </button>
+              <% end %>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+
+    <tr>
+      <td style="width: 100%;height: 22.5%;">
+
+      </td>
+    </tr>
+  </table>
+</div>
+
 <div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-labelledby="linkodalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" style="text-align: left; color: white; font-size: 25px; font-weight: bold; text-align: center;">
+        <h4 class="modal-title" style="text-align: left; color: white; font-size: 20px; font-weight: bold; text-align: center;">
           eBRS Link
         </h4>
       </div>
@@ -96,7 +170,7 @@
       <div class="modal-body" style="min-height: 140px;">
         <div style="text-align:center;">
              <input type="text" id="link"  placeholder="http://192.168.100.200:5000"
-                style="font-size: 25px;margin-left: 40px;width: 90%;font-weight: bold;"/>
+                style="font-size: 20px;margin-left: 40px;width: 90%;font-weight: bold;"/>
         </div>
 
         <div id="progress" class="progress" style="width: 100%;font-size: 18px;font-weight: bold;display: none;">
@@ -153,6 +227,7 @@
 <script>
 
 
+    var locatn = "";
 
     function isURL(str) {
         var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
@@ -164,7 +239,7 @@
     }
 
     function set(vg){
-        jQuery("#vg").html("Village: " + vg);
+        jQuery("#vg").html(vg);
     }
 
     function offload(){
@@ -174,7 +249,7 @@
       }
 
       jQuery.ajax({
-          url: "/dump_data?link=" + __$('link').value,
+          url: "/dump_data?link=" + __$('link').value + "&location=" + locatn,
           success: function(result){
               if (result == "OK"){
                   __$("progress").style.display = "none";
@@ -218,6 +293,10 @@
             })
           }
       })
+    }
+
+    function select(cat, loc){
+        locatn = cat + "|" + loc;
     }
 
     $(document).ajaxStart(function(){

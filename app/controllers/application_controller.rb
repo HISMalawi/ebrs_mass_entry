@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   before_filter :check_user, :except => ['logout', 'login']
+  before_filter :set_current_location, :except =>['set_current', 'districts', 'logout', 'login', 'tas', 'villages']
 
   def check_user
     if params[:active_tab].present?
@@ -13,6 +14,13 @@ class ApplicationController < ActionController::Base
       @cur_user = User.find(session[:user_id]) rescue (redirect_to '/logout' and return)
     else
       redirect_to "/logout"
+    end
+  end
+
+  def set_current_location
+    @cur_location = JSON.parse(File.read("#{Rails.root}/public/current.json")) rescue {}
+    if @cur_location.blank?
+      redirect_to "/location/set_current"
     end
   end
 

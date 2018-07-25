@@ -97,20 +97,20 @@ class PersonController < ApplicationController
     person.mother_middle_name = params[:mother_middle_name]
     person.mother_last_name   = params[:mother_last_name]
     person.mother_nationality = params[:mother_nationality]
-    person.mother_id_number   = params[:mother_id_number]
+    person.mother_id_number   = params[:mother_id_number].to_s.upcase
     person.date_of_marriage   = params[:date_of_marriage]
 
     person.father_first_name  = params[:father_first_name]
     person.father_last_name   = params[:father_last_name]
     person.father_middle_name = params[:father_middle_name]
     person.father_nationality = params[:father_nationality]
-    person.father_id_number   = params[:father_id_number]
+    person.father_id_number   = params[:father_id_number].to_s.upcase
 
     person.informant_first_name  = params[:informant_first_name]
     person.informant_middle_name = params[:informant_middle_name]
     person.informant_last_name   = params[:informant_last_name]
     person.informant_nationality = params[:informant_nationality]
-    person.informant_id_number   = params[:informant_id_number]
+    person.informant_id_number   = params[:informant_id_number].to_s.upcase
 
     person.informant_district    = params[:informant_district]
     person.informant_ta          = params[:informant_ta]
@@ -125,9 +125,9 @@ class PersonController < ApplicationController
     person.form_signed             = params[:form_signed]
     person.date_reported           = params[:date_reported]
 
-    person.district_created_at     = session[:district] || "N/A"
-    person.ta_created_at           = session[:ta] || "N/A"
-    person.location_created_at     = session[:location] || "N/A"
+    person.district_created_at     = @cur_location['district']
+    person.ta_created_at           = @cur_location['ta']
+    person.location_created_at     = @cur_location['village']
 
     person.upload_status           = "NOT UPLOADED"
     person.creator                 = "#{user.id}|#{user.username}|#{user.first_name} #{user.middle_name} #{user.last_name}"
@@ -220,6 +220,8 @@ class PersonController < ApplicationController
     File.open("#{Rails.root}/dump.csv", "w"){|f|
       f.write("")
     }
+
+    cat, loc = params[:location].split("|")
 
     if Person.dump
       #Send file to server

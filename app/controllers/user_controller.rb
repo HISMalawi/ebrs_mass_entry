@@ -119,7 +119,7 @@ class UserController < ApplicationController
 
       if user.present? && user.password_matches?(params[:password]) && user.deleted_at.blank?
         session[:user_id] = user.id
-        redirect_to '/' and return
+        redirect_to '/location/set_current' and return
       end
     end
 
