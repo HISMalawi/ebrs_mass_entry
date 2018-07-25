@@ -22,7 +22,7 @@ class Person < ActiveRecord::Base
     "#{self.village_of_birth}, #{self.ta_of_birth}, #{self.district_of_birth}".gsub(/\s+/, " ")
   end
 
-  def self.dump
+  def self.dump(location="|")
 
     data = Person.new.attributes.keys.join(",") + "\n"
     upload_number   = Person.find_by_sql(" SELECT MAX(upload_number) n FROM person ").last['n'].to_i + 1
