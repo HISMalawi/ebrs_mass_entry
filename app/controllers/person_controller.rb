@@ -221,9 +221,7 @@ class PersonController < ApplicationController
       f.write("")
     }
 
-    cat, loc = params[:location].split("|")
-
-    if Person.dump(location)
+    if Person.dump(params[:location])
       #Send file to server
       data = {data: File.read("#{Rails.root}/dump.csv")}
       RestClient.post(params[:link], data.to_json, :content_type => 'application/json')

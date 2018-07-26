@@ -23,11 +23,22 @@ class Person < ActiveRecord::Base
   end
 
   def self.dump(location="|")
+    cat, loc = location.split("|")
+    filter = "ta_created_at" if cat.to_s.downcase == "ta"
+    filter = "location_created_at" if cat.to_s.downcase == "village"
 
     data = Person.new.attributes.keys.join(",") + "\n"
     upload_number   = Person.find_by_sql(" SELECT MAX(upload_number) n FROM person ").last['n'].to_i + 1
     upload_datetime = Time.now
-    Person.where(upload_status: "NOT UPLOADED").each do |person|
+
+    records = Person.order('created_at DESC')
+    if loc.to_s.downcase == "all"
+      records = records.where("upload_status" => "NOT UPLOADED")
+    else
+      records = records.where("upload_status" => "NOT UPLOADED", "#{filter}" => "#{loc}")
+    end
+
+    records.each do |person|
       data = data + person.attributes.values.join(",") + "\n"
       person.upload_status   =  "UPLOADED"
       person.upload_number   = upload_number
@@ -43,6 +54,7 @@ class Person < ActiveRecord::Base
   end
 
   def self.offload_rollback
+
     File.read("#{Rails.root}/dump.csv").split("\n").each{|line|
       data = line.split(",")
       next if data.first.strip == "person_id"
