@@ -224,7 +224,8 @@ class PersonController < ApplicationController
     if Person.dump(params[:location])
       #Send file to server
       data = {data: File.read("#{Rails.root}/dump.csv")}
-      RestClient.post(params[:link], data.to_json, :content_type => 'application/json')
+      link = "#{params[:link]}/offload"
+      RestClient.post(link, data.to_json, :content_type => 'application/json')
       render :text => "OK"
     else
       render :text => "FAILED"

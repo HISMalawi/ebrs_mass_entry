@@ -516,7 +516,7 @@
 
     datepicker = jQuery('.datepicker').datepicker({
         format: 'dd/mm/yyyy',
-        endDate: '0y'
+        maxDate: '-0d'
     });
 
     function next() {
@@ -714,7 +714,7 @@
                     data: $("#form-create-person").serialize(),
                     success: function(response){
                         if (response == "OK") {
-                            window.location = "/person/new?active_tab=home";
+                            window.location = "/person/index?active_tab=home";
                         }else{
                             alert("something Went Wrong!!")
                         }
