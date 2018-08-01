@@ -28,6 +28,9 @@
     })(jQuery);
 </script>
 
+<link href="/Pikaday/css/pikaday.css" rel="stylesheet">
+
+
 <style>
   label{
       margin-left: 20px;
@@ -49,6 +52,7 @@
       -webkit-box-sizing:content-box;
       box-sizing:content-box;
   }
+
   .row{
       margin-bottom: 10px;
   }
@@ -113,7 +117,7 @@
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Date of Birth:</label>
           <input id="date_of_birth" type="text" name="date_of_birth" value="<%=@person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil%>"
-                 class="datepicker" data-validation="required, date" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy">
+                 class="datepicker" data-validation="required" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy">
         </div>
 
         <div data-field-span="1" class="form-inline col-lg-3">
@@ -433,6 +437,8 @@
 
   </form>
 
+  <script src="/Pikaday/pikaday.js"></script>
+
 <script>
     function __$(id){
         return document.getElementById(id);
@@ -525,10 +531,6 @@
         __$("father_nationality").appendChild(opt);
     <% end %>
 
-    datepicker = jQuery('.datepicker').datepicker({
-        format: 'dd/mm/yyyy',
-        maxDate: '-0d'
-    });
 
     function next() {
 
@@ -775,6 +777,21 @@
    <% else %>
 
    <% end %>
+
+    jQuery(document).ready(function(){
+
+        var dobpicker = new Pikaday({
+            field: document.getElementById('date_of_birth'),
+            format: 'DD/MM/YYYY',
+            maxDate: new Date()
+        } );
+
+        var dompicker = new Pikaday({
+            field: document.getElementById('date_of_marriage'),
+            format: 'DD/MM/YYYY',
+            maxDate: new Date()
+        });
+    })
 
     $("select option").css("background-color","red");
 </script>
