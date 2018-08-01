@@ -174,11 +174,11 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input id="mother_last_name" type="text" name="mother_last_name" data-validation="required length" data-validation-length="2-55" value="<%=@person.mother_last_name%>">
+          <input id="mother_last_name" type="text" name="mother_last_name" data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_last_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input id="mother_first_name" type="text" name="mother_first_name" data-validation="required length" data-validation-length="2-55" value="<%=@person.mother_first_name%>">
+          <input id="mother_first_name" type="text" name="mother_first_name" data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_first_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
@@ -237,26 +237,16 @@
 
     <fieldset id="informant" style="display: none">
       <legend>INFORMANTS DETAILS</legend>
-      <div data-row-span="2" class="row">
-        <div data-field-span="1" class="form-inline col-lg-3">
-          <label>Surname:</label>
-          <input type="text" name="informant_last_name" value="<%=@person.informant_last_name%>">
-        </div>
-        <div data-field-span="1" class="form-inline col-lg-3">
-          <label>First Name:</label>
-          <input type="text" name="informant_first_name" value="<%=@person.informant_first_name%>">
-        </div>
-        <div data-field-span="1" class="form-inline col-lg-3">
-          <label>Other Names:</label>
-          <input type="text" name="informant_middle_name" value="<%=@person.informant_middle_name%>">
-        </div>
-      </div>
 
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Informant Relationship to Child:</label>
-          <select id="informant_relationship" name="informant_relationship" data-validation="required" value="<%=@person.informant_relationship%>">
+          <select id="informant_relationship" name="informant_relationship"
+                  onchange="checkRelationship()"
+                  data-validation="required" value="<%=@person.informant_relationship%>">
             <option></option>
+            <option>Mother</option>
+            <option>Father</option>
             <option>Grandmother/Grandfather</option>
             <option>Brother/Sister</option>
             <option>Aunt/Uncle</option>
@@ -265,10 +255,31 @@
             <option>Other</option>
           </select>
         </div>
+
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>ID Number:</label>
+          <input value="<%=@person.informant_id_number%>" id="informant_id_number" type="text" name="informant_id_number" data-validation="required length" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
+                 data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
+        </div>
+      </div>
+
+      <div data-row-span="2" class="row">
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>Surname:</label>
+          <input type="text" id="informant_last_name" name="informant_last_name" value="<%=@person.informant_last_name%>" data-validation="required length" data-validation-length="2-30">
+        </div>
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>First Name:</label>
+          <input type="text" id="informant_first_name" name="informant_first_name" value="<%=@person.informant_first_name%>" data-validation="required length" data-validation-length="2-30">
+        </div>
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>Other Names:</label>
+          <input type="text" id="informant_middle_name" name="informant_middle_name" value="<%=@person.informant_middle_name%>">
+        </div>
       </div>
 
       <div data-row-span="2" class="row" style="margin-bottom: 0px;border-top: 1px dotted gray;">
-        <label style="color: gray;text-decoration: underline;">Informant Address </label>
+        <label style="color: gray;text-decoration: underline;">Informant Residential Address </label>
       </div>
 
       <div data-row-span="2" class="row " style="margin-bottom: 35px;">
@@ -726,6 +737,27 @@
         )
     })
 
+    function copyMother(){
+        __$("informant_first_name").value =  __$("mother_first_name").value;
+        __$("informant_last_name").value =  __$("mother_last_name").value;
+        __$("informant_middle_name").value =  __$("mother_middle_name").value;
+        __$("informant_id_number").value =  __$("mother_id_number").value;
+    }
+
+    function copyFather(){
+        __$("informant_first_name").value =  __$("father_first_name").value;
+        __$("informant_last_name").value =  __$("father_last_name").value;
+        __$("informant_middle_name").value =  __$("father_middle_name").value;
+        __$("informant_id_number").value =  __$("father_id_number").value
+    }
+
+    function checkRelationship(){
+        if (__$("informant_relationship").value == "Mother"){
+            copyMother();
+        }else if(__$("informant_relationship").value == "Father") {
+            copyFather();
+        }
+    }
 
     districts("birth_district", ['birth_ta', 'birth_village']);
     districts("informant_district", ['informant_ta', 'informant_village']);
