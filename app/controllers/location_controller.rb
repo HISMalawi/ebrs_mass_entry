@@ -220,9 +220,9 @@ class LocationController < ApplicationController
     else
       @cur_location = JSON.parse(File.read("#{Rails.root}/public/current.json")) rescue {}
       if @cur_location.blank?
-        @header = "Set Current Location"
+        @header = "Set Registration Village"
       else
-        @header = "Confirm Current Location"
+        @header = "Confirm Registration Village"
       end
     end
   end

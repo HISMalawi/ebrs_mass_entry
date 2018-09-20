@@ -13,4 +13,10 @@ class User < ActiveRecord::Base
   def sex
     {0 => 'Female', 1 => 'Male'}[self.gender]
   end
+
+  def role
+    user_role = UserRole.where(user_id: self.id).last
+    role = Role.where(role_id: user_role.role_id).last
+    role.name
+  end
 end

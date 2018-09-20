@@ -165,8 +165,8 @@
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>If yes, date of marriage:</label>
-          <input type="text" name="date_of_birth" id="date_of_marriage" disabled="disabled"
-                 class="datepicker" data-validation="date" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy">
+          <input type="text" name="date_of_marriage" id="date_of_marriage" disabled="disabled"
+                 class="datepicker"  data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy" >
         </div>
       </div>
 
@@ -199,7 +199,9 @@
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label >ID Number:</label>
-          <input value="<%=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number" data-validation="required length" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
+          <input value="<%=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number" data-validation="mother_id"
+                 data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead"
+                 data-validation-length="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
         </div>
       </div>
@@ -232,7 +234,9 @@
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>ID Number:</label>
-          <input value="<%=@person.father_id_number%>" id="father_id_number" type="text" name="father_id_number" data-validation="father_id" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
+          <input value="<%=@person.father_id_number%>" id="father_id_number" type="text" name="father_id_number"
+                 data-validation="father_id" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead"
+                 data-validation-length="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
         </div>
       </div>
@@ -339,7 +343,8 @@
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Date of Reporting:</label>
-          <input id="date_reported" type="text" class="datepicker" name="date_reported" data-validation="required" value="<%=@person.date_reported.to_date.strftime("%d/%m/%Y") rescue nil%>">
+          <input id="date_reported" type="text" class="datepicker" name="date_reported"
+                 data-validation="required" value="<%=@person.date_reported.to_date.strftime("%d/%m/%Y") rescue nil%>">
         </div>
       </div>
 
@@ -437,7 +442,8 @@
 
   </form>
 
-  <script src="/Pikaday/pikaday.js"></script>
+<script src="/Pikaday/moment.js"></script>
+<script src="/Pikaday/pikaday.js"></script>
 
 <script>
     function __$(id){
@@ -480,10 +486,9 @@
             var validate;
             var id = $el.attr("id");
 
-            if ((__$("father_first_name").value.trim().length > 0 ||
+            if (__$("father_nationality").value.trim() == "Malawian" && (__$("father_first_name").value.trim().length > 0 ||
                     __$("father_last_name").value.trim().length > 0 ||
                     __$("father_middle_name").value.trim().length > 0 ||
-                    __$("father_nationality").value.trim().length > 0 ||
                     __$("father_id_number").value.trim().length > 0)){
 
                 validate = true;
@@ -493,6 +498,29 @@
 
             if (validate && ((__$("father_id_number").value.trim().length != 8) ||
                     (__$("father_id_number").value.trim().match(/\i|o|I|O/g)))){
+                return false;
+            }else {
+                return true;
+            }
+        },
+        errorMessage : 'ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead',
+        errorMessageKey: 'IDNotComplete'
+    });
+
+    $.formUtils.addValidator({
+        name : 'mother_id',
+        validatorFunction : function(value, $el, config, language, $form) {
+            var validate;
+            var id = $el.attr("id");
+
+            if (__$("mother_nationality").value.trim() == "Malawian"){
+                validate = true;
+            }else{
+                validate = false
+            }
+
+            if (validate && ((__$("mother_id_number").value.trim().length != 8) ||
+                    (__$("mother_id_number").value.trim().match(/\i|o|I|O/g)))){
                 return false;
             }else {
                 return true;
@@ -647,9 +675,12 @@
     function checkMarriage(){
         if (__$("married").value.trim() == "Yes"){
             __$("date_of_marriage").removeAttribute("disabled");
-            __$("date_of_marriage").setAttribute("data-validation", "required date")
+            __$("date_of_marriage").setAttribute("data-validation", "required");
+            __$("date_of_marriage").setAttribute("data-validation-format", "dd/mm/yyyy")
+
         }else{
             __$("date_of_marriage").removeAttribute("data-validation");
+            __$("date_of_marriage").removeAttribute("data-validation-format");
             __$("date_of_marriage").setAttribute("disabled", "disabled");
             __$("date_of_marriage").value = "";
         }
@@ -782,13 +813,19 @@
 
         var dobpicker = new Pikaday({
             field: document.getElementById('date_of_birth'),
-            format: 'DD/MM/YYYY',
+            format: 'DD/MMM/YYYY',
             maxDate: new Date()
         } );
 
         var dompicker = new Pikaday({
             field: document.getElementById('date_of_marriage'),
-            format: 'DD/MM/YYYY',
+            format: 'DD/MMM/YYYY',
+            maxDate: new Date()
+        });
+
+        var dompicker = new Pikaday({
+            field: document.getElementById('date_reported'),
+            format: 'DD/MMM/YYYY',
             maxDate: new Date()
         });
     })

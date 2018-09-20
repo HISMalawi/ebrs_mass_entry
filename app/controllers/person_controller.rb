@@ -225,7 +225,11 @@ class PersonController < ApplicationController
       #Send file to server
       data = {data: File.read("#{Rails.root}/dump.csv")}
       link = "#{params[:link]}/offload"
-      RestClient.post(link, data.to_json, :content_type => 'application/json')
+      #RestClient.post(link, data.to_json, :content_type => 'application/json')
+      RestClient::Request.execute(:method => :post, :url => link, :timeout => 90000000,
+                      :payload => data.to_json,
+                      :headers => {:content_type => 'application/json'})
+
       render :text => "OK"
     else
       render :text => "FAILED"
