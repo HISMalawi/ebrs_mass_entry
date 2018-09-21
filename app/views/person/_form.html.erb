@@ -352,7 +352,56 @@
         </div>
       </div>
 
+
     </fieldset>
+
+  <fieldset id="headman" style="display: none">
+    <legend>DETAILS OF VILLAGE HEADMAN</legend>
+    <div data-row-span="2" class="row">
+      <div data-field-span="1" class="form-inline col-lg-3">
+
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Name of Village Headman:</label>
+        <input id="village_headman_name" type="text" name="village_headman_name" value="<%=@person.village_headman_name%>"
+               data-validation="required length" data-validation-length="2-50" value="<%=@person.mother_last_name%>">
+      </div>
+
+
+    </div>
+
+    <div data-row-span="2" class="row">
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Name of Village Senior Member:</label>
+        <input id="village_senior_name" type="text" name="village_senior_name"
+               data-validation="length" data-validation-length="2-50" value="<%=@person.village_senior_name%>">
+      </div>
+
+    </div>
+
+    <div data-row-span="2" class="row">
+      <div data-field-span="1" class="form-inline col-lg-3">
+
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Village Headman Signed?:</label>
+        <select id="form_signed" name="village_headman_signed" data-validation="required" value="<%=@person.village_headman_signed%>">
+          <option></option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+
+    </div>
+
+  </fieldset>
 
     <div class="form-group actions-row">
       <button type="button" onclick="validateForm()" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Save</button>

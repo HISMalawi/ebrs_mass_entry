@@ -125,6 +125,10 @@ class PersonController < ApplicationController
     person.form_signed             = params[:form_signed]
     person.date_reported           = params[:date_reported]
 
+    person.village_headman_name    = params[:village_headman_name]
+    person.village_senior_name     = params[:village_senior_name]
+    person.village_headman_signed  = params[:village_headman_signed]
+
     person.district_created_at     = @cur_location['district']
     person.ta_created_at           = @cur_location['ta']
     person.location_created_at     = @cur_location['village']
