@@ -193,7 +193,9 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Nationality:</label>
-          <select id="mother_nationality" name="mother_nationality" data-validation="required" value="<%=@person.mother_nationality%>">
+          <select id="mother_nationality" name="mother_nationality" data-validation="required"
+                  onchange = "nullify('mother_id_number', this)"
+                  value="<%=@person.mother_nationality%>">
             <option></option>
           </select>
         </div>
@@ -228,13 +230,15 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Nationality:</label>
-          <select id="father_nationality" name="father_nationality"  data-validation="father" value="<%=@person.father_nationality%>">
+          <select id="father_nationality" name="father_nationality"  data-validation="father" value="<%=@person.father_nationality%>"
+                  onchange = "nullify('father_id_number', this)">
             <option></option>
           </select>
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>ID Number:</label>
-          <input value="<%=@person.father_id_number%>" id="father_id_number" type="text" name="father_id_number"
+          <input value="<%=@person.father_id_number%>" id="father_id_number" type="text"
+                 name="father_id_number"
                  data-validation="father_id" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead"
                  data-validation-length="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
@@ -266,7 +270,7 @@
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>ID Number:</label>
-          <input value="<%=@person.informant_id_number%>" id="informant_id_number" type="text" name="informant_id_number" data-validation="required length" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
+          <input value="<%=@person.informant_id_number%>" id="informant_id_number" type="text" name="informant_id_number" data-validation="length" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
         </div>
       </div>
@@ -516,7 +520,7 @@
             if (__$("mother_nationality").value.trim() == "Malawian"){
                 validate = true;
             }else{
-                validate = false
+                validate = false;
             }
 
             if (validate && ((__$("mother_id_number").value.trim().length != 8) ||
@@ -537,7 +541,7 @@
         errorMessagePosition : 'top',
         scrollToTopOnError : false,
         onError : function(){
-            alert("Could not validate some input elements")
+            alert("Could not validate some input elements");
         }
     });
 
@@ -564,10 +568,10 @@
 
         jQuery(sets[cur_pos]).find("input, select").validate();
         if (jQuery(sets[cur_pos]).find(".error").length > 0) {
-            jQuery(".form-error").show();
+            jQuery('#form-create-person').submit();
             jQuery("fieldset .form-error").hide();
         }else {
-
+            jQuery('.form-error').hide();
             if (cur_pos < sets.length - 1) {
                 for (var i = 0; i < sets.length; i++) {
                     sets[i].style.display = "none";
@@ -789,6 +793,12 @@
             copyMother();
         }else if(__$("informant_relationship").value == "Father") {
             copyFather();
+        }
+    }
+
+    function nullify(id, field){
+        if (field.value.trim() != "Malawian"){
+            __$(id).value = "";
         }
     }
 
