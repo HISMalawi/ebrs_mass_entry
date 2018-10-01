@@ -757,11 +757,11 @@
     function checkMarriage(){
         if (__$("married").value.trim() == "Yes"){
             __$("date_of_marriage").removeAttribute("disabled");
-            __$("date_of_marriage").setAttribute("data-validation", "required");
+            //__$("date_of_marriage").setAttribute("data-validation", "required");
             __$("date_of_marriage").setAttribute("data-validation-format", "dd/mm/yyyy")
 
         }else{
-            __$("date_of_marriage").removeAttribute("data-validation");
+            //__$("date_of_marriage").removeAttribute("data-validation");
             __$("date_of_marriage").removeAttribute("data-validation-format");
             __$("date_of_marriage").setAttribute("disabled", "disabled");
             __$("date_of_marriage").value = "";
