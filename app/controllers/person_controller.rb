@@ -141,12 +141,12 @@ class PersonController < ApplicationController
     person.date_reported           = params[:date_reported]
 
     person.village_headman_name    = params[:village_headman_name]
-    person.village_senior_name     = params[:village_senior_name]
+    #person.village_senior_name     = params[:village_senior_name]
     person.village_headman_signed  = params[:village_headman_signed]
 
     person.district_created_at     = @cur_location['district']
-    person.ta_created_at           = @cur_location['ta']
-    person.location_created_at     = @cur_location['village']
+    person.ta_created_at           = (params[:ta_name].blank? ? @cur_location['ta'] : params[:ta_name])
+    person.location_created_at     = (params[:village_name].blank? ? @cur_location['village'] : params[:village_name])
 
     person.upload_status           = "NOT UPLOADED"
     person.creator                 = "#{user.id}|#{user.username}|#{user.first_name} #{user.middle_name} #{user.last_name}"
@@ -236,7 +236,6 @@ class PersonController < ApplicationController
         "Details of Village Headman" => [
             {
                 "Village Headman Name" => "#{@person.village_headman_name}",
-                "Name of Senior Member of Village" => "#{@person.village_senior_name}",
                 "Village Headman Signed?" => "#{@person.village_headman_signed}"
             },
             {

@@ -296,7 +296,9 @@
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>ID Number:</label>
-          <input value="<%=@person.informant_id_number%>" id="informant_id_number" type="text" name="informant_id_number" data-validation="length" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
+          <input value="<%=@person.informant_id_number%>" id="informant_id_number" type="text" name="informant_id_number"
+                 data-validation="informant_id"
+                 data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
         </div>
       </div>
@@ -386,37 +388,29 @@
 
   <fieldset id="headman" style="display: none">
     <legend>DETAILS OF VILLAGE HEADMAN</legend>
-    <div data-row-span="2" class="row">
-      <div data-field-span="1" class="form-inline col-lg-3">
+    <div data-row-span="2" class="row" >
 
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>TA Name:</label>
+        <select id="ta_name" type="text" name="ta_name"
+               data-validation="length" data-validation-length="2-50" value="<%=@cur_location['ta']%>">
+        </select>
       </div>
 
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Village Name:</label>
+        <select id="village_name" type="text" name="village_name"
+               data-validation="length" data-validation-length="2-50" value="<%=@cur_location['village']%>">
+        </select>
+      </div>
+
+    </div>
+
+    <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Name of Village Headman:</label>
         <input id="village_headman_name" type="text" name="village_headman_name" value="<%=@person.village_headman_name%>"
                data-validation="required length" data-validation-length="2-50" value="<%=@person.mother_last_name%>">
-      </div>
-
-
-    </div>
-
-    <div data-row-span="2" class="row">
-
-      <div data-field-span="1" class="form-inline col-lg-3">
-
-      </div>
-
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Name of Village Senior Member:</label>
-        <input id="village_senior_name" type="text" name="village_senior_name"
-               data-validation="length" data-validation-length="2-50" value="<%=@person.village_senior_name%>">
-      </div>
-
-    </div>
-
-    <div data-row-span="2" class="row">
-      <div data-field-span="1" class="form-inline col-lg-3">
-
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
@@ -571,11 +565,12 @@
             if (__$("father_nationality").value.trim() == "Malawian" && (__$("father_first_name").value.trim().length > 0 ||
                     __$("father_last_name").value.trim().length > 0 ||
                     __$("father_middle_name").value.trim().length > 0 ||
-                    __$("father_id_number").value.trim().length > 0)){
+                    __$("father_id_number").value.trim().length > 0) && __$("father_id_number").value.trim() != ""){
 
                 validate = true;
             }else{
-                validate = false
+                validate = false;
+                __$("father_id_number").value = "";
             }
 
             if (validate && ((__$("father_id_number").value.trim().length != 8) ||
@@ -595,14 +590,39 @@
             var validate;
             var id = $el.attr("id");
 
-            if (__$("mother_nationality").value.trim() == "Malawian"){
+            if (__$("mother_nationality").value.trim() == "Malawian" && __$("mother_id_number").value.trim() != ""){
                 validate = true;
             }else{
                 validate = false;
+                __$("mother_id_number").value = "";
             }
 
             if (validate && ((__$("mother_id_number").value.trim().length != 8) ||
                     (__$("mother_id_number").value.trim().match(/\i|o|I|O/g)))){
+                return false;
+            }else {
+                return true;
+            }
+        },
+        errorMessage : 'ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead',
+        errorMessageKey: 'IDNotComplete'
+    });
+
+    $.formUtils.addValidator({
+        name : 'informant_id',
+        validatorFunction : function(value, $el, config, language, $form) {
+            var validate;
+            var id = $el.attr("id");
+
+            if (__$("informant_id_number").value.trim() != ""){
+                validate = true;
+            }else{
+                validate = false;
+                __$("informant_id_number").value = "";
+            }
+
+            if (validate && ((__$("informant_id_number").value.trim().length != 8) ||
+                    (__$("informant_id_number").value.trim().match(/\i|o|I|O/g)))){
                 return false;
             }else {
                 return true;
@@ -814,7 +834,7 @@
         $("#completeness_details #child_name").html(hash['first_name'] + " " + hash['middle_name'] + " " + hash["last_name"]);
         $("#completeness_details #child_gender").html(hash['gender']);
         $("#completeness_details #child_date_of_birth").html(hash['date_of_birth']);
-        $("#completeness_details #child_place_of_birth").html(hash['birth_village'] + " " + hash["birth_ta"] + " " + hash["birth_district"]);
+        $("#completeness_details #child_place_of_birth").html(hash['birth_village'] + ", " + hash["birth_ta"] + ", " + hash["birth_district"]);
 
         $("#completeness_details #mother_name").html(hash['mother_first_name'] + " " + hash['mother_middle_name'] + " " + hash["mother_last_name"]);
         $("#completeness_details #father_name").html(hash['father_first_name'] + " " + hash['father_middle_name'] + " " + hash["father_last_name"]);
@@ -883,7 +903,8 @@
     districts("birth_district", ['birth_ta', 'birth_village']);
     districts("informant_district", ['informant_ta', 'informant_village']);
 
-   <% if request.path.match("/edit")%>
+   <% if request.path.match("/edit")
+   %>
 
     __$("gender").value = "<%= @person.gender%>";
     __$("married").value = "<%= @person.parents_married%>";
@@ -894,10 +915,11 @@
     __$("form_signed").value = "<%= @person.form_signed%>";
     __$("date_of_marriage").value = "<%= @person.date_of_marriage%>";
     __$("village_headman_signed").value = "<%= @person.village_headman_signed%>";
-
     <% else %>
 
    <% end %>
+
+
     var dobpicker;
     var dompicker;
     var dompicker;
@@ -929,6 +951,20 @@
             minDate: (new Date("01/Sep/2018")),
             maxDate: new Date()
         });
+
+        tas('ta_name', "<%=@cur_location['district']%>", [])
+        villages('village_name', "<%=@cur_location['district']%>", "<%=@cur_location['ta']%>");
+
+        setTimeout(function(){
+            <% if !request.path.match("/edit")%>
+            __$("ta_name").value = "<%= @cur_location['ta']%>";
+            __$("village_name").value = "<%= @cur_location['village']%>";
+            <% else %>
+            __$("ta_name").value = "<%= @person.ta_created_at%>";
+            __$("village_name").value = "<%= @person.location_created_at%>";
+            <% end %>
+        }, 1000)
+
     })
 
     $("select option").css("background-color","red");
