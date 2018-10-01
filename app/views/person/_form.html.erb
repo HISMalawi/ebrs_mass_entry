@@ -90,7 +90,7 @@
 <script src="/js/jquery.form-validator.min.js"></script>
 
   <form enctype="multipart/form-data" id="form-create-person" accept-charset="UTF-8"
-        action="/save_record" method="POST"><input type="hidden">
+        action="/save_record" method="POST"><input type="hidden" >
 
     <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
     <%= hidden_field_tag :person_id, @person.person_id -%>
@@ -100,15 +100,34 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input id="last_name" type="text" value="<%=@person.last_name%>" name="last_name" data-validation="required length" data-validation-length="2-55">
+          <input id="last_name" type="text" list="surname_list" autocomplete="off"
+                 value="<%=@person.last_name%>" name="last_name" data-validation="required length" data-validation-length="2-55">
+          <datalist id="surname_list">
+            <%@last_names.each do |name|%>
+                <option value="<%=name%>">
+            <% end %>
+          </datalist>
+
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input id="first_name" type="text" value="<%=@person.first_name%>" name="first_name" data-validation="required length" data-validation-length="2-55">
+          <input id="first_name" type="text" list="first_name_list" autocomplete="off"
+                 value="<%=@person.first_name%>" name="first_name" data-validation="required length" data-validation-length="2-55">
+          <datalist id="first_name_list">
+            <%@first_names.each do |name|%>
+                <option value="<%=name%>">
+            <% end %>
+          </datalist>
+
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input id="middle_name" type="text" name="middle_name" value="<%=@person.middle_name%>">
+          <input id="middle_name" type="text" name="middle_name" value="<%=@person.middle_name%>" list="middle_name_list"  autocomplete="off">
+          <datalist id="middle_name_list">
+            <%@middle_names.each do |name|%>
+                <option value="<%=name%>">
+            <% end %>
+          </datalist>
         </div>
       </div>
 
@@ -178,15 +197,19 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input id="mother_last_name" type="text" name="mother_last_name" data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_last_name%>">
+          <input id="mother_last_name" type="text" name="mother_last_name"  autocomplete="off" list="surname_list"
+                 data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_last_name%>">
+
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input id="mother_first_name" type="text" name="mother_first_name" data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_first_name%>">
+          <input id="mother_first_name" type="text" name="mother_first_name" autocomplete="off" list="first_name_list"
+                 data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_first_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input id="mother_middle_name" type="text" name="mother_middle_name" value="<%=@person.mother_middle_name%>">
+          <input id="mother_middle_name" type="text" name="mother_middle_name" autocomplete="off" list="middle_name_list"
+                 value="<%=@person.mother_middle_name%>">
         </div>
       </div>
 
@@ -215,15 +238,18 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input type="text" name="father_last_name"  data-validation="father" id="father_last_name" value="<%=@person.father_last_name%>">
+          <input type="text" name="father_last_name"  autocomplete="off" list="surname_list"
+                 data-validation="father" id="father_last_name" value="<%=@person.father_last_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input type="text" name="father_first_name" id="father_first_name"  data-validation="father" value="<%=@person.father_first_name%>">
+          <input type="text" name="father_first_name" id="father_first_name"  autocomplete="off" list="first_name_list"
+                 data-validation="father" value="<%=@person.father_first_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input type="text" name="father_middle_name" id="father_middle_name" value="<%=@person.father_middle_name%>">
+          <input type="text" name="father_middle_name" id="father_middle_name"   autocomplete="off" list="middle_name_list"
+                 value="<%=@person.father_middle_name%>">
         </div>
       </div>
 
@@ -278,15 +304,18 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input type="text" id="informant_last_name" name="informant_last_name" value="<%=@person.informant_last_name%>" data-validation="required length" data-validation-length="2-30">
+          <input type="text" id="informant_last_name" name="informant_last_name"  autocomplete="off" list="surname_list"
+                 value="<%=@person.informant_last_name%>" data-validation="required length" data-validation-length="2-30">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input type="text" id="informant_first_name" name="informant_first_name" value="<%=@person.informant_first_name%>" data-validation="required length" data-validation-length="2-30">
+          <input type="text" id="informant_first_name" name="informant_first_name"  autocomplete="off" list="first_name_list"
+                 value="<%=@person.informant_first_name%>" data-validation="required length" data-validation-length="2-30">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input type="text" id="informant_middle_name" name="informant_middle_name" value="<%=@person.informant_middle_name%>">
+          <input type="text" id="informant_middle_name" name="informant_middle_name"  autocomplete="off" list="middle_name_list"
+                 value="<%=@person.informant_middle_name%>">
         </div>
       </div>
 
@@ -392,7 +421,7 @@
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Village Headman Signed?:</label>
-        <select id="form_signed" name="village_headman_signed" data-validation="required" value="<%=@person.village_headman_signed%>">
+        <select id="village_headman_signed" name="village_headman_signed" data-validation="required" value="<%=@person.village_headman_signed%>">
           <option></option>
           <option>Yes</option>
           <option>No</option>
@@ -864,27 +893,40 @@
     __$("informant_district").value = "<%= @person.informant_district%>";
     __$("form_signed").value = "<%= @person.form_signed%>";
     __$("date_of_marriage").value = "<%= @person.date_of_marriage%>";
-   <% else %>
+    __$("village_headman_signed").value = "<%= @person.village_headman_signed%>";
+
+    <% else %>
 
    <% end %>
+    var dobpicker;
+    var dompicker;
+    var dompicker;
 
     jQuery(document).ready(function(){
+        var d = new Date();
+        d.setFullYear(d.getFullYear() - 16);
 
-        var dobpicker = new Pikaday({
+        var d2 = new Date();
+        d2.setFullYear(d.getFullYear() - 50);
+
+        dobpicker = new Pikaday({
             field: document.getElementById('date_of_birth'),
             format: 'DD/MMM/YYYY',
+            minDate: d,
             maxDate: new Date()
         } );
 
-        var dompicker = new Pikaday({
+        dompicker = new Pikaday({
             field: document.getElementById('date_of_marriage'),
             format: 'DD/MMM/YYYY',
+            minDate: d2,
             maxDate: new Date()
         });
 
-        var dompicker = new Pikaday({
+        dompicker = new Pikaday({
             field: document.getElementById('date_reported'),
             format: 'DD/MMM/YYYY',
+            minDate: (new Date("01/Sep/2018")),
             maxDate: new Date()
         });
     })

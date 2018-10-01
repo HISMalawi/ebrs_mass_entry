@@ -17,6 +17,19 @@
         border: 1px dotted ghostwhite;
     }
 </style>
+
+<% if @all['not_offloaded'] > 0%>
+    <button class="btn btn-primary" style="padding: 5px;font-size: 12px;margin: 20px;margin-right: 150px;"
+            onclick="jQuery('#linkModal').modal('show'); set('Village: All Listed Villages'); select('Village', 'all')">
+      <b>Offload Data (<%= @all['not_offloaded']%>)</b>
+    </button>
+<% else %>
+    <button class="btn btn-primary disabled" style="padding: 5px;font-size: 12px;margin: 20px;margin-right: 150px;">
+    <b>Offload Data (<%= @all['not_offloaded']%>)</b>
+    </button>
+
+<% end %>
+
  <div style="width: 100%;margin-top: 7vh;margin-left: 11%;">
     <span><b><h3>Statistics by Village of Registration</h3></b></span>
  </div>
@@ -31,7 +44,6 @@
             <td  style="padding: 3px; text-align: center; "> Total Registered</td>
             <td  style="padding: 3px; text-align: center; ">Offloaded</td>
             <td  style="padding: 3px; text-align: center; ">Not Offloaded</td>
-            <td  style="padding: 3px; text-align: center; ">&nbsp;</td>
           </tr>
           </tr>
           <% @data.each do |dt|%>
@@ -40,18 +52,7 @@
                 <td style="padding: 3px; text-align: center; "><%=  (dt['offloaded'] + dt['not_offloaded']) %></td>
                 <td style="padding: 3px; text-align: center; "><%=  dt['offloaded']%></td>
                 <td style="padding: 3px; text-align: center;"><%=  dt['not_offloaded']%></td>
-                <td style="padding: 3px; text-align: center;">
-                  <% if dt['not_offloaded'] > 0%>
-                      <button class="btn btn-primary" style="padding: 5px;font-size: 12px;"
-                              onclick="jQuery('#linkModal').modal('show'); set('Village: <%= dt['village']%>'); set('Village: <%=dt['village']%>'); select('Village', '<%=dt['village']%>')">
-                        <b>Offload</b>
-                      </button>
-                  <% else %>
-                      <button class="btn btn-primary" disabled="disabled" style="padding: 5px;font-size: 12px;" onclick="alert()">
-                        <b>Offload</b>
-                      </button>
-                  <% end %>
-                </td>
+
               </tr>
           <% end %>
 
@@ -60,18 +61,7 @@
             <td style="text-align: center" ><%=(@all['offloaded'] + @all['not_offloaded'])%></td>
             <td style="text-align: center"><%=@all['offloaded']%></td>
             <td style="text-align: center"><%=@all['not_offloaded']%></td>
-            <td>
-              <% if @all['not_offloaded'] > 0%>
-                  <button class="btn btn-primary" style="padding: 5px;font-size: 12px;"
-                          onclick="jQuery('#linkModal').modal('show'); set('Village: All Listed Villages'); select('Village', 'all')">
-                    <b>Offload All</b>
-                  </button>
-              <% else %>
-                  <button class="btn btn-primary" disabled="disabled" style="padding: 5px;font-size: 12px;" onclick="jQuery('#linkModal').modal('show');">
-                    <b>Offload All</b>
-                  </button>
-              <% end %>
-            </td>
+
           </tr>
 
         </table>
@@ -101,7 +91,6 @@
             <td  style="padding: 3px; text-align: center; "> Total Registered</td>
             <td  style="padding: 3px; text-align: center; ">Offloaded</td>
             <td  style="padding: 3px; text-align: center; ">Not Offloaded</td>
-            <td  style="padding: 3px; text-align: center; ">&nbsp;</td>
           </tr>
           </tr>
           <% @data2.each do |dt|%>
@@ -110,18 +99,7 @@
                 <td style="padding: 3px; text-align: center; "><%=  (dt['offloaded'] + dt['not_offloaded']) %></td>
                 <td style="padding: 3px; text-align: center; "><%=  dt['offloaded']%></td>
                 <td style="padding: 3px; text-align: center;"><%=  dt['not_offloaded']%></td>
-                <td style="padding: 3px; text-align: center;">
-                  <% if dt['not_offloaded'] > 0%>
-                      <button class="btn btn-primary" style="padding: 5px;font-size: 12px;"
-                              onclick="jQuery('#linkModal').modal('show'); set('TA: <%= dt['ta']%>'); select('TA', '<%=dt['ta']%>') ">
-                        <b>Offload</b>
-                      </button>
-                  <% else %>
-                      <button class="btn btn-primary" disabled="disabled" style="padding: 5px;font-size: 12px;">
-                        <b>Offload</b>
-                      </button>
-                  <% end %>
-                </td>
+
               </tr>
           <% end %>
 
@@ -130,18 +108,7 @@
             <td style="text-align: center" ><%=(@all2['offloaded'] + @all['not_offloaded'])%></td>
             <td style="text-align: center"><%=@all2['offloaded']%></td>
             <td style="text-align: center"><%=@all2['not_offloaded']%></td>
-            <td>
-              <% if @all2['not_offloaded'] > 0%>
-                  <button class="btn btn-primary" style="padding: 5px;font-size: 12px;"
-                          onclick="jQuery('#linkModal').modal('show'); set('TA: All Listed TAs'); select('TA', 'all') ">
-                    <b>Offload All</b>
-                  </button>
-              <% else %>
-                  <button class="btn btn-primary" disabled="disabled" style="padding: 5px;font-size: 12px;" onclick="jQuery('#linkModal').modal('show')">
-                    <b>Offload All</b>
-                  </button>
-              <% end %>
-            </td>
+
           </tr>
 
         </table>

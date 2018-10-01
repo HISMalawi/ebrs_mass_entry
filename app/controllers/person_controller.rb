@@ -50,6 +50,13 @@ class PersonController < ApplicationController
 
     @person = Person.new
 
+    @first_names = (File.read("#{Rails.root}/app/assets/data/first_names.csv").split("\n") +
+       Person.pluck("first_name") + Person.pluck("mother_first_name") + Person.pluck("father_first_name")).uniq.sort
+    @middle_names = (File.read("#{Rails.root}/app/assets/data/middle_names.csv").split("\n") +
+       Person.pluck("middle_name") + Person.pluck("mother_middle_name") + Person.pluck("father_middle_name")).uniq.sort
+    @last_names = (File.read("#{Rails.root}/app/assets/data/last_names.csv").split("\n") +
+       Person.pluck("last_name") + Person.pluck("mother_last_name") + Person.pluck("father_last_name")).uniq.sort
+
     tag_id = LocationTag.where(name: "Country").first.id;
     locations = Location.find_by_sql(
         "SELECT l.country FROM location l INNER JOIN location_tag_map m ON l.location_id = m.location_id  WHERE m.location_tag_id = #{tag_id} ")
@@ -61,6 +68,14 @@ class PersonController < ApplicationController
   def edit
 
     @person = Person.find(params[:person_id])
+
+    @first_names = (File.read("#{Rails.root}/app/assets/data/first_names.csv").split("\n") +
+        Person.pluck("first_name") + Person.pluck("mother_first_name") + Person.pluck("father_first_name")).uniq.sort
+    @middle_names = (File.read("#{Rails.root}/app/assets/data/middle_names.csv").split("\n") +
+        Person.pluck("middle_name") + Person.pluck("mother_middle_name") + Person.pluck("father_middle_name")).uniq.sort
+    @last_names = (File.read("#{Rails.root}/app/assets/data/last_names.csv").split("\n") +
+        Person.pluck("last_name") + Person.pluck("mother_last_name") + Person.pluck("father_last_name")).uniq.sort
+
 
     tag_id = LocationTag.where(name: "Country").first.id;
     locations = Location.find_by_sql(
@@ -215,6 +230,19 @@ class PersonController < ApplicationController
             },
             {
                 "Date of Reporting" => "#{@person.date_reported.to_date.strftime('%d/%b/%Y') rescue ""}"
+            }
+        ],
+
+        "Details of Village Headman" => [
+            {
+                "Village Headman Name" => "#{@person.village_headman_name}",
+                "Name of Senior Member of Village" => "#{@person.village_senior_name}",
+                "Village Headman Signed?" => "#{@person.village_headman_signed}"
+            },
+            {
+                "Name of District" => "#{@person.district_created_at}",
+                "Name of TA" => "#{@person.ta_created_at}",
+                "Name of Village" => "#{@person.location_created_at}"
             }
         ]
     }
