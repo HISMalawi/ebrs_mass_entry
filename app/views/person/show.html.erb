@@ -250,7 +250,9 @@
 
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><b>Close</b></button>
-                    <button type="button" style="width: 100px;" class="btn btn-primary" onclick="window.location='/edit/<%=@person.person_id%>' "><b>Edit Record</b></button>
+                    <% if false %>
+                        <button type="button" style="width: 100px;" class="btn btn-primary" onclick="window.location='/edit/<%=@person.person_id%>' "><b>Edit Record</b></button>
+                    <% end %>
                   </div>
                 </div>
               </div>

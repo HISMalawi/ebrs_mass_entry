@@ -11,12 +11,14 @@
     <div class="panel-heading ">
       <span class="glyphicon glyphicon-eye-open"></span>
       <b>View Location</b>
-      <div class="panel-btn">
-        <a class="btn btn-sm btn-info" href="/location/edit?location_id=<%=@location.id%>">
-          <span class="glyphicon glyphicon-pencil"></span>
-          Edit
-        </a>
-      </div>
+      <% if false %>
+          <div class="panel-btn">
+            <a class="btn btn-sm btn-info" href="/location/edit?location_id=<%=@location.id%>">
+              <span class="glyphicon glyphicon-pencil"></span>
+              Edit
+            </a>
+          </div>
+      <% end %>
     </div>
     <div class="panel-body">
       <div class="container-fluid">
