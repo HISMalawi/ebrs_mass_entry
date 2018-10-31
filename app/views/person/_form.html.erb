@@ -95,7 +95,9 @@
     <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
     <%= hidden_field_tag :person_id, @person.person_id -%>
 
-    <fieldset id="child">
+  <div id="progress-div" style="height: 3px;background: #003366;width: 2%;">&nbsp;</div>
+
+  <fieldset id="child">
       <legend>DETAILS OF CHILD</legend>
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
@@ -426,14 +428,15 @@
 
   </fieldset>
 
-    <div class="form-group actions-row">
-      <button type="button" onclick="validateForm()" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Save</button>
-      <button type="button" onclick="clearForm()" class="btn btn-warning" ><span></span> Clear </button>
-      <button type="button" class="btn btn-danger" style="margin-left: 450px;" onclick="window.location = '/person/index?active_tab=person'; " ><b>Cancel</b></button>
+    <div class="form-group actions-row" style="width: 100%;padding-right: 45%;">
+      <button style="display: none" id="finish-btn" type="button" onclick="validateForm()" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Finish </button>
+      <% if false %>
+        <button type="button" onclick="clearForm()" class="btn btn-warning" ><span></span> Clear </button>
+      <% end %>
 
-      <div type="next submit" style="font-weight: bold;" class="btn btn-next btn-success" onclick="next()" ><span></span> Next >> </div>
-      <div type="back submit" style="font-weight: bold;" class="btn btn-next btn-success" onclick="back()"><span></span> << Back </div>
-
+      <div type="next submit"  id="next-btn" style="font-weight: bold;" class="btn btn-next btn-success" onclick="next()" ><span></span> Next >> </div>
+      <div type="back submit"  style="font-weight: bold;" class="btn btn-next btn-success" onclick="back()"><span></span> << Back </div>
+      <button type="button" class="btn btn-danger" style="margin-left: 10px;" onclick="window.location = '/person/index?active_tab=person'; " ><b>Cancel</b></button>
 
     </div>
 
@@ -678,6 +681,16 @@
                 sets[cur_pos].style.display = "block";
             }
         }
+
+        if (cur_pos == sets.length - 1){
+            //Show Finish Button And Hide Next Button
+            jQuery("#next-btn").hide();
+            jQuery("#finish-btn").show();
+        }else{
+            jQuery("#next-btn").show();
+            jQuery("#finish-btn").hide();
+        }
+        __$("progress-div").style.width = (cur_pos/sets.length)*100 + "%";
     }
 
     function back(){
@@ -688,10 +701,21 @@
             cur_pos -= 1;
             sets[cur_pos].style.display = "block";
         }
+
+        if (cur_pos == sets.length - 1){
+            //Show Finish Button And Hide Next Button
+            jQuery("#next-btn").hide();
+            jQuery("#finish-btn").show();
+        }else{
+            jQuery("#next-btn").show();
+            jQuery("#finish-btn").hide();
+        }
     }
 
     function clearForm(){
         jQuery(sets[cur_pos]).find("input, select").val("");
+        __$("progress-div").style.width = "0%";
+
     }
 
     function districts(id, dep){
