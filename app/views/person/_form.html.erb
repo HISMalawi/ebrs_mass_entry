@@ -82,8 +82,12 @@
   }
   #completeness_details .labell{
   }
-  #mother_id_number, #father_id_number{
+  #mother_id_number, #father_id_number, #informant_id_number{
       text-transform: uppercase;
+  }
+
+  .sentence-case{
+      text-transform: capitalize;
   }
 
 </style>
@@ -102,7 +106,7 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input id="last_name" type="text" list="surname_list" autocomplete="off"
+          <input id="last_name" class="sentence-case" type="text" list="surname_list" autocomplete="off"
                  value="<%=@person.last_name%>" name="last_name" data-validation="required length" data-validation-length="2-55">
           <datalist id="surname_list">
             <%@last_names.each do |name|%>
@@ -113,7 +117,7 @@
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input id="first_name" type="text" list="first_name_list" autocomplete="off"
+          <input id="first_name" type="text"  class="sentence-case" list="first_name_list" autocomplete="off"
                  value="<%=@person.first_name%>" name="first_name" data-validation="required length" data-validation-length="2-55">
           <datalist id="first_name_list">
             <%@first_names.each do |name|%>
@@ -124,7 +128,7 @@
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input id="middle_name" type="text" name="middle_name" value="<%=@person.middle_name%>" list="middle_name_list"  autocomplete="off">
+          <input id="middle_name"  class="sentence-case" type="text" name="middle_name" value="<%=@person.middle_name%>" list="middle_name_list"  autocomplete="off">
           <datalist id="middle_name_list">
             <%@middle_names.each do |name|%>
                 <option value="<%=name%>">
@@ -199,18 +203,18 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input id="mother_last_name" type="text" name="mother_last_name"  autocomplete="off" list="surname_list"
+          <input id="mother_last_name"  class="sentence-case" type="text" name="mother_last_name"  autocomplete="off" list="surname_list"
                  data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_last_name%>">
 
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input id="mother_first_name" type="text" name="mother_first_name" autocomplete="off" list="first_name_list"
+          <input id="mother_first_name"  class="sentence-case" type="text" name="mother_first_name" autocomplete="off" list="first_name_list"
                  data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_first_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input id="mother_middle_name" type="text" name="mother_middle_name" autocomplete="off" list="middle_name_list"
+          <input id="mother_middle_name"  class="sentence-case" type="text" name="mother_middle_name" autocomplete="off" list="middle_name_list"
                  value="<%=@person.mother_middle_name%>">
         </div>
       </div>
@@ -226,7 +230,7 @@
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label >ID Number:</label>
-          <input value="<%=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number" data-validation="mother_id"
+          <input value="<%=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number" data-validation="mother_id" maxlength="8" size="8"
                  data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead"
                  data-validation-length="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
@@ -240,17 +244,17 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input type="text" name="father_last_name"  autocomplete="off" list="surname_list"
+          <input type="text"  class="sentence-case" name="father_last_name"  autocomplete="off" list="surname_list"
                  data-validation="father" id="father_last_name" value="<%=@person.father_last_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input type="text" name="father_first_name" id="father_first_name"  autocomplete="off" list="first_name_list"
+          <input type="text" name="father_first_name" id="father_first_name"  class="sentence-case"  autocomplete="off" list="first_name_list"
                  data-validation="father" value="<%=@person.father_first_name%>">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input type="text" name="father_middle_name" id="father_middle_name"   autocomplete="off" list="middle_name_list"
+          <input type="text" name="father_middle_name" id="father_middle_name"  class="sentence-case"  autocomplete="off" list="middle_name_list"
                  value="<%=@person.father_middle_name%>">
         </div>
       </div>
@@ -265,9 +269,12 @@
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>ID Number:</label>
-          <input value="<%=@person.father_id_number%>" id="father_id_number" type="text"
+          <input value="<%=@person.father_id_number%>" id="father_id_number" type="text" maxlength="8" size="8"
                  name="father_id_number"
-                 data-validation="father_id" data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead"
+                 data-validation="father_id father_mother_id_check" data-validation-error-msg="ID Number must have length of 8;
+                 does not contain letter I (use number 1 instead);
+                  does not have letter O (use number 0) instead;
+                  should be different from mother ID Number"
                  data-validation-length="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
         </div>
@@ -298,7 +305,7 @@
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>ID Number:</label>
-          <input value="<%=@person.informant_id_number%>" id="informant_id_number" type="text" name="informant_id_number"
+          <input value="<%=@person.informant_id_number%>" id="informant_id_number" type="text" name="informant_id_number" maxlength="8" size="8"
                  data-validation="informant_id"
                  data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
@@ -308,17 +315,17 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Surname:</label>
-          <input type="text" id="informant_last_name" name="informant_last_name"  autocomplete="off" list="surname_list"
+          <input type="text"  class="sentence-case" id="informant_last_name" name="informant_last_name"  autocomplete="off" list="surname_list"
                  value="<%=@person.informant_last_name%>" data-validation="required length" data-validation-length="2-30">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>First Name:</label>
-          <input type="text" id="informant_first_name" name="informant_first_name"  autocomplete="off" list="first_name_list"
+          <input type="text"  class="sentence-case" id="informant_first_name" name="informant_first_name"  autocomplete="off" list="first_name_list"
                  value="<%=@person.informant_first_name%>" data-validation="required length" data-validation-length="2-30">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input type="text" id="informant_middle_name" name="informant_middle_name"  autocomplete="off" list="middle_name_list"
+          <input type="text"  class="sentence-case" id="informant_middle_name" name="informant_middle_name"  autocomplete="off" list="middle_name_list"
                  value="<%=@person.informant_middle_name%>">
         </div>
       </div>
@@ -347,19 +354,21 @@
       <div data-row-span="1" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Postal Address:</label>
-          <input type="text" name="informant_address_line1" placeholder="e.g CodeBuild Systems" value="<%=@person.informant_address_line1%>">
+          <input type="text"  class="sentence-case" name="informant_address_line1" placeholder="e.g CodeBuild Systems" value="<%=@person.informant_address_line1%>">
         </div>
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Telephone Number:</label>
-          <input type="text" name="informant_phone_number" placeholder="e.g 0991763413" value="<%=@person.informant_phone_number%>">
+          <input type="text" name="informant_phone_number" placeholder="e.g 0991763413" onchange="removeSpace(this)"
+                 data-validation="phone_number" data-validation-message="Input a valid phone number"
+                 value="<%=@person.informant_phone_number%>">
         </div>
       </div>
 
       <div data-row-span="1" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label style="color: white;">Postal Address:</label>
-          <input type="text" name="informant_address_line2" placeholder="e.g P.O Box 31777" value="<%=@person.informant_address_line2%>">
+          <input type="text"  class="sentence-case" name="informant_address_line2" placeholder="e.g P.O Box 31777" value="<%=@person.informant_address_line2%>">
         </div>
 
         <div data-field-span="1" class="form-inline col-lg-3">
@@ -375,7 +384,7 @@
       <div data-row-span="1" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label style="color: white;">Postal Address:</label>
-          <input type="text" name="informant_address_line3" placeholder="e.g Balaka" value="<%=@person.informant_address_line3%>">
+          <input type="text" class="sentence-case"  name="informant_address_line3" placeholder="e.g Balaka" value="<%=@person.informant_address_line3%>">
         </div>
 
         <div data-field-span="1" class="form-inline col-lg-3">
@@ -394,14 +403,14 @@
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>TA Name:</label>
-        <select id="ta_name" type="text" name="ta_name"
+        <select id="ta_name" type="text" name="ta_name"  class="sentence-case"
                data-validation="length" data-validation-length="2-50" value="<%=@cur_location['ta']%>">
         </select>
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Village Name:</label>
-        <select id="village_name" type="text" name="village_name"
+        <select id="village_name" type="text" name="village_name"  class="sentence-case"
                data-validation="length" data-validation-length="2-50" value="<%=@cur_location['village']%>">
         </select>
       </div>
@@ -411,7 +420,8 @@
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Name of Village Headman:</label>
-        <input id="village_headman_name" type="text" name="village_headman_name" value="<%=@person.village_headman_name%>"
+        <input id="village_headman_name" type="text"  class="sentence-case"
+               name="village_headman_name" value="<%=@person.village_headman_name%>"
                data-validation="required length" data-validation-length="2-50" value="<%=@person.mother_last_name%>">
       </div>
 
@@ -560,6 +570,48 @@
     });
 
     $.formUtils.addValidator({
+        name : 'phone_number',
+        validatorFunction : function(value, $el, config, language, $form) {
+
+            if (value.trim().length > 0 && !value.trim().match("^0\\d{7}$|^0\\d{9}$")){
+                return false;
+            }else {
+                return true;
+            }
+        },
+        errorMessage : 'Input a valid phone number',
+        errorMessageKey: 'InvalidPhoneNumber'
+    });
+
+    $.formUtils.addValidator({
+        name : 'father_mother_id_check',
+        validatorFunction : function(value, $el, config, language, $form) {
+            var validate;
+            var id = $el.attr("id");
+
+            if (__$("father_nationality").value.trim() == "Malawian" && (__$("father_first_name").value.trim().length > 0 ||
+                    __$("father_last_name").value.trim().length > 0 ||
+                    __$("father_middle_name").value.trim().length > 0 ||
+                    __$("father_id_number").value.trim().length > 0) && __$("father_id_number").value.trim() != ""){
+
+                validate = true;
+            }else{
+                validate = false;
+                __$("father_id_number").value = "";
+            }
+
+            if(__$("father_id_number").value.trim().length > 0 && __$("mother_id_number").value.toUpperCase().trim() == __$("father_id_number").value.toUpperCase().trim()){
+                return false;
+            }else{
+                return true;
+            }
+        },
+        errorMessage : 'Mother ID Number cannot be the same as father id number',
+        errorMessageKey: 'MotherFatherIdSimilar'
+    });
+
+
+    $.formUtils.addValidator({
         name : 'father_id',
         validatorFunction : function(value, $el, config, language, $form) {
             var validate;
@@ -583,7 +635,7 @@
                 return true;
             }
         },
-        errorMessage : 'ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead',
+        errorMessage : 'ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0 instead); should be different from mother ID Number',
         errorMessageKey: 'IDNotComplete'
     });
 
@@ -607,7 +659,7 @@
                 return true;
             }
         },
-        errorMessage : 'ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead',
+        errorMessage : 'ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead;  should be different from Father ID Number',
         errorMessageKey: 'IDNotComplete'
     });
 
@@ -664,6 +716,9 @@
         __$("father_nationality").appendChild(opt);
     <% end %>
 
+    function removeSpace(node){
+        node.value = node.value.trim().replace(/\s+/g, "");
+    }
 
     function next() {
 
@@ -907,14 +962,29 @@
         __$("informant_first_name").value =  __$("father_first_name").value;
         __$("informant_last_name").value =  __$("father_last_name").value;
         __$("informant_middle_name").value =  __$("father_middle_name").value;
-        __$("informant_id_number").value =  __$("father_id_number").value
+        __$("informant_id_number").value =  __$("father_id_number").value;
+    }
+
+    function lockFields(lockableFields){
+        for(var i = 0; i < lockableFields.length; i++){
+            __$(lockableFields[i]).setAttribute("disabled", "disabled");
+        }
+    }
+
+    function unlockFields(unlockableFields){
+        for(var i = 0; i < unlockableFields.length; i++){
+            __$(unlockableFields[i]).value = ""
+            __$(unlockableFields[i]).removeAttribute("disabled");
+        }
     }
 
     function checkRelationship(){
         if (__$("informant_relationship").value == "Mother"){
-            copyMother();
+            copyMother(); lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
         }else if(__$("informant_relationship").value == "Father") {
-            copyFather();
+            copyFather(); lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
+        }else{
+            unlockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"]);
         }
     }
 
