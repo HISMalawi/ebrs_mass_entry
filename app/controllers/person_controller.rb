@@ -95,9 +95,9 @@ class PersonController < ApplicationController
     person = Person.find(params[:person_id]) rescue nil #editing record
     person = Person.new if person.blank?                #new record
 
-    person.first_name         = params[:first_name]
-    person.last_name          = params[:last_name]
-    person.middle_name        = params[:middle_name]
+    person.first_name         = params[:first_name].titleize rescue nil
+    person.last_name          = params[:last_name].titleize rescue nil
+    person.middle_name        = params[:middle_name].titleize rescue nil
 
     person.gender             = params[:gender]
     person.date_of_birth      = params[:date_of_birth].to_date.to_s(:db)
@@ -108,22 +108,22 @@ class PersonController < ApplicationController
     person.village_of_birth   = params[:birth_village]
 
     person.parents_married    = params[:parents_married]
-    person.mother_first_name  = params[:mother_first_name]
-    person.mother_middle_name = params[:mother_middle_name]
-    person.mother_last_name   = params[:mother_last_name]
+    person.mother_first_name  = params[:mother_first_name].titleize rescue nil
+    person.mother_middle_name = params[:mother_middle_name].titleize rescue nil
+    person.mother_last_name   = params[:mother_last_name].titleize rescue nil
     person.mother_nationality = params[:mother_nationality]
     person.mother_id_number   = params[:mother_id_number].to_s.upcase
     person.date_of_marriage   = params[:date_of_marriage]
 
-    person.father_first_name  = params[:father_first_name]
-    person.father_last_name   = params[:father_last_name]
-    person.father_middle_name = params[:father_middle_name]
+    person.father_first_name  = params[:father_first_name].titleize rescue nil
+    person.father_last_name   = params[:father_last_name].titleize rescue nil
+    person.father_middle_name = params[:father_middle_name].titleize rescue nil
     person.father_nationality = params[:father_nationality]
     person.father_id_number   = params[:father_id_number].to_s.upcase
 
-    person.informant_first_name  = params[:informant_first_name]
-    person.informant_middle_name = params[:informant_middle_name]
-    person.informant_last_name   = params[:informant_last_name]
+    person.informant_first_name  = params[:informant_first_name].titleize rescue nil
+    person.informant_middle_name = params[:informant_middle_name].titleize rescue nil
+    person.informant_last_name   = params[:informant_last_name].titleize rescue nil
     person.informant_nationality = params[:informant_nationality]
     person.informant_id_number   = params[:informant_id_number].to_s.upcase
 
