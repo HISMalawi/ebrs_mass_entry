@@ -235,9 +235,8 @@
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label >ID Number:</label>
-          <input value="<%=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number" data-validation="mother_id" maxlength="8" size="8"
-                 data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead"
-                 data-validation-length="8"
+          <input value="<%=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number"
+                 data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
         </div>
       </div>
@@ -276,11 +275,7 @@
           <label>ID Number:</label>
           <input value="<%=@person.father_id_number%>" id="father_id_number" type="text" maxlength="8" size="8"
                  name="father_id_number"
-                 data-validation="father_id father_mother_id_check" data-validation-error-msg="ID Number must have length of 8;
-                 does not contain letter I (use number 1 instead);
-                  does not have letter O (use number 0) instead;
-                  should be different from mother ID Number"
-                 data-validation-length="8"
+                 data-validation="father_id_length father_id_special_char father_mother_id_check"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
         </div>
       </div>
@@ -311,8 +306,7 @@
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>ID Number:</label>
           <input value="<%=@person.informant_id_number%>" id="informant_id_number" type="text" name="informant_id_number" maxlength="8" size="8"
-                 data-validation="informant_id"
-                 data-validation-error-msg="ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead" data-validation-length="8"
+                 data-validation="informant_id_length informant_id_special_char"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
         </div>
       </div>
@@ -611,7 +605,7 @@
                 return true;
             }
         },
-        errorMessage : 'Mother ID Number cannot be the same as father id number',
+        errorMessage : 'Mother ID Number cannot be the same as father ID Number',
         errorMessageKey: 'MotherFatherIdSimilar'
     });
 
@@ -645,6 +639,62 @@
     });
 
     $.formUtils.addValidator({
+        name : 'father_id_length',
+        validatorFunction : function(value, $el, config, language, $form) {
+            var validate;
+            var id = $el.attr("id");
+
+            if (__$("father_nationality").value.trim() == "Malawian" && (__$("father_first_name").value.trim().length > 0 ||
+                    __$("father_last_name").value.trim().length > 0 ||
+                    __$("father_middle_name").value.trim().length > 0 ||
+                    __$("father_id_number").value.trim().length > 0) && __$("father_id_number").value.trim() != ""){
+
+                validate = true;
+            }else{
+                validate = false;
+                __$("father_id_number").value = "";
+            }
+
+            if (validate && (__$("father_id_number").value.trim().length != 8)){
+                return false;
+            }else {
+                return true;
+            }
+        },
+        errorMessage : 'ID Number must have length of 8',
+        errorMessageKey: 'IDNotBadLength'
+    });
+
+    $.formUtils.addValidator({
+        name : 'father_id_special_char',
+        validatorFunction : function(value, $el, config, language, $form) {
+            var validate;
+            var id = $el.attr("id");
+
+            if (__$("father_nationality").value.trim() == "Malawian" && (__$("father_first_name").value.trim().length > 0 ||
+                    __$("father_last_name").value.trim().length > 0 ||
+                    __$("father_middle_name").value.trim().length > 0 ||
+                    __$("father_id_number").value.trim().length > 0) && __$("father_id_number").value.trim() != ""){
+
+                validate = true;
+            }else{
+                validate = false;
+                __$("father_id_number").value = "";
+            }
+
+            if (validate && ((__$("father_id_number").value.trim().length > 0) &&
+                    (__$("father_id_number").value.trim().match(/\i|o|I|O/g)))){
+                return false;
+            }else {
+                return true;
+            }
+        },
+        errorMessage : 'ID Number does not contain letter I (use number 1 instead), does not have letter O (use number 0 instead)',
+        errorMessageKey: 'IDSpecialChar'
+    });
+
+
+    $.formUtils.addValidator({
         name : 'mother_id',
         validatorFunction : function(value, $el, config, language, $form) {
             var validate;
@@ -669,6 +719,52 @@
     });
 
     $.formUtils.addValidator({
+        name : 'mother_id_special_char',
+        validatorFunction : function(value, $el, config, language, $form) {
+            var validate;
+            var id = $el.attr("id");
+
+            if (__$("mother_nationality").value.trim() == "Malawian" && __$("mother_id_number").value.trim() != ""){
+                validate = true;
+            }else{
+                validate = false;
+                __$("mother_id_number").value = "";
+            }
+
+            if (validate && (__$("mother_id_number").value.trim().match(/\i|o|I|O/g))){
+                return false;
+            }else {
+                return true;
+            }
+        },
+        errorMessage : 'ID Number does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead',
+        errorMessageKey: 'MIDNotComplete'
+    });
+
+    $.formUtils.addValidator({
+        name : 'mother_id_length',
+        validatorFunction : function(value, $el, config, language, $form) {
+            var validate;
+            var id = $el.attr("id");
+
+            if (__$("mother_nationality").value.trim() == "Malawian" && __$("mother_id_number").value.trim() != ""){
+                validate = true;
+            }else{
+                validate = false;
+                __$("mother_id_number").value = "";
+            }
+
+            if (validate && (__$("mother_id_number").value.trim().length != 8)){
+                return false;
+            }else {
+                return true;
+            }
+        },
+        errorMessage : 'ID Number must have length of 8',
+        errorMessageKey: 'MIDNotComplete'
+    });
+
+    $.formUtils.addValidator({
         name : 'informant_id',
         validatorFunction : function(value, $el, config, language, $form) {
             var validate;
@@ -689,6 +785,52 @@
             }
         },
         errorMessage : 'ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead',
+        errorMessageKey: 'IDNotComplete'
+    });
+
+    $.formUtils.addValidator({
+        name : 'informant_id_length',
+        validatorFunction : function(value, $el, config, language, $form) {
+            var validate;
+            var id = $el.attr("id");
+
+            if (__$("informant_id_number").value.trim() != ""){
+                validate = true;
+            }else{
+                validate = false;
+                __$("informant_id_number").value = "";
+            }
+
+            if (validate && (__$("informant_id_number").value.trim().length != 8)){
+                return false;
+            }else {
+                return true;
+            }
+        },
+        errorMessage : 'ID Number must have length of 8',
+        errorMessageKey: 'IDNotCompleteLength'
+    });
+
+    $.formUtils.addValidator({
+        name : 'informant_id_special_char',
+        validatorFunction : function(value, $el, config, language, $form) {
+            var validate;
+            var id = $el.attr("id");
+
+            if (__$("informant_id_number").value.trim() != ""){
+                validate = true;
+            }else{
+                validate = false;
+                __$("informant_id_number").value = "";
+            }
+
+            if (validate && (__$("informant_id_number").value.trim().match(/\i|o|I|O/g))){
+                return false;
+            }else {
+                return true;
+            }
+        },
+        errorMessage : 'ID Number does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead',
         errorMessageKey: 'IDNotComplete'
     });
 
@@ -966,7 +1108,7 @@
     })
 
     function moveToSection(section){
-        console.log(section)
+        console.log(section);
         cur_pos = section;
         jQuery('.form-error').hide();
         for (var i = 0; i < sets.length; i++) {
