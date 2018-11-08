@@ -90,6 +90,11 @@
       text-transform: capitalize;
   }
 
+ .edit{
+    text-decoration: underline;
+     cursor: pointer;
+ }
+
 </style>
 <script src="/js/jquery.form-validator.min.js"></script>
 
@@ -467,51 +472,51 @@
 
             <tr>
               <td class="labell">Child Name</td>
-              <td style="text-align: left; padding-left:50px;" id="child_name"></td>
+              <td style="text-align: left; padding-left:50px;" id="child_name" class="edit 0"></td>
             </tr>
             <tr>
               <td class="labell">Child Gender</td>
-              <td style="text-align: left; padding-left:50px;" id="child_gender">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="child_gender" class="edit 0">&nbsp;</td>
             </tr>
             <tr>
               <td class="labell">Child Date of Birth</td>
-              <td style="text-align: left; padding-left:50px;" id="child_date_of_birth">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="child_date_of_birth" class="edit 0">&nbsp;</td>
             </tr>
             <tr>
               <td class="labell">Child Place of Birth</td>
-              <td style="text-align: left; padding-left:50px;" id="child_place_of_birth">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="child_place_of_birth" class="edit 0">&nbsp;</td>
             </tr>
             <tr>
               <td class="labell">Mother Name</td>
-              <td style="text-align: left; padding-left:50px;" id="mother_name">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="mother_name" class="edit 1">&nbsp;</td>
             </tr>
             <tr>
               <td class="labell">Nationality of Mother</td>
-              <td style="text-align: left; padding-left:50px;" id="mother_nationality">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="mother_nationality" class="edit 1">&nbsp;</td>
             </tr>
             <tr>
               <td class="labell">Mother National ID</td>
-              <td style="text-align: left; padding-left:50px;" id="mother_id_number">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="mother_id_number" class="edit 1">&nbsp;</td>
             </tr>
             <tr>
               <td class="labell">Father Name</td>
-              <td style="text-align: left; padding-left:50px;" id="father_name">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="father_name" class="edit 2">&nbsp;</td>
             </tr>
             <tr>
               <td class="labell">Nationality of Father</td>
-              <td style="text-align: left; padding-left:50px;" id="father_nationality">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="father_nationality" class="edit 2">&nbsp;</td>
             </tr>
             <tr>
               <td class="labell">Father National ID</td>
-              <td style="text-align: left; padding-left:50px;" id="father_id_number">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="father_id_number" class="edit 2">&nbsp;</td>
             </tr>
             <tr>
               <td class="labell">Parents Married to each Other?</td>
-              <td style="text-align: left; padding-left:50px;" id="parents_married">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="parents_married" class="edit 0">&nbsp;</td>
             </tr>
             <tr>
               <td class="labell">Parents signed?</td>
-              <td style="text-align: left; padding-left:50px;" id="form_signed">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="form_signed" class="edit 3">&nbsp;</td>
             </tr>
 
           </table>
@@ -927,6 +932,15 @@
         $("#completeness_details #parents_married").html(hash['parents_married']);
         $("#completeness_details #form_signed").html(hash['form_signed']);
 
+        var nodes = document.getElementsByClassName("edit");
+        for(var i = 0; i < nodes.length; i++){
+            var section = parseInt(nodes[i].className.split(/\s/)[1].trim());
+            nodes[i].setAttribute("section", section);
+            nodes[i].onmousedown = function() {
+                moveToSection(parseInt(this.getAttribute("section")));
+             }
+        }
+
         jQuery('#completenessModal').modal('show');
     }
 
@@ -950,6 +964,20 @@
                 }
         )
     })
+
+    function moveToSection(section){
+        console.log(section)
+        cur_pos = section;
+        jQuery('.form-error').hide();
+        for (var i = 0; i < sets.length; i++) {
+            sets[i].style.display = "none";
+        }
+        sets[section].style.display = "block";
+        jQuery("#next-btn").show();
+        jQuery("#back-btn").show();
+
+        jQuery('#completenessModal').modal('hide');
+    }
 
     function copyMother(){
         __$("informant_first_name").value =  __$("mother_first_name").value;
