@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   post "user/new_permission"
   get "user/delete_permission"
   get "user/view_permission"
+  get "person/suggest"
 
   get "user/role_permissions"
   post "user/role_permissions"
