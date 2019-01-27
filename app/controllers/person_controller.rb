@@ -46,6 +46,11 @@ class PersonController < ApplicationController
     render :template => "/person/index"
   end
 
+  def delete_all_records
+    Person.delete_all
+    redirect_to "/"
+  end
+
   def new
 
     @person = Person.new

@@ -82,6 +82,8 @@ Rails.application.routes.draw do
   get "person/new"
   post "person/new"
 
+  get "person/delete_all_records"
+
   get "/edit/:person_id"  => "person#edit"
   post "/edit/:person_id"  => "person#edit"
 
