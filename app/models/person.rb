@@ -19,7 +19,7 @@ class Person < ActiveRecord::Base
   end
 
   def place_of_birth
-    "#{self.village_of_birth}, #{self.ta_of_birth}, #{self.district_of_birth}".gsub(/\s+/, " ").gsub(/^,/, "")
+    [self.village_of_birth, self.ta_of_birth, self.district_of_birth].delete_if{|v| v.blank?}.join(", ")
   end
 
   def self.dump(location="|")

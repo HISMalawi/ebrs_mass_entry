@@ -168,7 +168,7 @@
         </div>
         <div data-field-span="1"  class="form-inline col-lg-3">
           <label>TA:</label>
-          <select id="birth_ta" type="text" name="birth_ta" data-validation="required"
+          <select id="birth_ta" type="text" name="birth_ta"
           onchange="villages('birth_village', document.getElementById('birth_district').value, document.getElementById('birth_ta').value)"> </select>
         </div>
         <div data-field-span="1"  class="form-inline col-lg-3">
@@ -336,7 +336,7 @@
         </div>
         <div data-field-span="1"  class="form-inline col-lg-3">
           <label>TA:</label>
-          <select id="informant_ta" type="text" name="informant_ta" data-validation="required"
+          <select id="informant_ta" type="text" name="informant_ta"
                   onchange="villages('informant_village', document.getElementById('informant_district').value, document.getElementById('informant_ta').value)"> </select>
         </div>
         <div data-field-span="1"  class="form-inline col-lg-3">
@@ -1092,11 +1092,18 @@
         $("#completeness_details #child_gender").html(hash['gender']);
         $("#completeness_details #child_date_of_birth").html(hash['date_of_birth']);
 
-        if(hash['birth_village']) {
-            $("#completeness_details #child_place_of_birth").html(hash['birth_village'] + ", " + hash["birth_ta"] + ", " + hash["birth_district"]);
-        } else {
-            $("#completeness_details #child_place_of_birth").html(hash["birth_ta"] + ", " + hash["birth_district"]);
+        var arr = []
+        if (hash['birth_village']){
+            arr.push(hash['birth_village']);
         }
+
+        if (hash['birth_ta']){
+            arr.push(hash['birth_ta']);
+        }
+
+        arr.push(hash['birth_district'])
+
+        $("#completeness_details #child_place_of_birth").html(arr.join(", "));
 
         $("#completeness_details #mother_name").html(hash['mother_first_name'] + " " + hash['mother_middle_name'] + " " + hash["mother_last_name"]);
         $("#completeness_details #father_name").html(hash['father_first_name'] + " " + hash['father_middle_name'] + " " + hash["father_last_name"]);
