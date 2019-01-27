@@ -75,7 +75,7 @@ class PersonController < ApplicationController
     end
 
     names = names.delete_if{|name| name if !name.match(/^#{params[:search_value]}/i)}
-
+    names = names.collect{|n| n.titleize}.sort
     render :text => names[0 .. 20].to_json
   end
 
