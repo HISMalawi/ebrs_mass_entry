@@ -173,7 +173,7 @@
         </div>
         <div data-field-span="1"  class="form-inline col-lg-3">
           <label>Village:</label>
-          <select id="birth_village" type="text" name="birth_village" data-validation="required"></select>
+          <select id="birth_village" type="text" name="birth_village" ></select>
         </div>
       </div>
 
@@ -341,7 +341,7 @@
         </div>
         <div data-field-span="1"  class="form-inline col-lg-3">
           <label>Village:</label>
-          <select id="informant_village" data-validation="required" type="text" name="informant_village"></select>
+          <select id="informant_village" type="text" name="informant_village"></select>
         </div>
       </div>
 
@@ -651,13 +651,13 @@
             }
 
             if (validate && ((__$("father_id_number").value.trim().length != 8) ||
-                    (__$("father_id_number").value.trim().match(/\i|o|I|O/g)))){
+                    (__$("father_id_number").value.trim().match(/\i|o|I|O|L|U/g)))){
                 return false;
             }else {
                 return true;
             }
         },
-        errorMessage : 'ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0 instead); should be different from mother ID Number',
+        errorMessage : 'ID Number must have length of 8; does not contain letters I, O, L and U; should be different from mother ID Number',
         errorMessageKey: 'IDNotComplete'
     });
 
@@ -706,13 +706,13 @@
             }
 
             if (validate && ((__$("father_id_number").value.trim().length > 0) &&
-                    (__$("father_id_number").value.trim().match(/\i|o|I|O/g)))){
+                    (__$("father_id_number").value.trim().match(/\i|o|I|O|L|U/g)))){
                 return false;
             }else {
                 return true;
             }
         },
-        errorMessage : 'ID Number does not contain letter I (use number 1 instead), does not have letter O (use number 0 instead)',
+        errorMessage : 'ID Number does not contain letters I, O, L and U',
         errorMessageKey: 'IDSpecialChar'
     });
 
@@ -731,13 +731,13 @@
             }
 
             if (validate && ((__$("mother_id_number").value.trim().length != 8) ||
-                    (__$("mother_id_number").value.trim().match(/\i|o|I|O/g)))){
+                    (__$("mother_id_number").value.trim().match(/\i|o|I|O|L|U/g)))){
                 return false;
             }else {
                 return true;
             }
         },
-        errorMessage : 'ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead;  should be different from Father ID Number',
+        errorMessage : 'ID Number must have length of 8; does not contain letters I, L, O and U;  should be different from Father ID Number',
         errorMessageKey: 'IDNotComplete'
     });
 
@@ -754,13 +754,13 @@
                 __$("mother_id_number").value = "";
             }
 
-            if (validate && (__$("mother_id_number").value.trim().match(/\i|o|I|O/g))){
+            if (validate && (__$("mother_id_number").value.trim().match(/\i|o|I|O|L|U/g))){
                 return false;
             }else {
                 return true;
             }
         },
-        errorMessage : 'ID Number does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead',
+        errorMessage : 'ID Number does not contain letters I, L, O and U',
         errorMessageKey: 'MIDNotComplete'
     });
 
@@ -801,13 +801,13 @@
             }
 
             if (validate && ((__$("informant_id_number").value.trim().length != 8) ||
-                    (__$("informant_id_number").value.trim().match(/\i|o|I|O/g)))){
+                    (__$("informant_id_number").value.trim().match(/\i|o|I|L|U|O/g)))){
                 return false;
             }else {
                 return true;
             }
         },
-        errorMessage : 'ID Number must have length of 8; does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead',
+        errorMessage : 'ID Number must have length of 8; does not contain letters I, O, L and U',
         errorMessageKey: 'IDNotComplete'
     });
 
@@ -847,13 +847,13 @@
                 __$("informant_id_number").value = "";
             }
 
-            if (validate && (__$("informant_id_number").value.trim().match(/\i|o|I|O/g))){
+            if (validate && (__$("informant_id_number").value.trim().match(/\i|o|I|O|L|U/g))){
                 return false;
             }else {
                 return true;
             }
         },
-        errorMessage : 'ID Number does not contain letter I (use number 1 instead), does not have letter O (use number 0) instead',
+        errorMessage : 'ID Number does not contain letters I, O, L and U',
         errorMessageKey: 'IDNotComplete'
     });
 
@@ -1091,7 +1091,12 @@
         $("#completeness_details #child_name").html(hash['first_name'] + " " + hash['middle_name'] + " " + hash["last_name"]);
         $("#completeness_details #child_gender").html(hash['gender']);
         $("#completeness_details #child_date_of_birth").html(hash['date_of_birth']);
-        $("#completeness_details #child_place_of_birth").html(hash['birth_village'] + ", " + hash["birth_ta"] + ", " + hash["birth_district"]);
+
+        if(hash['birth_village']) {
+            $("#completeness_details #child_place_of_birth").html(hash['birth_village'] + ", " + hash["birth_ta"] + ", " + hash["birth_district"]);
+        } else {
+            $("#completeness_details #child_place_of_birth").html(hash["birth_ta"] + ", " + hash["birth_district"]);
+        }
 
         $("#completeness_details #mother_name").html(hash['mother_first_name'] + " " + hash['mother_middle_name'] + " " + hash["mother_last_name"]);
         $("#completeness_details #father_name").html(hash['father_first_name'] + " " + hash['father_middle_name'] + " " + hash["father_last_name"]);
