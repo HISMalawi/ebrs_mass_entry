@@ -175,6 +175,19 @@
             </li>
             <% end %>
 
+            <% if User.find(session[:user_id]).role.downcase == "administrator"%>
+                <li id="reports">
+                  <a href="javascript:" data-toggle="collapse" data-target="#rpt"><i class="fa fa-file">
+                  </i> Reports <i class="fa fa-fw fa-caret-down"></i>
+                  </a>
+                  <ul id="rpt" class="collapse">
+                    <li>
+                      <a href="/report/download_all?active_tab=access">Download All Records</a>
+                    </li>
+                  </ul>
+                </li>
+            <% end %>
+
 
           </ul>
         </div>

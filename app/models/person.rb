@@ -27,6 +27,7 @@ class Person < ActiveRecord::Base
     data = Person.new.attributes.keys.join("|") + "\n"
     records = Person.order('created_at DESC')
     records.each do |person|
+      person.creator = person.creator.gsub("|", "-")
       data = data + person.attributes.values.join("|") + "\n"
     end
 
