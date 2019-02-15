@@ -109,4 +109,7 @@ Rails.application.routes.draw do
   get  "/dump_data" => "person#dump_data"
   get  "/offload_rollback" => "person#offload_rollback"
   post "/dump_data" => "person#dump_data"
+
+  get "/report/download_all"
+
 end
