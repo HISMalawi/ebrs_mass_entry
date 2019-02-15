@@ -22,6 +22,21 @@ class Person < ActiveRecord::Base
     [self.village_of_birth, self.ta_of_birth, self.district_of_birth].delete_if{|v| v.blank?}.join(", ")
   end
 
+  def self.dump_all
+
+    data = Person.new.attributes.keys.join("|") + "\n"
+    records = Person.order('created_at DESC')
+    records.each do |person|
+      data = data + person.attributes.values.join("|") + "\n"
+    end
+
+    File.open("#{Rails.root}/dump.csv", "w"){|f|
+      f.write(data)
+    }
+
+    return true
+  end
+
   def self.dump(location="|")
     cat, loc = location.split("|")
     filter = "ta_created_at" if cat.to_s.downcase == "ta"
