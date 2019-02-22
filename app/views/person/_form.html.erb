@@ -917,6 +917,8 @@
             jQuery("#finish-btn").hide();
         }
         __$("progress-div").style.width = (cur_pos/sets.length)*100 + "%";
+
+        checkRelationship();
     }
 
     function back(){
@@ -936,6 +938,8 @@
             jQuery("#next-btn").show();
             jQuery("#finish-btn").hide();
         }
+
+        checkRelationship();
     }
 
     function clearForm(){
@@ -1073,7 +1077,8 @@
     }
 
     function validateForm(){
-
+        checkRelationship();
+        
         jQuery(sets[cur_pos]).find("input, select").validate();
         if (jQuery(sets[cur_pos]).find(".error").length > 0) {
             jQuery('#form-create-person').submit();
@@ -1277,6 +1282,8 @@
             __$("village_name").value = "<%= @person.location_created_at%>";
             <% end %>
         }, 1000)
+
+        checkRelationship();
 
     })
 

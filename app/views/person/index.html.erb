@@ -72,12 +72,14 @@
     <div class="panel-heading ">
       <span class="glyphicon glyphicon-user"></span>
       <b>List Birth Records</b>
+      <% if User.find(session[:user_id]).role.downcase == "data clerk"%>
       <div class="panel-btn">
         <a class="btn btn-sm btn-info" href="/person/new">
           <span class="glyphicon glyphicon-plus-sign"></span>
           New Birth Record
         </a>
       </div>
+      <% end %>
     </div>
 
 
@@ -175,6 +177,14 @@
                                         '<button onclick="javascript:location=\'/show_person/' + person_id + popup + ' \'"     ' +
 
                                         '    class="action-btn btn btn-success btn-xs ' + clas + '"><i class="fa fa-eye"></i></button></td>';
+
+                                <% if User.find(session[:user_id]).role.downcase == "data supervisor"%>
+                                    json['data'][i][last_index] +=  '<td> ' +
+
+                                        '<button onclick="javascript:location=\'/edit/' + person_id + popup + ' \'"     ' +
+
+                                        '    class="action-btn btn btn-warning btn-xs ' + clas + '"><i class="fa fa-pencil"></i></button></td>';
+                                <% end %>
                             }
                             return JSON.stringify( json );
                         }

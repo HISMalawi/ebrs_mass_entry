@@ -127,9 +127,13 @@
             <li id="home">
               <a href="/"><i class="glyphicon glyphicon-home"></i> Home </a>
             </li>
-            <li id="new">
-              <a href="/person/new?active_tab=home"><i class="glyphicon glyphicon-plus-sign"></i> New Birth Record </a>
-            </li>
+
+            <% if User.find(session[:user_id]).role.downcase == "data clerk"%>
+                <li id="new">
+                  <a href="/person/new?active_tab=home"><i class="glyphicon glyphicon-plus-sign"></i> New Birth Record </a>
+                </li>
+            <% end %>
+
             <li id="person">
               <a href="/person/index?active_tab=person"><i class="fa fa-fw fa-list"></i> Registered Births</a>
             </li>

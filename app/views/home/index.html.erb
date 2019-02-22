@@ -18,7 +18,7 @@
     }
 </style>
 
-<% if @all['not_offloaded'] > 0%>
+<% if @all['not_offloaded'] > 0 && User.find(session[:user_id]).role.downcase == "administrator" %>
     <button class="btn btn-primary" style="padding: 5px;font-size: 12px;margin: 20px;margin-right: 150px;"
             onclick="jQuery('#linkModal').modal('show'); set('Village: All Listed Villages'); select('Village', 'all')">
       <b>Offload Data (<%= @all['not_offloaded']%>)</b>
