@@ -128,7 +128,8 @@
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Other Names:</label>
-          <input id="middle_name"  class="sentence-case" type="text" name="middle_name" value="<%=@person.middle_name%>" list="middle_name_list"  autocomplete="off">
+          <input id="middle_name"  class="sentence-case" type="text" name="middle_name" value="<%=@person.middle_name%>" list="middle_name_list"
+                 autocomplete="off">
           <datalist id="middle_name_list">
 
           </datalist>
@@ -1078,7 +1079,7 @@
 
     function validateForm(){
         checkRelationship();
-        
+
         jQuery(sets[cur_pos]).find("input, select").validate();
         if (jQuery(sets[cur_pos]).find(".error").length > 0) {
             jQuery('#form-create-person').submit();
