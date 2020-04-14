@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'person#new'
 
+  get '/home' => 'home#index'
+
   get "user/index"
   get "user/edit"
   get "user/new"

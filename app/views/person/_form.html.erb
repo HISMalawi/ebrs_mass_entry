@@ -105,7 +105,27 @@
 
   <div id="progress-div" style="height: 3px;background: #003366;width: 2%;">&nbsp;</div>
 
-  <fieldset id="child">
+    <fieldset id="registration_type">
+      <legend>REGISTRATION TYPE</legend>
+
+      <div data-row-span="2" class="row">
+
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>Type of Registration:</label>
+          <div>
+            <label for="gender"></label>
+            <select id="gender" name="gender" data-validation="required">
+              <option></option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    </fieldset>
+
+    <fieldset id="child">
       <legend>DETAILS OF CHILD</legend>
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
