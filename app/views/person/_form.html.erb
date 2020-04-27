@@ -116,8 +116,10 @@
             <label for="gender"></label>
             <select id="gender" name="gender" data-validation="required">
               <option></option>
-              <option>Male</option>
-              <option>Female</option>
+              <option>Normal</option>
+              <option>Abandoned</option>
+              <option>Adopted</option>
+              <option>Orphaned</option>
             </select>
           </div>
         </div>
@@ -125,7 +127,7 @@
 
     </fieldset>
 
-    <fieldset id="child">
+    <fieldset id="child" style="display: none">
       <legend>DETAILS OF CHILD</legend>
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
