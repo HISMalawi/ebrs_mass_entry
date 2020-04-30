@@ -244,6 +244,12 @@
 
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
+          <label>Date of Birth:</label>
+          <input id="mother_date_of_birth" type="text" name="mother_date_of_birth" value="<%=@person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil%>"
+                 class="datepicker" data-validation="required" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
+                 onchange="compareWithDOB()">
+        </div>
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Nationality:</label>
           <select id="mother_nationality" name="mother_nationality" data-validation="required"
                   onchange = "nullify('mother_id_number', this)"
@@ -1278,6 +1284,13 @@
             minDate: d,
             maxDate: new Date()
         } );
+
+        motherDOBpicker = new Pikaday({
+            field: document.getElementById('mother_date_of_birth'),
+            format: 'DD/MMM/YYYY',
+            minDate: d,
+            maxDate: new Date(),
+        });
 
         dompicker = new Pikaday({
             field: document.getElementById('date_of_marriage'),
