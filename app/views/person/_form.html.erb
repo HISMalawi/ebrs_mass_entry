@@ -364,6 +364,48 @@
         </div>
       </div>
 
+      <div data-row-span="2" class="row" style="margin-bottom: 0px;">
+        <label style="color: gray;text-decoration: underline;">Residential Address</label>
+      </div>
+
+      <div data-row-span="2" class="row " style="margin-bottom: 35px;">
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>District:</label>
+          <select id="father_physical_district" type="text" name="father_physical_district" data-validation="required"
+                  onchange="tas('father_physical_ta', this.value, ['father_physical_village'])"></select>
+        </div>
+        <div data-field-span="1"  class="form-inline col-lg-3">
+          <label>TA:</label>
+          <select id="father_physical_ta" type="text" name="father_physical_ta"
+                  onchange="villages('father_physical_village', document.getElementById('father_physical_district').value, document.getElementById('father_physical_ta').value)"> </select>
+        </div>
+        <div data-field-span="1"  class="form-inline col-lg-3">
+          <label>Village:</label>
+          <select id="father_physical_village" type="text" name="father_physical_village" ></select>
+        </div>
+      </div>
+
+      <div data-row-span="2" class="row" style="margin-bottom: 0px;">
+        <label style="color: gray;text-decoration: underline;">Home Address</label>
+      </div>
+
+      <div data-row-span="2" class="row " style="margin-bottom: 35px;">
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>District:</label>
+          <select id="father_home_district" type="text" name="father_home_district" data-validation="required"
+                  onchange="tas('father_home_ta', this.value, ['father_home_village'])"></select>
+        </div>
+        <div data-field-span="1"  class="form-inline col-lg-3">
+          <label>TA:</label>
+          <select id="father_home_ta" type="text" name="father_home_ta"
+                  onchange="villages('father_home_village', document.getElementById('father_home_district').value, document.getElementById('father_home_ta').value)"> </select>
+        </div>
+        <div data-field-span="1"  class="form-inline col-lg-3">
+          <label>Village:</label>
+          <select id="father_home_village" type="text" name="father_home_village" ></select>
+        </div>
+      </div>
+
     </fieldset>
 
     <fieldset id="informant" style="display: none">
@@ -1310,6 +1352,8 @@
     districts("birth_district", ['birth_ta', 'birth_village']);
     districts("mother_physical_district", ['mother_physical_ta', 'mother_physical_village']);
     districts("mother_home_district", ['mother_home_ta', 'mother_home_village']);
+    districts("father_physical_district", ['father_physical_ta', 'father_physical_village']);
+    districts("father_home_district", ['father_home_ta', 'father_home_village']);
     districts("informant_district", ['informant_ta', 'informant_village']);
 
    <% if request.path.match("/edit")
