@@ -325,11 +325,11 @@
       </div>
 
       <div data-row-span="2" class="row" style="margin-bottom: 0px;">
-        <div data-field-span="1" class="form-inline col-lg-3">
+        <div data-field-span="1" class="form-inline col-lg-4">
           <label>Gestation Age at birth: (in weeks)</label>
           <input id="gestation_age" type="number" name="gestation_age" data-validation="required">
         </div>
-        <div data-field-span="1"  class="form-inline col-lg-3">
+        <div data-field-span="1"  class="form-inline col-lg-4">
           <label>Mode of Delivery:</label>
           <select id="delivery_mode" type="text" name="delivery_mode" >
             <option></option>
@@ -340,8 +340,8 @@
             <option>Caesarean Section</option>
           </select>
         </div>
-        <div data-field-span="1"  class="form-inline col-lg-3">
-          <label>Month of pregnancy prenatal care began</label>
+        <div data-field-span="1"  class="form-inline col-lg-4">
+          <label>Month prenatal care began</label>
           <select id="prenatal_care_began" type="text" name="prenatal_care_began">
             <option></option>
             <option>January</option>
@@ -358,12 +358,34 @@
             <option>December</option>
           </select>
         </div>
-        <div data-field-span="1" class="form-inline col-lg-3">
+      </div>
+
+      <div data-row-span="2" class="row" style="margin-bottom: 0px;">
+        <div data-field-span="1" class="form-inline col-lg-6">
           <label>Number of prenatal visits</label>
-          <input name="prenatal_visits_number" id="prenatal_visits_number">
+          <input type="number" name="prenatal_visits_number" id="prenatal_visits_number">
+        </div>
+        <div data-field-span="1" class="form-inline col-lg-6">
+          <label>Number of children born alive to the mother (including this child)</label>
+          <input type="number" name="born_alive_number" id="born_alive_number">
         </div>
       </div>
 
+      <div data-row-span="2" class="row" style="margin-bottom: 0px;">
+        <div data-field-span="1" class="form-inline col-lg-6">
+          <label>Number of children born alive to the mother (and still living)</label>
+          <input type="number" name="born_alive_number_living" id="born_alive_number_living">
+        </div>
+        <div data-field-span="1"  class="form-inline col-lg-6">
+          <label>Level of Education:</label>
+          <select id="delivery_mode" type="text" name="delivery_mode" >
+            <option></option>
+            <option>None</option>
+            <option>Secondary</option>
+            <option>Higher Education</option>
+          </select>
+        </div>
+      </div>
 
     </fieldset>
 
