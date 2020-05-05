@@ -275,7 +275,7 @@
           </select>
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label >ID Number:</label>
+          <label>ID Number:</label>
           <input value="<%=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number"
                  data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
@@ -317,6 +317,21 @@
           <label>TA:</label>
           <select id="mother_home_ta" type="text" name="mother_home_ta"
                   onchange="villages('mother_home_village', document.getElementById('mother_home_district').value, document.getElementById('mother_home_ta').value)"> </select>
+        </div>
+        <div data-field-span="1"  class="form-inline col-lg-3">
+          <label>Village:</label>
+          <select id="mother_home_village" type="text" name="mother_home_village" ></select>
+        </div>
+      </div>
+
+      <div data-row-span="2" class="row" style="margin-bottom: 0px;">
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>Gestation Age at birth: (in weeks)</label>
+          <input id="gestation_age" type="number" name="gestation_age" data-validation="required">
+        </div>
+        <div data-field-span="1"  class="form-inline col-lg-3">
+          <label>Month of pregnancy prenatal care began</label>
+          <select id="prenatal_care_began" type="text" name="prenatal_care_began"> </select>
         </div>
         <div data-field-span="1"  class="form-inline col-lg-3">
           <label>Village:</label>
