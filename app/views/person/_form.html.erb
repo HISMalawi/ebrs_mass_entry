@@ -288,6 +288,14 @@
 
       <div data-row-span="2" class="row " style="margin-bottom: 35px;">
         <div data-field-span="1" class="form-inline col-lg-3">
+          <label>Country:</label>
+          <select id="mother_country" name="mother_country" data-validation="required"
+                  onchange = "nullify('mother_id_number', this)"
+                  value="<%=@person.mother_nationality%>">
+            <option></option>
+          </select>
+        </div>
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>District:</label>
           <select id="mother_physical_district" type="text" name="mother_physical_district" data-validation="required"
           onchange="tas('mother_physical_ta', this.value, ['mother_physical_village'])"></select>
@@ -308,6 +316,17 @@
       </div>
 
       <div data-row-span="2" class="row " style="margin-bottom: 35px;">
+        <div data-field-span="1"  class="form-inline col-lg-12">
+          <label>Same as Residential?</label>
+          <select id="mother_home_as_residence" type="text" name="mother_home_as_residence" >
+            <option></option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+      </div>
+
+      <div data-row-span="2" class="row " style="margin-bottom: 35px;">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>District:</label>
           <select id="mother_home_district" type="text" name="mother_home_district" data-validation="required"
@@ -324,7 +343,7 @@
         </div>
       </div>
 
-      <div data-row-span="2" class="row" style="margin-bottom: 0px;">
+      <div data-row-span="2" class="row" style="margin-bottom: 35px;">
         <div data-field-span="1" class="form-inline col-lg-4">
           <label>Gestation Age at birth: (in weeks)</label>
           <input id="gestation_age" type="number" name="gestation_age" data-validation="required">
@@ -360,7 +379,7 @@
         </div>
       </div>
 
-      <div data-row-span="2" class="row" style="margin-bottom: 0px;">
+      <div data-row-span="2" class="row" style="margin-bottom: 35px;">
         <div data-field-span="1" class="form-inline col-lg-6">
           <label>Number of prenatal visits</label>
           <input type="number" name="prenatal_visits_number" id="prenatal_visits_number">
@@ -371,7 +390,7 @@
         </div>
       </div>
 
-      <div data-row-span="2" class="row" style="margin-bottom: 0px;">
+      <div data-row-span="2" class="row" style="margin-bottom: 35px;">
         <div data-field-span="1" class="form-inline col-lg-6">
           <label>Number of children born alive to the mother (and still living)</label>
           <input type="number" name="born_alive_number_living" id="born_alive_number_living">
