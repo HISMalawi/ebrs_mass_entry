@@ -412,6 +412,12 @@
 
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
+          <label>Date of Birth:</label>
+          <input id="mother_date_of_birth" type="text" name="mother_date_of_birth" value="<%=@person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil%>"
+                 class="datepicker" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
+                 onchange="compareWithDOB()">
+        </div>
+        <div data-field-span="1" class="form-inline col-lg-3">
           <label>Nationality:</label>
           <select id="father_nationality" name="father_nationality"  data-validation="father" value="<%=@person.father_nationality%>"
                   onchange = "nullify('father_id_number', this)">
