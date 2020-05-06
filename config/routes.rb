@@ -104,6 +104,7 @@ Rails.application.routes.draw do
   get "/dispense/:client_id" => "drug#dispense"
   get "/outcomes/:client_id"  => "encounter#outcomes"
 
+  get "/countries" => "location#countries"
   get "/districts" => "location#districts"
   get "/tas" => "location#tas"
   get "/villages" => "location#villages"

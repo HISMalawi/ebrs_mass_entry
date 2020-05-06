@@ -1292,6 +1292,46 @@
 
     }
 
+    function countries(id, dep){
+        for(var i = 0; i < dep.length; i++){
+            jQuery("#" + dep[i]).val("");
+            jQuery(document.getElementById(dep[i])).empty();
+        }
+
+        var node = document.getElementById(id);
+        jQuery(node).empty();
+
+        jQuery.ajax({
+            url: "/countries",
+            success: function(results){
+
+                var opts = JSON.parse(results);
+                for(var i in opts){
+                    var option = document.createElement("option");
+                    option.innerHTML = opts[i];
+                    option.setAttribute("value", opts[i]);
+
+                    <% if request.path.match("/edit")%>
+                    if('<%= @person.district_of_birth%>' == opts[i] && id=="birth_district") {
+                        option.setAttribute("selected", "true");
+                        tas('birth_ta', opts[i], ['birth_village'])
+                    }
+
+                    if('<%= @person.informant_district%>' == opts[i] && id=="informant_district") {
+                        option.setAttribute("selected", "true");
+                        tas('informant_ta', opts[i], ['informant_village'])
+                    }
+                    <% end %>
+                    node.appendChild(option);
+                }
+
+            },
+            error: function(){
+
+            }
+        })
+    }
+
     function districts(id, dep){
         for(var i = 0; i < dep.length; i++){
             jQuery("#" + dep[i]).val("");
