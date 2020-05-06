@@ -111,11 +111,11 @@
       <div data-row-span="2" class="row">
 
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>Type of Registration:</label>
+          <label>Type of Registration: <font color="red">*</font></label>
           <div>
             <label for="gender"></label>
             <select id="gender" name="gender" data-validation="required">
-              <option></option>
+              <option></option> 
               <option>Normal</option>
               <option>Abandoned</option>
               <option>Adopted</option>
@@ -131,7 +131,7 @@
       <legend>DETAILS OF CHILD</legend>
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>Surname:</label>
+          <label>Surname: <font color="red">*</font></label>
           <input id="last_name" class="sentence-case" type="text" list="surname_list" autocomplete="off" pattern=""
                  value="<%=@person.last_name%>" name="last_name" data-validation="required length" data-validation-length="2-55">
           <datalist id="surname_list">
@@ -140,7 +140,7 @@
 
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>First Name:</label>
+          <label>First Name: <font color="red">*</font></label>
           <input id="first_name" type="text"  class="sentence-case" list="first_name_list" autocomplete="off"
                  value="<%=@person.first_name%>" name="first_name" data-validation="required length" data-validation-length="2-55">
           <datalist id="first_name_list">
@@ -161,14 +161,14 @@
       <div data-row-span="2" class="row">
 
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>Date of Birth:</label>
-          <input id="date_of_birth" type="text" name="date_of_birth" value="<%=@person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil%>"
+          <label>Date of Birth: <font color="red">*</font></label>
+          <input id="date_of_birth" type="text" name="date_of_birth" value="<%=@person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil%>" 
                  class="datepicker" data-validation="required" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
           onchange="compareWithDOB()">
         </div>
 
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>Sex:</label>
+          <label>Sex: <font color="red">*</font></label>
           <div>
             <select id="gender" name="gender" data-validation="required">
               <option></option>
@@ -177,11 +177,86 @@
             </select>
           </div>
         </div>
+
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label >ID Number:</label>
+          <input value="<%=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number"
+                 data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
+                 data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
+        </div>
+
       </div>
 
       <div data-row-span="2" class="row" style="margin-bottom: 0px;">
         <label style="color: gray;text-decoration: underline;">Place of Birth</label>
       </div>
+
+      <div data-row-span="2" class="row " style="margin-bottom: 30px;">
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+          <label for="place">Place of birth <font color="red">*</font></label>
+          <select type="text" class="input-small"  id="place_of_birth" name="filter[place]" onchange="showFields(this)">
+            <option></option>
+            <option>Home</option>
+            <option>Hospital</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label for="district_of_birth">District of birth</label>
+          <select type="text" class="input-small"  id="district_of_birth" name="filter[district_of_birth]" onchange="load_tas(this)">
+            <option></option>
+            <% @districts.each do |d|%>
+                <option value="<%= d.name%>"><%= d.name%></option>
+            <% end %>
+          </select>
+
+        </div>
+
+        <div data-field-span="1" class="form-inline col-lg-3">
+
+          <label for="ta_of_birth" class=" place home">TA of birth</label>
+          <select type="text" class="input-small  place home"  id="ta_of_birth" name="filter[ta_of_birth]" onchange="load_villages(this)">
+            <option></option>
+            <% @districts.each do |d|%>
+                <option value="<%= d.id%>"><%= d.name%></option>
+            <% end %>
+          </select>
+        </div>
+
+        <div data-field-span="1" class="form-inline col-lg-3">
+
+          <label for="village_of_birth" class=" place home">Village of birth</label>
+          <select type="text" class="input-small place home"  id="village_of_birth" name="filter[village_of_birth]">
+            <option></option>
+            <% @districts.each do |d|%>
+                <option value="<%= d.id%>"><%= d.name%></option>
+            <% end %>
+          </select>
+
+        </div>
+
+        <div data-field-span="1" class="form-inline col-lg-3">
+
+          <label for="hospital_of_birth" class=" place hospital">Hospital of birth</label>
+          <select type="text" class="input-small place hospital"  id="hospital_of_birth" name="filter[hospital_of_birth]">
+            <option></option>
+            <% @districts.each do |d|%>
+                <option value="<%= d.id%>"><%= d.name%></option>
+            <% end %>
+          </select>
+
+        </div>
+
+        <div data-field-span="1" class="form-inline col-lg-3">
+
+          <label for="other_birth_place" class=" place other">Specify other birth place</label>
+          <input type="text" class="input-small place other"  id="other_birth_place" name="filter[other_birth_place]">
+        </div>
+
+        </div>
+<!--
 
       <div data-row-span="2" class="row " style="margin-bottom: 35px;">
         <div data-field-span="1" class="form-inline col-lg-3">
@@ -199,14 +274,16 @@
           <select id="birth_village" type="text" name="birth_village" ></select>
         </div>
       </div>
-
+-->
       <div data-row-span="2" class="row " style="margin-bottom: 35px;">
+
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>Birth Weight (in Kg):</label>
-          <input id="last_name" class="sentence-case" type="number" autocomplete="off" name="last_name" data-validation="required">
+          <label>Birth Weight:</label>
+          <input id="birth_weight" type="text" name="birth_weight" data-validation-length="0-4" >
         </div>
+
         <div data-field-span="1"  class="form-inline col-lg-3">
-          <label>Type of Birth:</label>
+          <label>Type of Birth: <font color="red">*</font></label>
           <select id="gender" name="gender" data-validation="required">
               <option></option>
               <option>Single</option>
@@ -215,11 +292,9 @@
               <option>Other</option>
             </select>
         </div>
-      </div>
 
-      <div data-row-span="2" class="row" style="border-top: 1px dotted ghostwhite;padding-top: 5px;">
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>Parents married to each other?:</label>
+          <label>Parents married: <font color="red">*</font></label>
           <select id="married" name="parents_married" data-validation="required" onchange="checkMarriage()">
             <option></option>
             <option>Yes</option>
@@ -227,11 +302,31 @@
           </select>
         </div>
 
+      </div>
+
+      <div data-row-span="2" class="row" style="border-top: 1px dotted ghostwhite;padding-top: 5px;">
+
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>If yes, date of marriage:</label>
+          <label>Date of marriage:</label>
           <input type="text" name="date_of_marriage" id="date_of_marriage" disabled="disabled"
                  class="datepicker"  data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
                   onchange="compareWithDOB()">
+        </div>
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>Court Order:</label>
+          <select id="married" name="court_order" id="court_order" data-validation="required" onchange="checkSigned()" disabled="disabled">
+            <option></option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+        <div data-field-span="1" class="form-inline col-lg-3">
+          <label>Parents Signed:</label>
+          <select id="married" name="parents_married" data-validation="required" onchange="checkMarriage()" disabled="disabled">
+            <option></option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
         </div>
       </div>
 
@@ -242,13 +337,13 @@
       <legend>DETAILS OF MOTHER</legend>
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>Surname:</label>
+          <label>Surname:<font color="red">*</font></label>
           <input id="mother_last_name"  class="sentence-case" type="text" name="mother_last_name"  autocomplete="off" list="surname_list"
                  data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_last_name%>">
 
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>First Name:</label>
+          <label>First Name:<font color="red">*</font></label>
           <input id="mother_first_name"  class="sentence-case" type="text" name="mother_first_name" autocomplete="off" list="first_name_list"
                  data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_first_name%>">
         </div>
@@ -1228,7 +1323,12 @@
             //__$("date_of_marriage").setAttribute("data-validation", "required");
             __$("date_of_marriage").setAttribute("data-validation-format", "dd/mm/yyyy")
 
-        }else{
+        } else if (__$("married").value.trim() == "No") {
+          __$("court_order").removeAttribute("disabled");
+
+        }
+
+        else{
             //__$("date_of_marriage").removeAttribute("data-validation");
             __$("date_of_marriage").removeAttribute("data-validation-format");
             __$("date_of_marriage").setAttribute("disabled", "disabled");
@@ -1515,5 +1615,224 @@
             )
         }
     })
+
+  jQuery(".filters input, .filters select").attr('disabled', true).val('');
+  jQuery(".check").attr('disabled', false).val('');
+  jQuery(".home, .hospital, .other").hide().val('');
+
+  selected = [];
+  table = null;
+  initt = false;
+
+  $i(document).ready(function() {
+
+  });
+
+  function initTable(){
+      table =  $i('#example').DataTable(
+              {
+                  "processing": true,
+                  "serverSide": true,
+                  "ordering": false,
+                  "ajax": {
+                      "url": "/search_cases",
+                      "data": function(d){
+                          var ids =['ben', 'brn', 'last_name', 'middle_name', 'first_name', 'gender', 'status',
+                              'place_of_birth', 'district_of_birth', 'ta_of_birth', 'village_of_birth',
+                              'hospital_of_birth', 'other_birth_place','start_date','end_date'];
+
+                          for(var i = 0; i < ids.length; i++){
+                              var node = document.getElementById(ids[i]);
+                              d[node.getAttribute('name')] = node.value;
+                          }
+                      },
+                      dataFilter: function(data){
+                          var json = jQuery.parseJSON( data );
+                          for(var i = 0; i < json['data'].length; i ++){
+                              var last_index = json['data'][i].length - 1;
+                              var person_id = json['data'][i][last_index]
+                              json['data'][i][last_index] =   '<td class="act-btn"> ' +
+                                      '<button onclick="javascript:location=\'/show_person/' + person_id + ' \'"     ' +
+
+                                      '    class="action-btn btn btn-success btn-xs"><i class="fa fa-eye"></i></button></td>';
+                          }
+                          return JSON.stringify( json );
+                      }
+                  }
+              }
+      );
+  }
+
+  function activeDate() {
+    jQuery(function() {
+      jQuery( "#start_date" ).datepicker({ dateFormat: 'dd/mm/yy' });
+    });
+    jQuery(function() {
+      jQuery( "#end_date" ).datepicker({ dateFormat: 'dd/mm/yy' });
+    });
+  }
+  function enableField(fields){
+        for(var i = 0 ; i< fields.length ; i++){
+            jQuery("#"+fields[i]).removeAttr("disabled")
+        }
+  }
+  function disableField(fields){
+        for(var i = 0 ; i< fields.length ; i++){
+            jQuery("#"+fields[i]).attr("disabled","disabled")
+            jQuery("#"+fields[i]).val("")
+        }
+  }
+  function check(node){
+      var nodes = jQuery(node).parent().children();
+
+      if(jQuery(node).is(':checked')){
+        nodes.attr('disabled', false)
+      }else{
+        nodes.attr('disabled', true).val('')
+      }
+
+      jQuery(node).attr('disabled', false)
+  }
+  function loadData(data){
+    var row = document.createElement('tr');
+    __$('tbody').appendChild(row);
+    var td = document.createElement('td');
+    td.className = 'table-cell'
+    td.style.textAlign = 'center';
+    td.innerHTML = data['ben'];
+    row.appendChild(td);
+
+    var td = document.createElement('td');
+    td.className = 'table-cell'
+    td.style.textAlign = 'center';
+    td.innerHTML = data['name'];
+    row.appendChild(td);
+
+      var td = document.createElement('td');
+      td.className = 'table-cell'
+      td.style.textAlign = 'center';
+      td.innerHTML = data['dob'];
+      row.appendChild(td);
+
+      var td = document.createElement('td');
+      td.className = 'table-cell'
+      td.style.textAlign = 'center';
+      td.innerHTML = data['gender'];
+      row.appendChild(td);
+
+      var td = document.createElement('td');
+      td.className = 'table-cell'
+      td.style.textAlign = 'center';
+      td.innerHTML = data['mother_name'];
+      row.appendChild(td);
+
+      var td = document.createElement('td');
+      td.className = 'table-cell'
+      td.style.textAlign = 'center';
+      td.innerHTML = data['father_name'];
+      row.appendChild(td);
+
+      var td = document.createElement('td');
+      td.className = 'table-cell'
+      td.style.textAlign = 'center';
+      td.innerHTML = data['status'];
+      row.appendChild(td);
+  }
+
+  function showFields(select){
+    var clas = select.value.toLowerCase();
+    jQuery(".place").hide().val('');
+    jQuery("." + clas).show().val('');
+  }
+
+  function fields(select){
+    var clas = select.value.toLowerCase();
+    jQuery(".parents_married").hide().val('');
+    jQuery("." + clas).show().val('');
+  }
+
+  function reloadDataTable(node){
+
+      if (initt == true) {
+          table.ajax.reload();
+      }else{
+          initt = true;
+          initTable();
+      }
+
+
+  }
+
+    function capitalize(string){
+        string = string.replace(/\_/g, ' ');
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    function __$(id){
+        return document.getElementById(id);
+    }
+
+    function load_tas(district){
+        var district_name = district.options[district.selectedIndex].text;
+
+        jQuery("#village_of_birth").empty();
+        jQuery("#ta_of_birth").empty();
+        jQuery("#hospital_of_birth").empty();
+
+        if (__$('place_of_birth').value == 'Home') {
+            jQuery.ajax({
+                url: '/person/get_ta_complete?district=' + district_name,
+                success: function (result) {
+                    var list = JSON.parse(result);
+
+                    for (var i = 0; i < list.length; i++) {
+                        var o = document.createElement('option');
+                        o.innerHTML = list[i][1];
+                        o.setAttribute('value', list[i][0]);
+                        __$('ta_of_birth').appendChild(o);
+                    }
+                }
+            })
+        }
+
+        if (__$('place_of_birth').value == 'Hospital') {
+            jQuery.ajax({
+                url: '/person/get_hospital_complete?district=' + district_name,
+                success: function (result) {
+                    var list = JSON.parse(result);
+
+
+                    for (var i = 0; i < list.length; i++) {
+                        var o = document.createElement('option');
+                        o.innerHTML = list[i][1];
+                        o.setAttribute('value', list[i][0]);
+                        __$('hospital_of_birth').appendChild(o);
+                    }
+                }
+            })
+        }
+    }
+
+    function load_villages(ta){
+      var district_name = __$('district_of_birth').options[__$('district_of_birth').selectedIndex].text;
+      var ta_name = ta.options[ta.selectedIndex].text;
+
+      jQuery.ajax({
+          url: '/person/get_village_complete?district=' + district_name + "&ta=" + ta_name,
+          success: function(result){
+              var list = JSON.parse(result);
+              jQuery("#village_of_birth").empty();
+              for(var i = 0; i < list.length; i++){
+                  var o = document.createElement('option');
+                  o.innerHTML = list[i][1];
+                  o.setAttribute('value', list[i][0]);
+                  __$('village_of_birth').appendChild(o);
+              }
+          }
+      })
+  }
+
+  activeDate();
+
 
 </script>

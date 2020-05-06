@@ -53,6 +53,10 @@ class PersonController < ApplicationController
 
   def new
 
+    tag_id = LocationTag.where(name: 'District').last.id
+    @districts = Location.joins(" join location_tag_map m ON m.location_id = location.location_id ")
+    .where(" m.location_tag_id = #{tag_id} ").order("name")
+
     @person = Person.new
 
     tag_id = LocationTag.where(name: "Country").first.id;
