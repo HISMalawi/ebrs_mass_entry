@@ -151,6 +151,14 @@ class LocationController < ApplicationController
     render text: ([""] + locations.sort).to_json
   end
 
+  def countries
+    tag_id = LocationTag.where(name: "Country").first.id;
+    locations = Location.find_by_sql(
+        "SELECT l.name FROM location l INNER JOIN location_tag_map m ON l.location_id = m.location_id  WHERE m.location_tag_id = #{tag_id} ").collect{|s| s.name.force_encoding('utf-8').encode}
+
+    render text: ([""] + locations.sort).to_json
+  end
+
   def districts
     tag_id = LocationTag.where(name: "District").first.id;
     locations = Location.find_by_sql(
