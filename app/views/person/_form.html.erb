@@ -413,7 +413,7 @@
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Date of Birth:</label>
-          <input id="mother_date_of_birth" type="text" name="mother_date_of_birth" value="<%=@person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil%>"
+          <input id="father_date_of_birth" type="text" name="father_date_of_birth" value="<%=@person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil%>"
                  class="datepicker" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
                  onchange="compareWithDOB()">
         </div>
@@ -1462,6 +1462,13 @@
 
         motherDOBpicker = new Pikaday({
             field: document.getElementById('mother_date_of_birth'),
+            format: 'DD/MMM/YYYY',
+            minDate: d,
+            maxDate: new Date(),
+        });
+
+        fatherDOBpicker = new Pikaday({
+            field: document.getElementById('father_date_of_birth'),
             format: 'DD/MMM/YYYY',
             minDate: d,
             maxDate: new Date(),
