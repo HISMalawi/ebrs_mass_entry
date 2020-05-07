@@ -54,6 +54,10 @@ Rails.application.routes.draw do
   get "location/new_tag"
   post "location/new_tag"
 
+  get '/person/get_ta_complete'
+  get '/person/get_village_complete'
+  get '/person/get_hospital_complete'
+
   get "location/view_tag"
   get  "location/edit_tag"
   post "location/edit_tag"
