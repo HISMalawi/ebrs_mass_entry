@@ -428,7 +428,8 @@
         <div data-field-span="1"  class="form-inline col-lg-3">
           <label>TA:</label>
           <select id="mother_home_ta" type="text" name="mother_home_ta"
-                  onchange="villages('mother_home_village', document.getElementById('mother_home_district').value, document.getElementById('mother_home_ta').value)"> </select>
+                  onchange="villages('mother_home_village', document.getElementById('mother_home_district').value, document.getElementById('mother_home_ta').value)">
+          </select>
         </div>
         <div data-field-span="1"  class="form-inline col-lg-3">
           <label>Village:</label>
@@ -897,9 +898,23 @@
         if (residenceSimilarityType === 'mother_home_as_residence') {
             __$('mother_home_district').value = __$('mother_physical_district').value;
             __$('mother_home_district').selected = true;
+            __$('mother_home_district').onchange = tas('mother_home_ta', __$('mother_physical_district').value, ['mother_home_village'])
 
             __$('mother_home_ta').value = __$('mother_physical_ta').value;
+
+            var tasDropdown = __$('mother_home_ta');
+
+            var j = 0;
+
+            for(var i = 0; i === tasDropdown.options[j]; j++) {
+                if(i.value === __$('mother_home_ta').value) {
+                    tasDropdown.selectedIndex = j;
+                    break;
+                }
+            }
+
             __$('mother_home_ta').selected = true;
+            __$('mother_home_ta').onchange = villages('mother_home_village', __$('mother_home_district').value, __$('mother_home_ta').value)
 
             __$('mother_home_village').value = __$('mother_physical_village').value;
             __$('mother_home_village').selected = true;
