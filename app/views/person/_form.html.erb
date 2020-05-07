@@ -383,10 +383,8 @@
 
       <div data-row-span="2" class="row " style="margin-bottom: 35px;">
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>Country:</label>
-          <select id="mother_country" name="mother_country" data-validation="required"
-                  onchange = "nullify('mother_id_number', this)"
-                  value="<%=@person.mother_nationality%>">
+          <label for="mother_country" class=" place home">Country</label>
+          <select type="text" class="input-small  place home"  id="mother_country" name="mother_country">
             <option></option>
           </select>
         </div>
@@ -566,8 +564,7 @@
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Country:</label>
           <select id="father_country" name="father_country" data-validation="required"
-                  onchange = "nullify('father_id_number', this)"
-                  value="<%=@person.father_nationality%>">
+                  onchange = "nullify('father_id_number', this)">
             <option></option>
           </select>
         </div>
@@ -1211,6 +1208,24 @@
             alert("Could not validate some input elements");
         }
     });
+
+    <% (["Malawi"] + @countries).uniq.each do |country|
+      next if country.blank?
+    %>
+        var opt = document.createElement("option");
+        opt.value = "<%=country%>";
+        opt.innerHTML = "<%=country%>";
+        __$("mother_country").appendChild(opt);
+    <% end %>
+
+    <% (["Malawi"] + @countries).uniq.each do |country|
+        next if country.blank?
+    %>
+        var opt = document.createElement("option");
+        opt.value = "<%=country%>";
+        opt.innerHTML = "<%=country%>";
+        __$("father_country").appendChild(opt);
+    <% end %>
 
     <% (["Malawian"] + @nationalities).uniq.each do |n|
     next if n.blank?
