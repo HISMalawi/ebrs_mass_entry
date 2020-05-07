@@ -179,10 +179,10 @@
         </div>
 
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label >ID Number:</label>
-          <input value="<%=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number"
+          <label >ID Number: <font color="red">*</font></label>
+          <input value="<%=@person.child_id_number%>" data-validation="required" id="child_id_number" type="text" name="child_id_number"
                  data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
-                 data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
+                 data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
         </div>
 
       </div>
@@ -295,7 +295,7 @@
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Parents married: <font color="red">*</font></label>
-          <select id="married" name="parents_married" data-validation="required" onchange="checkMarriage()">
+          <select id="married" name="parents_married" data-validation="required"  onchange="checkMarriage()">
             <option></option>
             <option>Yes</option>
             <option>No</option>
@@ -314,7 +314,7 @@
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Court Order:</label>
-          <select id="married" name="court_order" id="court_order" data-validation="required" onchange="checkSigned()" disabled="disabled">
+          <select name="court_order" id="court_order" data-validation="required" onchange="checkSigned()" disabled="disabled">
             <option></option>
             <option>Yes</option>
             <option>No</option>
@@ -322,7 +322,7 @@
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Parents Signed:</label>
-          <select id="married" name="parents_married" data-validation="required" onchange="checkMarriage()" disabled="disabled">
+          <select id="parents_signed" name="parents_signed" data-validation="required" disabled="disabled">
             <option></option>
             <option>Yes</option>
             <option>No</option>
@@ -1472,16 +1472,26 @@
             //__$("date_of_marriage").setAttribute("data-validation", "required");
             __$("date_of_marriage").setAttribute("data-validation-format", "dd/mm/yyyy")
 
-        } else if (__$("married").value.trim() == "No") {
-          __$("court_order").removeAttribute("disabled");
-
-        }
+        } 
 
         else{
             //__$("date_of_marriage").removeAttribute("data-validation");
             __$("date_of_marriage").removeAttribute("data-validation-format");
             __$("date_of_marriage").setAttribute("disabled", "disabled");
             __$("date_of_marriage").value = "";
+            __$("court_order").removeAttribute("disabled");
+        }
+    }
+
+    function checkSigned(){
+        if (__$("court_order").value.trim() == "No"){
+            __$("parents_signed").removeAttribute("disabled");
+        } 
+
+        else{
+            __$("parents_signed").removeAttribute("data-validation-format");
+            __$("parents_signed").setAttribute("disabled", "disabled");
+            __$("parents_signed").value = "";
         }
     }
 
@@ -1679,6 +1689,7 @@
     __$("informant_district").value = "<%= @person.informant_district%>";
     __$("form_signed").value = "<%= @person.form_signed%>";
     __$("date_of_marriage").value = "<%= @person.date_of_marriage%>";
+    __$("court_order").value = "<%= @person.court_order_attached%>";
     __$("village_headman_signed").value = "<%= @person.village_headman_signed%>";
     <% else %>
 
@@ -1903,7 +1914,7 @@
 
   function fields(select){
     var clas = select.value.toLowerCase();
-    jQuery(".parents_married").hide().val('');
+    jQuery(".married").hide().val('');
     jQuery("." + clas).show().val('');
   }
 
@@ -1930,8 +1941,6 @@
 
     function load_tas(district){
         var district_name = district.options[district.selectedIndex].text;
-
-        console.log(district_name)
 
         jQuery("#village_of_birth").empty();
         jQuery("#ta_of_birth").empty();
