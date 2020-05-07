@@ -100,14 +100,23 @@ ActiveRecord::Schema.define(version: 0) do
     t.string   "last_name",                 limit: 255,               null: false
 
     t.string   "gender",                    limit: 255
+    t.string   "birth_weight",              limit: 255
+    t.string   "type_of_birth",             limit: 255
     t.string   "date_of_birth",             limit: 255
     t.string   "place_of_birth",         		limit: 255
+    t.string   "child_id_number",           limit: 255
+    t.string   "birth_registration_type",   limit: 255,               null: false
+
 
     t.string   "district_of_birth",    			limit: 255
     t.string   "ta_of_birth",          			limit: 255
     t.string   "village_of_birth", 					limit: 255
+    t.string   "hospital_of_birth",         limit: 255
+
 		t.string   "parents_married",						limit: 255
     t.string   "date_of_marriage",					limit: 255
+    t.string   "court_order_attached",      limit: 255
+    t.string   "parents_signed",            limit: 255
 
     t.string   "mother_first_name",					limit: 255
 		t.string   "mother_middle_name",				limit: 255
@@ -115,11 +124,39 @@ ActiveRecord::Schema.define(version: 0) do
 		t.string   "mother_nationality",				limit: 255
 		t.string   "mother_id_number",					limit: 255
 
+    t.string   "mother_residential_country",  limit:255
+    t.string   "mother_residential_district", limit: 555
+    t.string   "mother_residential_ta",       limit: 255
+    t.string   "mother_residential_village",  limit: 255
+
+    t.string   "mother_home_country",       limit: 255
+    t.string   "mother_home_district",      limit: 255
+    t.string   "mother_home_ta",            limit: 255
+    t.string   "mother_home_village",       limit: 255
+
+    t.integer  "gestation_at_birth",                      limit: 4
+    t.integer  "number_of_prenatal_visits",               limit: 4
+    t.integer  "month_prenatal_care_started",             limit: 4
+    t.string   "mode_of_delivery",                        limit: 255
+    t.integer  "number_of_children_born_alive_inclusive", limit: 4,   default: 1, null: false
+    t.integer  "number_of_children_born_still_alive",     limit: 4,   default: 1, null: false
+    t.string   "level_of_education",                      limit: 255
+
 		t.string   "father_first_name",					limit: 255
 		t.string   "father_middle_name",				limit: 255
 		t.string   "father_last_name",					limit: 255
 		t.string   "father_nationality",				limit: 255
 		t.string   "father_id_number",					limit: 255
+
+    t.string   "father_residential_country",  limit:255
+    t.string   "father_residential_district", limit: 555
+    t.string   "father_residential_ta",       limit: 255
+    t.string   "father_residential_village",  limit: 255
+
+    t.string   "father_home_country",       limit: 255
+    t.string   "father_home_district",      limit: 255
+    t.string   "father_home_ta",            limit: 255
+    t.string   "father_home_village",       limit: 255
 
 		t.string   "informant_first_name",			limit: 255
 		t.string   "informant_middle_name",			limit: 255
