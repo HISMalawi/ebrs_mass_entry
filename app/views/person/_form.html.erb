@@ -411,7 +411,7 @@
       <div data-row-span="2" class="row " style="margin-bottom: 35px;">
         <div data-field-span="1"  class="form-inline col-lg-12">
           <label>Same as Residence?</label>
-          <select id="mother_home_as_residence" type="text" name="mother_home_as_residence" >
+          <select id="mother_home_as_residence" type="text" name="mother_home_as_residence" onchange="checkResidenceSimilarity('mother_home_as_residence')">
             <option></option>
             <option>Yes</option>
             <option>No</option>
@@ -885,6 +885,30 @@
 <script>
     function __$(id){
         return document.getElementById(id);
+    }
+
+    function checkResidenceSimilarity(parentID) {
+        if (__$(parentID).value === 'Yes') {
+            autoPopulateAddress(parentID);
+        }
+    }
+
+    function autoPopulateAddress(residenceSimilarityType) {
+        if (residenceSimilarityType === 'mother_home_as_residence') {
+            __$('mother_home_district').value = __$('mother_physical_district').value;
+            __$('mother_home_district').selected = true;
+
+            __$('mother_home_ta').value = __$('mother_physical_ta').value;
+            __$('mother_home_ta').selected = true;
+
+            __$('mother_home_village').value = __$('mother_physical_village').value;
+            __$('mother_home_village').selected = true;
+
+        } else if (residenceSimilarityType === 'father_home_as_residence') {
+            __$('father_home_district').value = __$('father_physical_district').value;
+            __$('father_home_ta').value = __$('father_physical_ta').value;
+            __$('father_home_village').value = __$('father_physical_village').value;
+        }
     }
 
     function compareWithDOB(){
