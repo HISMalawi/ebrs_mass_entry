@@ -180,7 +180,7 @@
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label >ID Number: <font color="red">*</font></label>
-          <input value="<%=@person.child_id_number%>" data-validation="required" id="child_id_number" type="text" name="child_id_number"
+          <input value="<%=@person.child_id_number%>" id="child_id_number" type="text" name="child_id_number"
                  data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
         </div>
@@ -195,7 +195,7 @@
 
       <div data-field-span="1" class="form-inline col-lg-3">
           <label for="place">Place of birth <font color="red">*</font></label>
-          <select type="text" class="input-small"  id="place_of_birth" name="filter[place]" onchange="showFields(this)">
+          <select type="text" class="input-small"  id="place_of_birth" name="place_of_birth" onchange="showFields(this)">
             <option></option>
             <option>Home</option>
             <option>Hospital</option>
@@ -205,7 +205,7 @@
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label for="district_of_birth">District of birth</label>
-          <select type="text" class="input-small"  id="district_of_birth" name="filter[district_of_birth]" onchange="load_tas(this)">
+          <select type="text" class="input-small"  id="district_of_birth" name="district_of_birth" onchange="load_tas(this)">
             <option></option>
             <% @districts.each do |d|%>
                 <option value="<%= d.name%>"><%= d.name%></option>
@@ -217,7 +217,7 @@
         <div data-field-span="1" class="form-inline col-lg-3">
 
           <label for="ta_of_birth" class=" place home">TA of birth</label>
-          <select type="text" class="input-small  place home"  id="ta_of_birth" name="filter[ta_of_birth]" onchange="load_villages(this)">
+          <select type="text" class="input-small  place home"  id="ta_of_birth" name="ta_of_birth" onchange="load_villages(this)">
             <option></option>
             <% @districts.each do |d|%>
                 <option value="<%= d.id%>"><%= d.name%></option>
@@ -228,7 +228,7 @@
         <div data-field-span="1" class="form-inline col-lg-3">
 
           <label for="village_of_birth" class=" place home">Village of birth</label>
-          <select type="text" class="input-small place home"  id="village_of_birth" name="filter[village_of_birth]">
+          <select type="text" class="input-small place home"  id="village_of_birth" name="village_of_birth">
             <option></option>
             <% @districts.each do |d|%>
                 <option value="<%= d.id%>"><%= d.name%></option>
@@ -240,7 +240,7 @@
         <div data-field-span="1" class="form-inline col-lg-3">
 
           <label for="hospital_of_birth" class=" place hospital">Hospital of birth</label>
-          <select type="text" class="input-small place hospital"  id="hospital_of_birth" name="filter[hospital_of_birth]">
+          <select type="text" class="input-small place hospital"  id="hospital_of_birth" name="hospital_of_birth">
             <option></option>
             <% @districts.each do |d|%>
                 <option value="<%= d.id%>"><%= d.name%></option>
@@ -252,7 +252,7 @@
         <div data-field-span="1" class="form-inline col-lg-3">
 
           <label for="other_birth_place" class=" place other">Specify other birth place</label>
-          <input type="text" class="input-small place other"  id="other_birth_place" name="filter[other_birth_place]">
+          <input type="text" class="input-small place other"  id="other_birth_place" name="other_birth_place">
         </div>
 
         </div>
@@ -371,7 +371,7 @@
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>ID Number:</label>
-          <input value="<%=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number"
+          <input value="<%=@person.child_id_number%>" id="child_id_number" type="text" name="child_id_number"
                  data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
         </div>
@@ -455,21 +455,7 @@
         </div>
         <div data-field-span="1"  class="form-inline col-lg-4">
           <label>Month prenatal care began</label>
-          <select id="prenatal_care_began" type="text" name="prenatal_care_began">
-            <option></option>
-            <option>January</option>
-            <option>February</option>
-            <option>March</option>
-            <option>April</option>
-            <option>May</option>
-            <option>June</option>
-            <option>July</option>
-            <option>August</option>
-            <option>September</option>
-            <option>October</option>
-            <option>November</option>
-            <option>December</option>
-          </select>
+          <input type="number" name="prenatal_care_began", id="prenatal_care_began">
         </div>
       </div>
 
@@ -926,7 +912,9 @@
         }
     }
 
+
     function compareWithDOB(){
+
 
         if ((new Date(__$("date_of_marriage").value) == "Invalid Date") || (new Date(__$("date_of_marriage").value)) == undefined){
             __$("date_of_marriage").value = ""
