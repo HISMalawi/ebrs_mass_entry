@@ -121,17 +121,26 @@ class PersonController < ApplicationController
     person = Person.find(params[:person_id]) rescue nil #editing record
     person = Person.new if person.blank?                #new record
 
+    person.birth_registration_type = params[:registration_type]
+
     person.first_name         = params[:first_name].titleize rescue nil
     person.last_name          = params[:last_name].titleize rescue nil
     person.middle_name        = params[:middle_name].titleize rescue nil
 
     person.gender             = params[:gender]
     person.date_of_birth      = params[:date_of_birth].to_date.to_s(:db)
+    person.child_id_number    = params[:child_id_number]
 
     person.place_of_birth     = params[:place_of_birth]
-    person.district_of_birth  = params[:birth_district]
-    person.ta_of_birth        = params[:birth_ta]
-    person.village_of_birth   = params[:birth_village]
+    person.district_of_birth  = params[:district_of_birth]
+    person.ta_of_birth        = params[:ta_of_birth]
+    person.village_of_birth   = params[:village_of_birth]
+    person.hospital_of_birth  = params[:hospital_of_birth]
+    person.other_place_of_birth_details = params[:other_birth_place]
+
+    person.birth_weight       = params[:birth_weight]
+    person.type_of_birth      = params[:type_of_birth]
+
 
     person.parents_married    = params[:parents_married]
     person.mother_first_name  = params[:mother_first_name].titleize rescue nil
@@ -140,6 +149,9 @@ class PersonController < ApplicationController
     person.mother_nationality = params[:mother_nationality]
     person.mother_id_number   = params[:mother_id_number].to_s.upcase
     person.date_of_marriage   = params[:date_of_marriage]
+
+    person.court_order_attached = params[:court_order]
+    person.parents_signed     = params[:parents_signed]
 
     person.father_first_name  = params[:father_first_name].titleize rescue nil
     person.father_last_name   = params[:father_last_name].titleize rescue nil

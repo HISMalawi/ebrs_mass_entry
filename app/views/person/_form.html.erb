@@ -113,13 +113,15 @@
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Type of Registration: <font color="red">*</font></label>
           <div>
-            <label for="gender"></label>
-            <select id="gender" name="gender" data-validation="required">
-              <option></option> 
+            <label for="registration_type"></label>
+            <select id="registration_type" name="registration_type" data-validation="required">
+              <!--<option></option> -->
               <option>Normal</option>
+              <!--
               <option>Abandoned</option>
               <option>Adopted</option>
               <option>Orphaned</option>
+            -->
             </select>
           </div>
         </div>
@@ -255,7 +257,7 @@
           <label for="other_birth_place" class=" place other">Specify other birth place</label>
           <input type="text" class="input-small place other"  id="other_birth_place" name="other_birth_place">
         </div>
-
+      </div>
 
       <div data-row-span="2" class="row " style="margin-bottom: 35px;">
 
@@ -266,12 +268,8 @@
 
         <div data-field-span="1"  class="form-inline col-lg-3">
           <label>Type of Birth: <font color="red">*</font></label>
-          <select id="gender" name="gender" data-validation="required">
-              <option></option>
+          <select id="type_of_birth" name="type_of_birth" data-validation="required">
               <option>Single</option>
-              <option>Twin</option>
-              <option>Triplet</option>
-              <option>Other</option>
             </select>
         </div>
 
