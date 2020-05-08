@@ -707,19 +707,26 @@
     <div data-row-span="2" class="row" >
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>TA Name:</label>
-        <select id="ta_name" type="text" name="ta_name"  class="sentence-case"
-               data-validation="length" data-validation-length="2-50" value="<%=@cur_location['ta']%>">
+        <label>District: <font color="red">*</font></label>
+        <select id="village_headman_district" type="text" name="village_headman_district" data-validation="required"
+                onchange="tas('village_headman_ta', this.value, ['village_headman_village'])"></select>
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>TA:</label>
+        <select id="village_headman_ta" type="text" name="village_headman_ta"  class="sentence-case"
+               data-validation="required"
+                onchange="villages('village_headman_village', document.getElementById('village_headman_district').value,
+                    document.getElementById('village_headman_ta').value)">
         </select>
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Village Name:</label>
-        <select id="village_name" type="text" name="village_name"  class="sentence-case"
-               data-validation="length" data-validation-length="2-50" value="<%=@cur_location['village']%>">
+        <select id="village_headman_village" type="text" name="village_headman_village" data-validation="required">
+
         </select>
       </div>
-
     </div>
 
     <div data-row-span="2" class="row">
@@ -1648,6 +1655,7 @@
     districts("father_physical_district", ['father_physical_ta', 'father_physical_village']);
     districts("father_home_district", ['father_home_ta', 'father_home_village']);
     districts("informant_district", ['informant_ta', 'informant_village']);
+    districts("village_headman_district", ['village_headman_ta', 'village_headman_village'])
 
    <% if request.path.match("/edit")
    %>
@@ -1713,8 +1721,9 @@
             maxDate: new Date()
         });
 
-        tas('ta_name', "<%=@cur_location['district']%>", [])
-        villages('village_name', "<%=@cur_location['district']%>", "<%=@cur_location['ta']%>");
+        tas('village_headman_ta', 'village_headman_district', [])
+
+        villages('village_headman_village', 'village_headman_district', 'village_headman_ta');
 
         setTimeout(function(){
             <% if !request.path.match("/edit")%>
