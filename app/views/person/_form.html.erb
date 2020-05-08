@@ -180,7 +180,11 @@
 
         <div data-field-span="1" class="form-inline col-lg-3">
           <label >ID Number: <font color="red">*</font></label>
+<<<<<<< HEAD
           <input value="<%=@person.child_id_number%>" id="child_id_number" type="text" name="child_id_number"
+=======
+          <input value="<%#=@person.child_id_number%>" data-validation="required" id="child_id_number" type="text" name="child_id_number"
+>>>>>>> b43f2992a32d47d304a512e8866431ff663d5a9c
                  data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
         </div>
@@ -337,13 +341,13 @@
       <legend>DETAILS OF MOTHER</legend>
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>Surname:<font color="red">*</font></label>
+          <label>Surname: <font color="red">*</font></label>
           <input id="mother_last_name"  class="sentence-case" type="text" name="mother_last_name"  autocomplete="off" list="surname_list"
                  data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_last_name%>">
 
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>First Name:<font color="red">*</font></label>
+          <label>First Name: <font color="red">*</font></label>
           <input id="mother_first_name"  class="sentence-case" type="text" name="mother_first_name" autocomplete="off" list="first_name_list"
                  data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_first_name%>">
         </div>
@@ -358,11 +362,11 @@
         <div data-field-span="1" class="form-inline col-lg-3">
           <label>Date of Birth:</label>
           <input id="mother_date_of_birth" type="text" name="mother_date_of_birth" value="<%=@person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil%>"
-                 class="datepicker" data-validation="required" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
+                 class="datepicker" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
                  onchange="compareWithDOB()">
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>Nationality:</label>
+          <label>Nationality: <font color="red">*</font></label>
           <select id="mother_nationality" name="mother_nationality" data-validation="required"
                   onchange = "nullify('mother_id_number', this)"
                   value="<%=@person.mother_nationality%>">
@@ -370,8 +374,10 @@
           </select>
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>ID Number:</label>
+
+          <label>ID Number: </label>
           <input value="<%=@person.child_id_number%>" id="child_id_number" type="text" name="child_id_number"
+
                  data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
                  data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
         </div>
@@ -383,24 +389,25 @@
 
       <div data-row-span="2" class="row " style="margin-bottom: 35px;">
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label for="mother_country" class=" place home">Country</label>
-          <select type="text" class="input-small  place home"  id="mother_country" name="mother_country">
+          <label for="mother_country" class=" place home">Country: <font color="red">*</font></label>
+          <select type="text" class="input-small  place home"  id="mother_country" name="mother_country" data-validation="required">
             <option></option>
           </select>
         </div>
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>District:</label>
+          <label>District: <font color="red">*</font></label>
           <select id="mother_physical_district" type="text" name="mother_physical_district" data-validation="required"
           onchange="tas('mother_physical_ta', this.value, ['mother_physical_village'])"></select>
         </div>
         <div data-field-span="1"  class="form-inline col-lg-3">
-          <label>TA:</label>
-          <select id="mother_physical_ta" type="text" name="mother_physical_ta"
-          onchange="villages('mother_physical_village', document.getElementById('mother_physical_district').value, document.getElementById('mother_physical_ta').value)"> </select>
+          <label>TA: <font color="red">*</font></label>
+          <select id="mother_physical_ta" type="text" name="mother_physical_ta" data-validation="required"
+          onchange="villages('mother_physical_village', document.getElementById('mother_physical_district').value, document.getElementById('mother_physical_ta').value)">
+          </select>
         </div>
         <div data-field-span="1"  class="form-inline col-lg-3">
-          <label>Village:</label>
-          <select id="mother_physical_village" type="text" name="mother_physical_village" ></select>
+          <label>Village: <font color="red">*</font></label>
+          <select id="mother_physical_village" type="text" name="mother_physical_village" data-validation="required"></select>
         </div>
       </div>
 
@@ -421,19 +428,19 @@
 
       <div data-row-span="2" class="row " style="margin-bottom: 35px;">
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>District:</label>
+          <label>District: <font color="red">*</font></label>
           <select id="mother_home_district" type="text" name="mother_home_district" data-validation="required"
                   onchange="tas('mother_home_ta', this.value, ['mother_home_village'])"></select>
         </div>
         <div data-field-span="1"  class="form-inline col-lg-3">
-          <label>TA:</label>
-          <select id="mother_home_ta" type="text" name="mother_home_ta"
+          <label>TA: <font color="red">*</font></label>
+          <select id="mother_home_ta" type="text" name="mother_home_ta" data-validation="required"
                   onchange="villages('mother_home_village', document.getElementById('mother_home_district').value, document.getElementById('mother_home_ta').value)">
           </select>
         </div>
         <div data-field-span="1"  class="form-inline col-lg-3">
-          <label>Village:</label>
-          <select id="mother_home_village" type="text" name="mother_home_village" ></select>
+          <label>Village: <font color="red">*</font></label>
+          <select id="mother_home_village" type="text" name="mother_home_village" data-validation="required"></select>
         </div>
       </div>
 
@@ -493,7 +500,7 @@
       <legend>DETAILS OF FATHER</legend>
       <div data-row-span="2" class="row">
         <div data-field-span="1" class="form-inline col-lg-3">
-          <label>Surname:</label>
+          <label>Surname: </label>
           <input type="text"  class="sentence-case" name="father_last_name"  autocomplete="off" list="surname_list"
                  data-validation="father" id="father_last_name" value="<%=@person.father_last_name%>">
         </div>
@@ -1705,14 +1712,14 @@
         motherDOBpicker = new Pikaday({
             field: document.getElementById('mother_date_of_birth'),
             format: 'DD/MMM/YYYY',
-            minDate: d,
+            minDate: d2,
             maxDate: new Date(),
         });
 
         fatherDOBpicker = new Pikaday({
             field: document.getElementById('father_date_of_birth'),
             format: 'DD/MMM/YYYY',
-            minDate: d,
+            minDate: d2,
             maxDate: new Date(),
         });
 
