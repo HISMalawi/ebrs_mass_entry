@@ -11,3 +11,7 @@ Installation Steps
 default login
  username: admin
  password: p@ssword
+
+# TODO:
+
+- Integrate CI and Management apps i.e. (Trello, Slack)
