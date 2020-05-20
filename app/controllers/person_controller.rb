@@ -193,7 +193,7 @@ class PersonController < ApplicationController
     person.updated_at              = DateTime.now
     person.save
 
-    render :text => "OK";
+    render :text => "OK"
   end
 
   def show
