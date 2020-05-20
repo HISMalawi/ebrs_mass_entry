@@ -111,7 +111,7 @@
     <div data-row-span="2" class="row">
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Type of Registration: <font color="red">*</font></label>
+        <label>Type of Registration: <span style="color: red; ">*</span></label>
         <div>
           <label for="registration_type"></label>
           <select id="registration_type" name="registration_type" data-validation="required">
@@ -133,7 +133,7 @@
     <legend>DETAILS OF CHILD</legend>
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Surname: <font color="red">*</font></label>
+        <label>Surname: <span style="color: red; ">*</span></label>
         <input id="last_name" class="sentence-case" type="text" list="surname_list" autocomplete="off" pattern=""
                value="<%=@person.last_name%>" name="last_name" data-validation="required length" data-validation-length="2-55">
         <datalist id="surname_list">
@@ -142,7 +142,7 @@
 
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>First Name: <font color="red">*</font></label>
+        <label>First Name: <span style="color: red; ">*</span></label>
         <input id="first_name" type="text"  class="sentence-case" list="first_name_list" autocomplete="off"
                value="<%=@person.first_name%>" name="first_name" data-validation="required length" data-validation-length="2-55">
         <datalist id="first_name_list">
@@ -163,14 +163,14 @@
     <div data-row-span="2" class="row">
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Date of Birth: <font color="red">*</font></label>
+        <label>Date of Birth: <span style="color: red; ">*</span></label>
         <input id="date_of_birth" type="text" name="date_of_birth" value="<%=@person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil%>"
                class="datepicker" data-validation="required" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
                onchange="compareWithDOB()">
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Sex: <font color="red">*</font></label>
+        <label>Sex: <span style="color: red; ">*</span></label>
         <div>
           <select id="gender" name="gender" data-validation="required">
             <option></option>
@@ -197,7 +197,7 @@
     <div data-row-span="2" class="row " style="margin-bottom: 30px;">
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label for="place">Place of birth <font color="red">*</font></label>
+        <label for="place">Place of birth <span style="color: red; ">*</span></label>
         <select type="text" class="input-small"  id="place_of_birth" name="place_of_birth" onchange="showFields(this)">
           <option></option>
           <option>Home</option>
@@ -267,7 +267,7 @@
       </div>
 
       <div data-field-span="1"  class="form-inline col-lg-3">
-        <label>Type of Birth: <font color="red">*</font></label>
+        <label>Type of Birth: <span style="color: red; ">*</span></label>
         <select id="type_of_birth" name="type_of_birth" data-validation="required" onchange="checkTypeOfBirth(this.value)">
           <option></option>
           <option>Single</option>
@@ -278,7 +278,7 @@
       </div>
 
       <div id="specify_birth_type" data-field-span="1"  class="form-inline col-lg-3" style="visibility: hidden">
-        <label>Specify Other: <font color="red">*</font></label>
+        <label>Specify Other: <span style="color: red; ">*</span></label>
         <select id="specify_type_of_birth" name="specify_type_of_birth">
           <option></option>
           <option>4</option>
@@ -298,7 +298,7 @@
     <div data-row-span="2" class="row" style="border-top: 1px dotted ghostwhite;padding-top: 5px;">
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Parents married: <font color="red">*</font></label>
+        <label>Parents married: <span style="color: red; ">*</span></label>
         <select id="married" name="parents_married" data-validation="required"  onchange="checkMarriage()">
           <option></option>
           <option>Yes</option>
@@ -337,13 +337,13 @@
     <legend>DETAILS OF MOTHER</legend>
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Surname: <font color="red">*</font></label>
+        <label>Surname: <span style="color: red; ">*</span></label>
         <input id="mother_last_name"  class="sentence-case" type="text" name="mother_last_name"  autocomplete="off" list="surname_list"
                data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_last_name%>">
 
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>First Name: <font color="red">*</font></label>
+        <label>First Name: <span style="color: red; ">*</span></label>
         <input id="mother_first_name"  class="sentence-case" type="text" name="mother_first_name" autocomplete="off" list="first_name_list"
                data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_first_name%>">
       </div>
@@ -362,7 +362,7 @@
                onchange="compareWithDOB()">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Nationality: <font color="red">*</font></label>
+        <label>Nationality: <span style="color: red; ">*</span></label>
         <select id="mother_nationality" name="mother_nationality" data-validation="required"
                 onchange = "nullify('mother_id_number', this)"
                 value="<%=@person.mother_nationality%>">
@@ -385,24 +385,24 @@
 
     <div data-row-span="2" class="row " style="margin-bottom: 35px;">
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label for="mother_country" class=" place home">Country: <font color="red">*</font></label>
+        <label for="mother_country" class=" place home">Country: <span style="color: red; ">*</span></label>
         <select type="text" class="input-small  place home"  id="mother_country" name="mother_country" data-validation="required">
           <option></option>
         </select>
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>District: <font color="red">*</font></label>
+        <label>District: <span style="color: red; ">*</span></label>
         <select id="mother_physical_district" type="text" name="mother_physical_district" data-validation="required"
                 onchange="tas('mother_physical_ta', this.value, ['mother_physical_village'])"></select>
       </div>
       <div data-field-span="1"  class="form-inline col-lg-3">
-        <label>TA: <font color="red">*</font></label>
+        <label>TA: <span style="color: red; ">*</span></label>
         <select id="mother_physical_ta" type="text" name="mother_physical_ta" data-validation="required"
                 onchange="villages('mother_physical_village', document.getElementById('mother_physical_district').value, document.getElementById('mother_physical_ta').value)">
         </select>
       </div>
       <div data-field-span="1"  class="form-inline col-lg-3">
-        <label>Village: <font color="red">*</font></label>
+        <label>Village: <span style="color: red; ">*</span></label>
         <select id="mother_physical_village" type="text" name="mother_physical_village" data-validation="required"></select>
       </div>
     </div>
@@ -424,18 +424,18 @@
 
     <div data-row-span="2" class="row " style="margin-bottom: 35px;">
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>District: <font color="red">*</font></label>
+        <label>District: <span style="color: red; ">*</span></label>
         <select id="mother_home_district" type="text" name="mother_home_district" data-validation="required"
                 onchange="tas('mother_home_ta', this.value, ['mother_home_village'])"></select>
       </div>
       <div data-field-span="1"  class="form-inline col-lg-3">
-        <label>TA: <font color="red">*</font></label>
+        <label>TA: <span style="color: red; ">*</span></label>
         <select id="mother_home_ta" type="text" name="mother_home_ta" data-validation="required"
                 onchange="villages('mother_home_village', document.getElementById('mother_home_district').value, document.getElementById('mother_home_ta').value)">
         </select>
       </div>
       <div data-field-span="1"  class="form-inline col-lg-3">
-        <label>Village: <font color="red">*</font></label>
+        <label>Village: <span style="color: red; ">*</span></label>
         <select id="mother_home_village" type="text" name="mother_home_village" data-validation="required"></select>
       </div>
     </div>
@@ -727,7 +727,7 @@
     <div data-row-span="2" class="row" >
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>District: <font color="red">*</font></label>
+        <label>District: <span style="color: red; ">*</span></label>
         <select id="village_headman_district" type="text" name="village_headman_district" data-validation="required"
                 onchange="tas('village_headman_ta', this.value, ['village_headman_village'])"></select>
       </div>
