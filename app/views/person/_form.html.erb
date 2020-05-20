@@ -733,7 +733,7 @@
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>TA:</label>
+        <label for="village_headman_ta">TA:</label>
         <select id="village_headman_ta" type="text" name="village_headman_ta"  class="sentence-case"
                 data-validation="required"
                 onchange="villages('village_headman_village', document.getElementById('village_headman_district').value,
@@ -742,9 +742,8 @@
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Village Name:</label>
+        <label for="village_headman_village">Village Name:</label>
         <select id="village_headman_village" type="text" name="village_headman_village" data-validation="required">
-
         </select>
       </div>
     </div>
@@ -753,19 +752,36 @@
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Name of Village Headman:</label>
         <input id="village_headman_name" type="text"  class="sentence-case"
-               name="village_headman_name" value="<%=@person.village_headman_name%>"
-               data-validation="required length" data-validation-length="2-50" value="<%=@person.mother_last_name%>">
+               name="village_headman_name" value=""
+               data-validation="required length" data-validation-length="2-50" value="">
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Village Headman Signed?:</label>
-        <select id="village_headman_signed" name="village_headman_signed" data-validation="required" value="<%=@person.village_headman_signed%>">
+        <select id="village_headman_signed" name="village_headman_signed" data-validation="required" value="">
           <option></option>
           <option>Yes</option>
           <option>No</option>
         </select>
       </div>
+    </div>
 
+    <div data-row-span="2" class="row">
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Name of Senior Member of Village:</label>
+        <input id="senior_member_name" type="text"  class="sentence-case"
+               name="senior_member_name" value=""
+               data-validation="required length" data-validation-length="2-50" value="">
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Senior Member of Village Signed?:</label>
+        <select id="senior_member_village_signed" name="senior_member_village_signed" data-validation="required" value="">
+          <option></option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
     </div>
 
   </fieldset>
