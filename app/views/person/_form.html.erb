@@ -612,7 +612,7 @@
 
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Informant Relationship to Child:</label>
+        <label>Informant Relationship to Child: <span style="color: red; ">*</span></label>
         <select id="informant_relationship" name="informant_relationship"
                 onchange="checkRelationship()"
                 data-validation="required" value="<%=@person.informant_relationship%>">
@@ -638,12 +638,12 @@
 
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Surname:</label>
+        <label>Surname: <span style="color: red; ">*</span></label>
         <input type="text"  class="sentence-case" id="informant_last_name" name="informant_last_name"  autocomplete="off" list="surname_list"
                value="<%=@person.informant_last_name%>" data-validation="required length" data-validation-length="2-30">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>First Name:</label>
+        <label>First Name: <span style="color: red; ">*</span></label>
         <input type="text"  class="sentence-case" id="informant_first_name" name="informant_first_name"  autocomplete="off" list="first_name_list"
                value="<%=@person.informant_first_name%>" data-validation="required length" data-validation-length="2-30">
       </div>
@@ -696,7 +696,7 @@
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Form Signed?:</label>
+        <label>Form Signed?: <span style="color: red; ">*</span></label>
         <select id="form_signed" name="form_signed" data-validation="required" value="<%=@person.form_signed%>">
           <option></option>
           <option>Yes</option>
@@ -712,7 +712,7 @@
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Date of Reporting:</label>
+        <label>Date of Reporting: <span style="color: red; ">*</span></label>
         <input id="date_reported" type="text" class="datepicker" name="date_reported"
                data-validation="required" value="<%=@person.date_reported.to_date.strftime("%d/%m/%Y") rescue nil%>">
       </div>
