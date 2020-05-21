@@ -410,14 +410,14 @@
       <!-- This section for when country is not Malawi -->
       <div id="mother_physical_state_div" data-field-span="1" class="form-inline col-lg-3" style="visibility: hidden">
         <label for="mother_physical_state">State: <span style="color: red; ">*</span></label>
-        <input id="mother_physical_state" type="text" name="mother_physical_district">
+        <input id="mother_physical_state" type="text" name="mother_physical_district" data-validation="required" />
       </div>
       <div id="mother_physical_town_div" data-field-span="1"  class="form-inline col-lg-3" style="visibility: hidden">
         <label for="mother_physical_town">Town: <span style="color: red; ">*</span></label>
-        <input id="mother_physical_town" type="text" name="mother_physical_ta" />
+        <input id="mother_physical_town" type="text" name="mother_physical_ta" data-validation="required" />
       </div>
       <div id="mother_physical_address_div" data-field-span="1"  class="form-inline col-lg-3" style="visibility: hidden">
-        <label for="mother_physical_address">Address: <span style="color: red; ">*</span></label>
+        <label for="mother_physical_address">Address: </label>
         <input id="mother_physical_address" type="text" name="mother_physical_village" />
       </div>
       <!-- End country not Malawi -->
@@ -1523,6 +1523,14 @@
           __$('mother_physical_state_div').style.visibility = 'visible'
           __$('mother_physical_town_div').style.visibility = 'visible'
           __$('mother_physical_address_div').style.visibility = 'visible'
+        } else {
+            __$('mother_physical_district_div').style.visibility = 'visible';
+            __$('mother_physical_ta_div').style.visibility = 'visible';
+            __$('mother_physical_village_div').style.visibility = 'visible';
+
+            __$('mother_physical_state_div').style.visibility = 'hidden'
+            __$('mother_physical_town_div').style.visibility = 'hidden'
+            __$('mother_physical_address_div').style.visibility = 'hidden'
         }
       }
     }
