@@ -105,7 +105,7 @@
 
   <div id="progress-div" style="height: 3px;background: #003366;width: 2%;">&nbsp;</div>
 
-  <fieldset id="registration_type">
+  <fieldset id="registration">
     <legend>REGISTRATION TYPE</legend>
 
     <div data-row-span="2" class="row">
@@ -115,8 +115,7 @@
         <div>
           <label for="registration_type"></label>
           <select id="registration_type" name="registration_type" data-validation="required">
-            <!--<option></option> -->
-            <option>Normal</option>
+            <option selected>Normal</option>
             <!--
             <option>Abandoned</option>
             <option>Adopted</option>
@@ -386,25 +385,42 @@
     <div data-row-span="2" class="row " style="margin-bottom: 35px;">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label for="mother_country">Country: <span style="color: red; ">*</span></label>
-        <select id="mother_country" name="mother_country" data-validation="required">
+        <select id="mother_country" name="mother_country" data-validation="required" onchange="checkValue(this.value, 'country')">
           <option></option>
         </select>
       </div>
-      <div data-field-span="1" class="form-inline col-lg-3">
+      <!-- This section for country Malawi -->
+      <div id="mother_physical_district_div" data-field-span="1" class="form-inline col-lg-3">
         <label for="mother_physical_district">District: <span style="color: red; ">*</span></label>
         <select id="mother_physical_district" type="text" name="mother_physical_district" data-validation="required"
                 onchange="tas('mother_physical_ta', this.value, ['mother_physical_village'])"></select>
       </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
-        <label>TA: <span style="color: red; ">*</span></label>
+      <div id="mother_physical_ta_div" data-field-span="1"  class="form-inline col-lg-3">
+        <label for="mother_physical_ta">TA: <span style="color: red; ">*</span></label>
         <select id="mother_physical_ta" type="text" name="mother_physical_ta" data-validation="required"
                 onchange="villages('mother_physical_village', document.getElementById('mother_physical_district').value, document.getElementById('mother_physical_ta').value)">
         </select>
       </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
-        <label>Village: <span style="color: red; ">*</span></label>
+      <div id="mother_physical_village_div" data-field-span="1"  class="form-inline col-lg-3">
+        <label for="mother_physical_village">Village: <span style="color: red; ">*</span></label>
         <select id="mother_physical_village" type="text" name="mother_physical_village" data-validation="required"></select>
       </div>
+      <!-- End country Malawi -->
+
+      <!-- This section for when country is not Malawi -->
+      <div id="mother_physical_state_div" data-field-span="1" class="form-inline col-lg-3" style="visibility: hidden">
+        <label for="mother_physical_state">State: <span style="color: red; ">*</span></label>
+        <input id="mother_physical_state" type="text" name="mother_physical_district" data-validation="required" />
+      </div>
+      <div id="mother_physical_town_div" data-field-span="1"  class="form-inline col-lg-3" style="visibility: hidden">
+        <label for="mother_physical_town">Town: <span style="color: red; ">*</span></label>
+        <input id="mother_physical_town" type="text" name="mother_physical_ta" data-validation="required" />
+      </div>
+      <div id="mother_physical_address_div" data-field-span="1"  class="form-inline col-lg-3" style="visibility: hidden">
+        <label for="mother_physical_address">Address: </label>
+        <input id="mother_physical_address" type="text" name="mother_physical_village" />
+      </div>
+      <!-- End country not Malawi -->
     </div>
 
     <div data-row-span="2" class="row" style="margin-bottom: 0px;">
@@ -618,7 +634,7 @@
 
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Informant Relationship to Child:</label>
+        <label>Informant Relationship to Child: <span style="color: red; ">*</span></label>
         <select id="informant_relationship" name="informant_relationship"
                 onchange="checkRelationship()"
                 data-validation="required" value="<%=@person.informant_relationship%>">
@@ -644,12 +660,12 @@
 
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Surname:</label>
+        <label>Surname: <span style="color: red; ">*</span></label>
         <input type="text"  class="sentence-case" id="informant_last_name" name="informant_last_name"  autocomplete="off" list="surname_list"
                value="<%=@person.informant_last_name%>" data-validation="required length" data-validation-length="2-30">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>First Name:</label>
+        <label>First Name: <span style="color: red; ">*</span></label>
         <input type="text"  class="sentence-case" id="informant_first_name" name="informant_first_name"  autocomplete="off" list="first_name_list"
                value="<%=@person.informant_first_name%>" data-validation="required length" data-validation-length="2-30">
       </div>
@@ -702,7 +718,7 @@
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Form Signed?:</label>
+        <label>Form Signed?: <span style="color: red; ">*</span></label>
         <select id="form_signed" name="form_signed" data-validation="required" value="<%=@person.form_signed%>">
           <option></option>
           <option>Yes</option>
@@ -718,7 +734,7 @@
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Date of Reporting:</label>
+        <label>Date of Reporting: <span style="color: red; ">*</span></label>
         <input id="date_reported" type="text" class="datepicker" name="date_reported"
                data-validation="required" value="<%=@person.date_reported.to_date.strftime("%d/%m/%Y") rescue nil%>">
       </div>
@@ -1518,6 +1534,28 @@
             __$("date_of_marriage").value = "";
             __$("court_order").removeAttribute("disabled");
         }
+    }
+    
+    function checkValue(passedValue, elementType) {
+      if (elementType == 'country') {
+        if (passedValue != 'Malawi') {
+          __$('mother_physical_district_div').style.visibility = 'hidden';
+          __$('mother_physical_ta_div').style.visibility = 'hidden';
+          __$('mother_physical_village_div').style.visibility = 'hidden';
+
+          __$('mother_physical_state_div').style.visibility = 'visible'
+          __$('mother_physical_town_div').style.visibility = 'visible'
+          __$('mother_physical_address_div').style.visibility = 'visible'
+        } else {
+            __$('mother_physical_district_div').style.visibility = 'visible';
+            __$('mother_physical_ta_div').style.visibility = 'visible';
+            __$('mother_physical_village_div').style.visibility = 'visible';
+
+            __$('mother_physical_state_div').style.visibility = 'hidden'
+            __$('mother_physical_town_div').style.visibility = 'hidden'
+            __$('mother_physical_address_div').style.visibility = 'hidden'
+        }
+      }
     }
 
     function checkSigned(){
