@@ -53,6 +53,10 @@ class PersonController < ApplicationController
 
   def new
 
+    if @cur_user.role == 'Administrator'
+      redirect_to '/home' and return
+    end
+
     tag_id = LocationTag.where(name: 'District').last.id
     @districts = Location.joins(" join location_tag_map m ON m.location_id = location.location_id ")
     .where(" m.location_tag_id = #{tag_id} ").order("name")
@@ -193,7 +197,7 @@ class PersonController < ApplicationController
     person.updated_at              = DateTime.now
     person.save
 
-    render :text => "OK";
+    render :text => "OK"
   end
 
   def show
