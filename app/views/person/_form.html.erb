@@ -1649,14 +1649,16 @@
                 type: "POST",
                 data: $("#form-create-person").serialize(),
                 success: function(response){
-                    if (response == "OK") {
+                    if (response === "OK") {
                         window.location = "/person/index?active_tab=home";
-                    }else{
-                        alert("something Went Wrong!!")
+                    } else if (response === "Redirect") {
+                        window.location = "/person/new?multiple_births=<%= session[:multiple_births_value] %>"
+                    } else{
+                        alert("Oops!!! Something Went Wrong!!")
                     }
                 },
                 error: function(){
-                    alert("Something Went Wrong!!");
+                    alert("Oops!!! Something Went Wrong!!");
                 }
             }
         )
