@@ -120,6 +120,7 @@ class PersonController < ApplicationController
   end
 
   def save_record
+
     user = User.find(session[:user_id])
 
     person = Person.find(params[:person_id]) rescue nil #editing record
@@ -196,6 +197,26 @@ class PersonController < ApplicationController
     person.created_at              = DateTime.now if person.created_at.blank?
     person.updated_at              = DateTime.now
     person.save
+
+    if params[:type_of_birth] != 'Single'
+
+      session[:multiple_births] = true
+
+      case params[:type_of_birth]
+      when 'Twin'
+        session[:multiple_births_value] = 2
+      when 'Triplet'
+        session[:multiple_births_value] = 3
+      when 'Other'
+        session[:multiple_births_value] = params[:specify_type_of_birth]
+      else
+        session.delete(:multiple_births)
+        session.delete(:multiple_births_value)
+      end
+
+      render :text => 'Redirect' and return
+      # redirect_to :back, multiple_births_value: session[:multiple_births_value] and return
+    end
 
     render :text => "OK"
   end
