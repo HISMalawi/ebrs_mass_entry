@@ -980,8 +980,12 @@
 
     const multiple_births = urlParams.get('multiple_births')
 
+    const number_of_child = urlParams.get('number_of_child')
+
     if (multiple_births) {
-        __$('multiple_births_badge').innerHTML = '(1 of 2)';
+        for (var i=0; i<= parseInt(multiple_births); i++) {
+            __$('multiple_births_badge').innerHTML = '(' + number_of_child + ' of ' + multiple_births+ ')';
+        }
 
         jQuery('.form-error').hide();
         if (cur_pos < sets.length - 1) {
@@ -1675,7 +1679,7 @@
                     if (response === "OK") {
                         window.location = "/person/index?active_tab=home";
                     } else if (response === "Redirect") {
-                        window.location = "/person/new?multiple_births=<%= session[:multiple_births_value] %>"
+                        window.location = "/person/new?multiple_births=<%= session[:multiple_births_value] %>&number_of_child=2"
                     } else{
                         alert("Oops!!! Something Went Wrong!!")
                     }

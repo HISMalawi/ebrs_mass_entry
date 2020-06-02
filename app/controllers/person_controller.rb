@@ -215,7 +215,6 @@ class PersonController < ApplicationController
       end
 
       render :text => 'Redirect' and return
-      # redirect_to :back, multiple_births_value: session[:multiple_births_value] and return
     end
 
     render :text => "OK"
