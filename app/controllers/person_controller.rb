@@ -201,6 +201,7 @@ class PersonController < ApplicationController
     if params[:type_of_birth] != 'Single'
 
       session[:multiple_births] = true
+      session[:number_of_child] = 2
 
       case params[:type_of_birth]
       when 'Twin'
@@ -214,7 +215,14 @@ class PersonController < ApplicationController
         session.delete(:multiple_births_value)
       end
 
-      render :text => 'Redirect' and return
+      number_of_child = session[:number_of_child].to_i
+      multiple_births_value = session[:multiple_births_value].to_i
+
+      if number_of_child <= multiple_births_value
+        session[:number_of_child] = number_of_child + 1
+        render :text => "Redirect" and return
+      end
+
     end
 
     render :text => "OK"
