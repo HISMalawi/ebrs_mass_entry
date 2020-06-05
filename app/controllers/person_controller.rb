@@ -213,6 +213,7 @@ class PersonController < ApplicationController
       else
         session.delete(:multiple_births)
         session.delete(:multiple_births_value)
+        session.delete(:number_of_child)
       end
 
       number_of_child = session[:number_of_child].to_i
@@ -221,6 +222,10 @@ class PersonController < ApplicationController
       if number_of_child <= multiple_births_value
         session[:number_of_child] = number_of_child + 1
         render :text => "Redirect" and return
+      else
+        session.delete(:multiple_births)
+        session.delete(:multiple_births_value)
+        session.delete(:number_of_child)
       end
 
     end
