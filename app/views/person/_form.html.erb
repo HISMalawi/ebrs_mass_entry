@@ -409,12 +409,12 @@
 
       <!-- This section for when country is not Malawi -->
       <div id="mother_physical_state_div" data-field-span="1" class="form-inline col-lg-3" style="visibility: hidden">
-        <label for="mother_physical_state">State: <span style="color: red; ">*</span></label>
-        <input id="mother_physical_state" type="text" name="mother_physical_district" data-validation="required" />
+        <label for="mother_physical_state">State: </label>
+        <input id="mother_physical_state" type="text" name="mother_physical_district" />
       </div>
       <div id="mother_physical_town_div" data-field-span="1"  class="form-inline col-lg-3" style="visibility: hidden">
-        <label for="mother_physical_town">Town: <span style="color: red; ">*</span></label>
-        <input id="mother_physical_town" type="text" name="mother_physical_ta" data-validation="required" />
+        <label for="mother_physical_town">Town: </label>
+        <input id="mother_physical_town" type="text" name="mother_physical_ta" />
       </div>
       <div id="mother_physical_address_div" data-field-span="1"  class="form-inline col-lg-3" style="visibility: hidden">
         <label for="mother_physical_address">Address: </label>
@@ -1541,11 +1541,14 @@
     }
     
     function checkValue(passedValue, elementType) {
-      if (elementType == 'country') {
-        if (passedValue != 'Malawi') {
+      if (elementType === 'country') {
+        if (passedValue !== 'Malawi') {
           __$('mother_physical_district_div').style.visibility = 'hidden';
           __$('mother_physical_ta_div').style.visibility = 'hidden';
           __$('mother_physical_village_div').style.visibility = 'hidden';
+          __$('mother_physical_district').removeAttribute('data-validation');
+          __$('mother_physical_ta').removeAttribute('data-validation');
+          __$('mother_physical_village').removeAttribute('data-validation');
 
           __$('mother_physical_state_div').style.visibility = 'visible'
           __$('mother_physical_town_div').style.visibility = 'visible'
@@ -1554,6 +1557,9 @@
             __$('mother_physical_district_div').style.visibility = 'visible';
             __$('mother_physical_ta_div').style.visibility = 'visible';
             __$('mother_physical_village_div').style.visibility = 'visible';
+            __$('mother_physical_district').setAttribute('data-validation','required');
+            __$('mother_physical_ta').setAttribute('data-validation','required');
+            __$('mother_physical_village').setAttribute('data-validation','required');
 
             __$('mother_physical_state_div').style.visibility = 'hidden'
             __$('mother_physical_town_div').style.visibility = 'hidden'
