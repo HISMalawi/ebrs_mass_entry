@@ -983,14 +983,14 @@
     const number_of_child = urlParams.get('number_of_child')
 
     if (multiple_births) {
-        for (var i=0; i<= parseInt(multiple_births); i++) {
-            __$('multiple_births_badge').innerHTML = '(' + number_of_child + ' of ' + multiple_births+ ')';
+        for (var loop=0; loop<= parseInt(multiple_births); loop++) {
+            __$('multiple_births_badge').innerHTML = '(' + number_of_child + ' of ' + multiple_births + ')';
         }
 
         jQuery('.form-error').hide();
         if (cur_pos < sets.length - 1) {
-            for (var i = 0; i < sets.length; i++) {
-                sets[i].style.display = "none";
+            for (var count = 0; count < sets.length; count++) {
+                sets[count].style.display = "none";
             }
             cur_pos += 1;
             sets[cur_pos].style.display = "block";
