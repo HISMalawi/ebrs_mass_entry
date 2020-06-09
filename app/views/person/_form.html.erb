@@ -129,7 +129,7 @@
   </fieldset>
 
   <fieldset id="child" style="display: none">
-    <legend>DETAILS OF CHILD</legend>
+    <legend>DETAILS OF CHILD <span id="multiple_births_badge"></span></legend>
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Surname: <span style="color: red; ">*</span></label>
@@ -409,12 +409,12 @@
 
       <!-- This section for when country is not Malawi -->
       <div id="mother_physical_state_div" data-field-span="1" class="form-inline col-lg-3" style="visibility: hidden">
-        <label for="mother_physical_state">State: <span style="color: red; ">*</span></label>
-        <input id="mother_physical_state" type="text" name="mother_physical_district" data-validation="required" />
+        <label for="mother_physical_state">State: </label>
+        <input id="mother_physical_state" type="text" name="mother_physical_district" />
       </div>
       <div id="mother_physical_town_div" data-field-span="1"  class="form-inline col-lg-3" style="visibility: hidden">
-        <label for="mother_physical_town">Town: <span style="color: red; ">*</span></label>
-        <input id="mother_physical_town" type="text" name="mother_physical_ta" data-validation="required" />
+        <label for="mother_physical_town">Town: </label>
+        <input id="mother_physical_town" type="text" name="mother_physical_ta" />
       </div>
       <div id="mother_physical_address_div" data-field-span="1"  class="form-inline col-lg-3" style="visibility: hidden">
         <label for="mother_physical_address">Address: </label>
@@ -832,7 +832,7 @@
     <% end %>
 
     <div type="next submit"  id="next-btn" style="font-weight: bold;" class="btn btn-next btn-success" onclick="next()" ><span></span> Next >> </div>
-    <div type="back submit"  style="font-weight: bold;" class="btn btn-next btn-success" onclick="back()"><span></span> << Back </div>
+    <div type="back submit" id="back-btn"  style="font-weight: bold;" class="btn btn-next btn-success" onclick="back()"><span></span> << Back </div>
     <button type="button" class="btn btn-danger" style="margin-left: 10px;" onclick="window.location = '/person/index?active_tab=person'; " ><b>Cancel</b></button>
 
   </div>
@@ -996,6 +996,33 @@
 
     var sets = document.getElementsByTagName("fieldset");
     var cur_pos = 0;
+
+    const queryString = window.location.search;
+
+    const urlParams = new URLSearchParams(queryString);
+
+    const multiple_births = urlParams.get('multiple_births')
+
+    const number_of_child = urlParams.get('number_of_child')
+
+    if (multiple_births) {
+        for (var loop=0; loop<= parseInt(multiple_births); loop++) {
+            __$('multiple_births_badge').innerHTML = '(' + number_of_child + ' of ' + multiple_births + ')';
+        }
+
+        jQuery('.form-error').hide();
+        if (cur_pos < sets.length - 1) {
+            for (var count = 0; count < sets.length; count++) {
+                sets[count].style.display = "none";
+            }
+            cur_pos += 1;
+            sets[cur_pos].style.display = "block";
+            jQuery("#back-btn").hide();
+            jQuery("#next-btn").hide();
+            jQuery("#finish-btn").show();
+        }
+
+    }
 
     $.formUtils.addValidator({
         name : 'father',
@@ -1537,11 +1564,14 @@
     }
     
     function checkValue(passedValue, elementType) {
-      if (elementType == 'country') {
-        if (passedValue != 'Malawi') {
+      if (elementType === 'country') {
+        if (passedValue !== 'Malawi') {
           __$('mother_physical_district_div').style.visibility = 'hidden';
           __$('mother_physical_ta_div').style.visibility = 'hidden';
           __$('mother_physical_village_div').style.visibility = 'hidden';
+          __$('mother_physical_district').removeAttribute('data-validation');
+          __$('mother_physical_ta').removeAttribute('data-validation');
+          __$('mother_physical_village').removeAttribute('data-validation');
 
           __$('mother_physical_state_div').style.visibility = 'visible'
           __$('mother_physical_town_div').style.visibility = 'visible'
@@ -1550,6 +1580,9 @@
             __$('mother_physical_district_div').style.visibility = 'visible';
             __$('mother_physical_ta_div').style.visibility = 'visible';
             __$('mother_physical_village_div').style.visibility = 'visible';
+            __$('mother_physical_district').setAttribute('data-validation','required');
+            __$('mother_physical_ta').setAttribute('data-validation','required');
+            __$('mother_physical_village').setAttribute('data-validation','required');
 
             __$('mother_physical_state_div').style.visibility = 'hidden'
             __$('mother_physical_town_div').style.visibility = 'hidden'
@@ -1672,14 +1705,16 @@
                 type: "POST",
                 data: $("#form-create-person").serialize(),
                 success: function(response){
-                    if (response == "OK") {
+                    if (response === "OK") {
                         window.location = "/person/index?active_tab=home";
-                    }else{
-                        alert("something Went Wrong!!")
+                    } else if (response === "Redirect") {
+                        window.location = "/person/new?multiple_births=<%= session[:multiple_births_value] %>&number_of_child=<%= session[:number_of_child] %>"
+                    } else{
+                        alert("Oops!!! Something Went Wrong!!")
                     }
                 },
                 error: function(){
-                    alert("Something Went Wrong!!");
+                    alert("Oops!!! Something Went Wrong!!");
                 }
             }
         )
@@ -2043,7 +2078,7 @@
                     for (var i = 0; i < list.length; i++) {
                         var o = document.createElement('option');
                         o.innerHTML = list[i][1];
-                        o.setAttribute('value', list[i][0]);
+                        o.setAttribute('value', list[i][1]);
                         __$('ta_of_birth').appendChild(o);
                     }
                 }
@@ -2080,7 +2115,7 @@
                 for(var i = 0; i < list.length; i++){
                     var o = document.createElement('option');
                     o.innerHTML = list[i][1];
-                    o.setAttribute('value', list[i][0]);
+                    o.setAttribute('value', list[i][1]);
                     __$('village_of_birth').appendChild(o);
                 }
             }
