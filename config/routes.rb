@@ -72,7 +72,7 @@ Rails.application.routes.draw do
   post "location/edit"
   get "location/set_current"
 
-  get "/location/health_facilities"
+  get "/health_facilities" => "location#health_facilities"
 
   get "location/ajax_locations"
   get "person/person_types"

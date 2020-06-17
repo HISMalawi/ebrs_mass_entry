@@ -262,7 +262,7 @@
       jQuery(node).empty();
 
       jQuery.ajax({
-          url: ("/location/health_facilities?district=" + district ),
+          url: ("/health_facilities?district=" + district ),
           success: function(results){
 
               var opts = JSON.parse(results);
