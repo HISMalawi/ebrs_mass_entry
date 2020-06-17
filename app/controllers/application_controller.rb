@@ -3,7 +3,8 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   before_filter :check_user, :except => ['logout', 'login']
-  before_filter :set_current_location, :except =>['set_current', 'districts', 'logout', 'login', 'tas', 'villages']
+  before_filter :set_current_location, :except =>['set_current', 'districts', 'logout', 'login', 'tas', 'villages',"health_facilities"]
+  before_filter :current_location_to_readable, :except =>['set_current', 'districts', 'logout', 'login', 'tas', 'villages',"health_facilities"]
 
   def check_user
     if params[:active_tab].present?
@@ -32,5 +33,19 @@ class ApplicationController < ActionController::Base
     end
 
     yes
+  end
+  def current_location_to_readable
+    cur_location = JSON.parse(File.read("#{Rails.root}/public/current.json")) rescue {}
+    @current_location = " Location Not Set"
+    case cur_location['type']
+    when "DRO"
+      @current_location = "#{cur_location['district']} DRO"
+    when "Village"
+      @current_location = "#{cur_location['village']}, #{cur_location['ta']}, #{cur_location['district']}"
+    when "Health Facility"
+      @current_location = "#{cur_location['health_facility']}, #{cur_location['district']}"
+    else
+      "Error: capacity has an invalid value (#{params[:type]})"
+    end
   end
 end

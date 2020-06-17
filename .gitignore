@@ -19,3 +19,4 @@ RackM*
 passenger*
 Gemfile.lock
 current.json
+/public/current.json

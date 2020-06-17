@@ -104,14 +104,14 @@
 
           <li class="dropdown" style="float: right">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <b><%= @cur_user.username%>@<span style="font-size: 12px;font-style:italic; color: lightgray;">(<%= ("#{@cur_location['village']}, #{@cur_location['ta']}, #{@cur_location['district']}" rescue "?") %>)</span></b> <b class="caret"></b></a>
+              <b><%= @cur_user.username%>@<span style="font-size: 12px;font-style:italic; color: lightgray;">(<%= ("#{@current_location}" rescue "?") %>)</span></b> <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li>
                 <a href="/user/view?user_id=<%= @cur_user.id%>"><i class="fa fa-fw fa-user"></i> My Account</a>
               </li>
 
               <li>
-                <a href="/location/set_current"><i class="fa fa-fw"></i> Set Current Reg. Village</a>
+                <a href="/location/set_current"><i class="fa fa-fw"></i> Set Current Reg. Location</a>
               </li>
 
               <li class="divider"></li>
@@ -148,7 +148,7 @@
                   <a href="/location/index?active_tab=config">Locations</a>
                 </li>
                 <li>
-                  <a href="/location/set_current?active_tab=config">Set Current  Reg. Village</a>
+                  <a href="/location/set_current?active_tab=config">Set Current  Reg. Location</a>
                 </li>
 
                 <% if User.find(session[:user_id]).role.downcase == "administrator"%>

@@ -450,7 +450,14 @@ class PersonController < ApplicationController
 
     person.district_created_at     = @cur_location['district']
     person.ta_created_at           = (params[:ta_name].blank? ? @cur_location['ta'] : params[:ta_name])
-    person.location_created_at     = (params[:village_name].blank? ? @cur_location['village'] : params[:village_name])
+    case @cur_location['type']
+    when "DRO"
+      person.location_created_at = @cur_location['district']
+    when "Village"
+      person.location_created_at = @cur_location['village']
+    when "Health Facility"
+      person.location_created_at  = @cur_location['health_facility']
+    end
 
     person.upload_status           = "NOT UPLOADED"
     person.creator                 = "#{user.id}|#{user.username}|#{user.first_name} #{user.middle_name} #{user.last_name}"

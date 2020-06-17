@@ -997,17 +997,15 @@
     var sets = document.getElementsByTagName("fieldset");
     var cur_pos = 0;
 
-    const queryString = window.location.search;
+    const multiple_births = "<%= session[:multiple_births] %>"
 
-    const urlParams = new URLSearchParams(queryString);
+    const multiple_births_value = "<%= session[:multiple_births_value] %>"
 
-    const multiple_births = urlParams.get('multiple_births')
-
-    const number_of_child = urlParams.get('number_of_child')
+    const number_of_child = "<%= session[:number_of_child] %>"
 
     if (multiple_births) {
-        for (var loop=0; loop<= parseInt(multiple_births); loop++) {
-            __$('multiple_births_badge').innerHTML = '(' + number_of_child + ' of ' + multiple_births + ')';
+        for (var loop=0; loop<= parseInt(multiple_births_value); loop++) {
+            __$('multiple_births_badge').innerHTML = '(' + number_of_child + ' of ' + multiple_births_value + ')';
         }
 
         jQuery('.form-error').hide();
