@@ -214,13 +214,51 @@ class LocationController < ApplicationController
     render text: ([""] + locations.sort).to_json
   end
 
+  def health_facilities
+     district = params[:district]
+     district_tag_id = LocationTag.where(name: "District").first.id
+
+     district_id = Location.find_by_sql(
+         "SELECT l.location_id FROM location l
+           INNER JOIN location_tag_map m ON l.location_id = m.location_id
+           WHERE m.location_tag_id = #{district_tag_id} AND l.name = '#{district}' "
+     ).last.location_id
+
+     health_facility_location_tag = LocationTag.where(name: 'Health Facility').first
+     
+     locations = Location.find_by_sql(
+      "SELECT l.name FROM location l
+        INNER JOIN location_tag_map m ON l.location_id = m.location_id
+        WHERE m.location_tag_id = #{health_facility_location_tag.id} AND l.parent_location = #{ district_id}").collect{|s| s.name.force_encoding('utf-8').encode}  
+        
+      render text: ([""] + locations.sort).to_json 
+  end
+
   def set_current
     if params[:district]
-      hash = {
-          'district' => params[:district],
-          'ta'       => params[:ta],
-          'village'  => params[:village]
-      }
+      hash = {}
+      case params[:type]
+      when "DRO"
+        hash = {
+            'type' => "DRO",
+            'district' => params[:district]
+        }
+      when "Village"
+        hash = {
+            'type' => "Village",
+            'district' => params[:district],
+            'ta'       => params[:ta],
+            'village'  => params[:village]
+        }
+      when "Health Facility"
+        hash = {
+            'type' => "Health Facility",
+            'district' => params[:district],
+            'health_facility' => params[:health_facility]
+        }
+      else
+        "Error: capacity has an invalid value (#{params[:type]})"
+      end
 
       File.open("#{Rails.root}/public/current.json", "w"){|f| f.write(hash.to_json)}
 

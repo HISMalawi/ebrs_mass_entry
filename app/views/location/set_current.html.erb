@@ -4,7 +4,83 @@
       font-size: 15px;
   }
 </style>
-<div style="margin-left: 20%; width: 50%; background: #f8f8ff;margin-top: 10vh;height: 35vh;border: 1px solid #d3d3d3;">
+<div style="margin-left: 20%; width: 50%; background: #f8f8ff;margin-top: 10vh;height: 15vh;border: 1px solid #d3d3d3;">
+    <span style="text-align: center;width: 100%;"><h3><b>Select Location of Entry</b></h3></span>
+    <table>
+        <tr>
+            <td style="width: 50%;padding-left: 30px;font-size: 15px;">
+              Location
+            </td>
+            <td>
+              <select onchange="showLocation(this.value)">
+                      <option></option>
+                      <option>DRO</option>
+                      <option>Health Facility</option>
+                      <option>Village</option>
+              </select>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="Health Facility" class="hidden" style="margin-left: 20%; width: 50%; background: #f8f8ff;margin-top: 10vh;height: 35vh;border: 1px solid #d3d3d3;">
+    <span style="text-align: center;width: 100%;"><h3><b>Confirm Registration Health Facility</b></h3></span>
+    <table style="width: 100%;margin-top: 3vh;">
+        <tr>
+          <td style="width: 50%;padding-left: 30px;font-size: 15px;">
+            District Of Registration
+          </td>
+          <td>
+            <select  id="facility_district" type="text" name="current_district" data-validation="required"
+            onchange="healthFacilities('facility', this.value)"></select>
+          </td>
+        </tr>
+        <table style="width: 100%;margin-top: 3vh;">
+        <tr>
+          <td style="width: 50%;padding-left: 30px;font-size: 15px;">
+            Health Facility Of Registration
+          </td>
+          <td>
+            <select  id="facility" type="text" name="current_facility" data-validation="required"
+            ></select>    
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <button class="btn btn-primary " style="width: 150px;margin-right: 25px;margin-top: 4vh;"
+              onclick="setFacility()">
+              <b>Proceed</b>
+            </button>        
+          </td>
+      </tr>
+    </table>
+</div>
+<div id="DRO" class="hidden" style="margin-left: 20%; width: 50%; background: #f8f8ff;margin-top: 10vh;height: 35vh;border: 1px solid #d3d3d3;">
+    <span style="text-align: center;width: 100%;"><h3><b>Confirm Registration DRO</b></h3></span>
+    <table style="width: 100%;margin-top: 3vh;">
+      <tr>
+        <td style="width: 50%;padding-left: 30px;font-size: 15px;">
+          District Of Registration
+        </td>
+        <td>
+          <select  id="current_dro" type="text" name="current_district" data-validation="required">
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <button class="btn btn-primary " style="width: 150px;margin-right: 25px;margin-top: 4vh;"
+            onclick="setDRO()">
+            <b>Proceed</b>
+          </button>        
+        </td>
+      </tr>
+    </table>
+
+
+</div>
+<div id="Village" class="hidden" style="margin-left: 20%; width: 50%; background: #f8f8ff;margin-top: 10vh;height: 35vh;border: 1px solid #d3d3d3;">
   <span style="text-align: center;width: 100%;"><h3><b><%= @header%></b></h3></span>
   <table style="width: 100%;margin-top: 3vh;">
     <tr>
@@ -12,7 +88,7 @@
         District Of Registration
       </td>
       <td>
-        <select disabled="disabled" id="current_district" type="text" name="current_district" data-validation="required"
+        <select  id="current_district" type="text" name="current_district" data-validation="required"
                 onchange="tas('current_ta', this.value, ['current_village'])"></select>
       </td>
     </tr>
@@ -35,13 +111,16 @@
         <select id="current_village" type="text" name="current_village" data-validation="required"></select>
       </td>
     </tr>
+    <tr>
+        <td></td>
+        <td>
+          <button class="btn btn-primary " style="width: 150px;margin-right: 25px;margin-top: 4vh;"
+            onclick="gotoDashboard()">
+            <b>Proceed</b>
+          </button>        
+        </td>
+    </tr>
   </table>
-    &nbsp;
-
-  <button class="btn btn-primary " style="width: 150px;margin-right: 25px;margin-top: 4vh;"
-    onclick="gotoDashboard()">
-    <b>Proceed</b>
-  </button>
 </div>
 
 <div class="modal fade" class="alert-modal" id="alert-modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -68,7 +147,7 @@
     function gotoDashboard(){
       if (__$('current_district').value.trim().length > 0 && __$('current_ta').value.trim().length > 0 && __$('current_village').value.trim().length > 0) {
           jQuery.ajax({
-              url: "/location/set_current?district=" + __$('current_district').value + "&ta=" + __$('current_ta').value + "&village=" + __$('current_village').value,
+              url: "/location/set_current?district=" + __$('current_district').value + "&ta=" + __$('current_ta').value + "&village=" + __$('current_village').value + "&type=Village",
               success: function (result) {
                 if(result == "OK"){
                     window.location = "/"
@@ -178,7 +257,81 @@
             }
         })
     }
+    function healthFacilities(id, district){
+      var node = document.getElementById(id);
+      jQuery(node).empty();
 
+      jQuery.ajax({
+          url: ("/location/health_facilities?district=" + district ),
+          success: function(results){
+
+              var opts = JSON.parse(results);
+
+              for(var i in opts){
+                  var option = document.createElement("option");
+                  option.innerHTML = opts[i];
+                  option.setAttribute("value", opts[i]);
+                  node.appendChild(option);
+              }
+
+          },
+          error: function(){
+          }
+      })
+    }
+
+    function showLocation(type){
+      var types = ["DRO","Health Facility", "Village"]
+      for(var i = 0 ; i < types.length ; i++){
+          if(__$(types[i]).className.indexOf("hidden") < 0){
+            __$(types[i]).className = "hidden"
+          }
+      }
+      if(type.length != 0){
+        __$(type).className = __$(type).className.replace("hidden","")
+      }
+     
+    }
+    function setDRO(){
+      if (__$('current_dro').value.trim().length > 0 ) {
+          jQuery.ajax({
+              url: "/location/set_current?district=" + __$('current_dro').value + "&type=DRO",
+              success: function (result) {
+                if(result == "OK"){
+                    window.location = "/"
+                }else{
+                    alert("Something went wrong!")
+                }
+              },
+              error: function () {
+                  alert("Something went wrong!");
+              }
+          })
+      }else{
+          alert("Please select all fields to proceed!");
+      }
+
+    }
+    function setFacility(){
+      if (__$('facility_district').value.trim().length > 0  && __$('facility').value.trim().length > 0 ) {
+          jQuery.ajax({
+              url: "/location/set_current?district=" + __$('facility_district').value+"&health_facility="+__$('facility').value+ "&type=Health Facility",
+              success: function (result) {
+                if(result == "OK"){
+                    window.location = "/"
+                }else{
+                    alert("Something went wrong!")
+                }
+              },
+              error: function () {
+                  alert("Something went wrong!");
+              }
+          })
+      }else{
+          alert("Please select all fields to proceed!");
+      }
+    }
     districts("current_district", ['current_ta', 'current_village']);
-
+    districts("current_dro", [])
+    districts("facility_district", [])
 </script>
