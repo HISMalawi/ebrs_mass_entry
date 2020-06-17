@@ -18,9 +18,9 @@ class Person < ActiveRecord::Base
     "#{self.informant_first_name} #{self.informant_middle_name} #{self.informant_last_name}".gsub(/\s+/, " ")
   end
 
-  def place_of_birth
-    [self.village_of_birth, self.ta_of_birth, self.district_of_birth].delete_if{|v| v.blank?}.join(", ")
-  end
+  #def place_of_birth
+    #[self.village_of_birth, self.ta_of_birth, self.district_of_birth].delete_if{|v| v.blank?}.join(", ")
+  #end
 
   def self.dump_all
 

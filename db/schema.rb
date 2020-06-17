@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(version: 0) do
 
     t.string   "gender",                    limit: 255
     t.string   "birth_weight",              limit: 255
+    t.string   "other_type_of_birth_specified", limit: 255
     t.string   "type_of_birth",             limit: 255
     t.string   "date_of_birth",             limit: 255
     t.string   "place_of_birth",         		limit: 255
@@ -124,6 +125,7 @@ ActiveRecord::Schema.define(version: 0) do
 		t.string   "mother_last_name",					limit: 255
 		t.string   "mother_nationality",				limit: 255
 		t.string   "mother_id_number",					limit: 255
+    t.string   "mother_date_of_birth",      limit: 255
 
     t.string   "mother_residential_country",  limit:255
     t.string   "mother_residential_district", limit: 555
@@ -148,6 +150,7 @@ ActiveRecord::Schema.define(version: 0) do
 		t.string   "father_last_name",					limit: 255
 		t.string   "father_nationality",				limit: 255
 		t.string   "father_id_number",					limit: 255
+    t.string   "father_date_of_birth",      limit: 255
 
     t.string   "father_residential_country",  limit:255
     t.string   "father_residential_district", limit: 555
