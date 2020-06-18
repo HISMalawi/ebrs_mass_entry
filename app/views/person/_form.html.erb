@@ -182,7 +182,7 @@
       <div data-field-span="1" class="form-inline col-lg-3">
 
         <label>ID Number: </label>
-        <input value="<%#=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number"
+        <input value="<%#=@person.mother_id_number%>" id="child_id_number" type="text" name="child_id_number"
 
                data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
                data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
@@ -1695,8 +1695,16 @@
 
     function saveRecord(){
         //jQuery('#form-create-person').submit(function(e){
-
         //e.preventDefault();
+        var childData = {
+            'last_name' : $('input[name=last_name]').val(),
+            'first_name' : $('input[name=first_name]').val(),
+            'middle_name' : $('input[name=middle_name]').val(),
+            'date_of_birth' : $('input[name=date_of_birth]').val(),
+            'gender' : $('input[name=gender]').val(),
+            'child_id_number' : $('input[name=child_id_number]').val()
+        };
+
         jQuery.ajax(
             {
                 url: "/save_record",
@@ -1804,10 +1812,11 @@
 
     <% end %>
 
-
     var dobpicker;
+    var motherDOBpicker;
+    var fatherDOBpicker;
     var dompicker;
-    var dompicker;
+    var drpicker;
 
     jQuery(document).ready(function(){
         var d = new Date();
@@ -1844,7 +1853,7 @@
             maxDate: new Date()
         });
 
-        dompicker = new Pikaday({
+        drpicker = new Pikaday({
             field: document.getElementById('date_reported'),
             format: 'DD/MMM/YYYY',
             minDate: (new Date("01/Sep/2018")),
