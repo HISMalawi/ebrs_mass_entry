@@ -132,6 +132,12 @@ class PersonController < ApplicationController
             {
                 ["Date of birth", "mandatory"] => "#{@person.date_of_birth.to_date.strftime('%d/%b/%Y') rescue nil}",
                 ["Sex", "mandatory"] => "#{@person.gender}",
+                "ID Number" => "#{@person.child_id_number}"
+            },
+            {
+                "Place of birth" => "#{@person.place_of_birth}",
+                "Name of Hospital" => "#{@person.hospital_of_birth}",
+                "Other Details" => "#{@person.other_place_of_birth_details}"
             },
             {
                 "Birth Village" => "#{@person.village_of_birth}",
@@ -139,8 +145,17 @@ class PersonController < ApplicationController
                 "Birth District" => "#{@person.district_of_birth}"
             },
             {
+                "Birth Weight(Kg)" => "#{@person.birth_weight}",
+                "Type of birth" => "#{@person.type_of_birth}",
+                "Other birth specified" => "#{@person.type_of_birth}"
+            },
+            {
                 "Are the parents married to each other?" => "#{@person.parents_married}",
                 "If yes, date of marriage" => "#{@person.date_of_marriage.to_date.strftime('%d/%b/%Y') rescue ""}"
+            },
+            {
+                "Court order attached?" => "#{@person.court_order_attached}",
+                "Parents signed" => "#{@person.parents_signed}"
             }
         ],
         "Details of Child's Mother" => [
@@ -150,8 +165,32 @@ class PersonController < ApplicationController
                 ["Maiden Surname", "mandatory"] => "#{@person.mother_last_name}"
             },
             {
+                "Date of birth" => "#{}", #to put date of mothers birth
                 "Nationality" => "#{@person.mother_nationality}",
                 "ID Number" => "#{@person.mother_id_number}"
+            },
+            {
+                "Physical Residential Address, District" => "#{@person.mother_residential_district}", 
+                "T/A" => "#{@person.mother_residential_ta}",
+                "Village" => "#{@person.mother_residential_village}"
+            },
+            {
+                "Home Address, District" => "#{@person.mother_home_district}", 
+                "T/A" => "#{@person.mother_home_ta}",
+                "Village" => "#{@person.mother_home_village}"
+            },
+            {
+                "Gestation age in weeks" => "#{@person.gestation_at_birth}", 
+                "Number of prenatal visits" => "#{@person.number_of_prenatal_visits}",
+                "Month of pregnancy prenatal care started" => "#{@person.month_prenatal_care_started}"
+            },
+            {
+                "Mode of delivery" => "#{@person.mode_of_delivery}", 
+                "Number of children born to the mother, including this child" => "#{@person.number_of_children_born_alive_inclusive}",
+                "Number of children born to the mother, and still living" => "#{@person.number_of_children_born_still_alive}"
+            },
+            {
+                "Level of education" => "#{@person.level_of_education}"
             }
         ],
         "Details of Child's Father" => [
@@ -161,8 +200,19 @@ class PersonController < ApplicationController
                 "Surname" => "#{@person.father_last_name}"
             },
             {
+                "Date of birth" => "#{}",
                 "Nationality" => "#{@person.father_nationality}",
                 "ID Number" => "#{@person.father_id_number}"
+            },
+            {
+                "Physical Residential Address, District" => "#{@person.father_residential_district}", 
+                "T/A" => "#{@person.father_residential_ta}",
+                "Village" => "#{@person.father_residential_village}"
+            },
+            {
+                "Home Address, District" => "#{@person.father_home_district}", 
+                "T/A" => "#{@person.father_home_ta}",
+                "Village" => "#{@person.father_home_village}"
             }
         ],
         "Details of Child's Informant" => [
@@ -311,6 +361,7 @@ class PersonController < ApplicationController
         mother_last_name: params[:mother_last_name],
         mother_nationality: params[:mother_nationality],
         mother_id_number: params[:mother_id_number],
+        mother_date_of_birth: params[:mother_date_of_birth],
         date_of_marriage: params[:date_of_marriage],
         court_order_attached: params[:court_order],
         parents_signed: params[:parents_signed],
@@ -319,6 +370,7 @@ class PersonController < ApplicationController
         father_middle_name: params[:father_middle_name],
         father_nationality: params[:father_nationality],
         father_id_number: params[:father_id_number],
+        father_date_of_birth: params[:father_date_of_birth],
         informant_first_name: params[:informant_first_name],
         informant_middle_name: params[:informant_middle_name],
         informant_last_name: params[:informant_last_name],

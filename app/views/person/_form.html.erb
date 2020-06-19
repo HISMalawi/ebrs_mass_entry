@@ -180,18 +180,16 @@
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label >ID Number: </label>
-        <input value="<%#=@person.child_id_number%>" id="child_id_number" type="text" name="child_id_number"
+
+        <label>ID Number: </label>
+        <input value="<%#=@person.mother_id_number%>" id="child_id_number" type="text" name="child_id_number"
 
                data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
-               data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
+               data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
       </div>
+    </div>  
 
-    </div>
-
-    <div data-row-span="2" class="row" style="margin-bottom: 0px;">
-      <label style="color: gray;text-decoration: underline;">Place of Birth</label>
-    </div>
+    <legend>Place of Birth</legend>
 
     <div data-row-span="2" class="row " style="margin-bottom: 30px;">
 
@@ -250,6 +248,8 @@
         </select>
 
       </div>
+
+
 
       <div data-field-span="1" class="form-inline col-lg-3">
 
@@ -478,8 +478,14 @@
       </div>
     </div>
 
-    <div data-row-span="2" class="row" style="margin-bottom: 35px;">
-      <div data-field-span="1" class="form-inline col-lg-6">
+    
+
+  </fieldset>
+
+  <fieldset id="mother_continued" style="display: none">
+    <legend>DETAILS OF MOTHER CONTINUED</legend>
+    <div data-row-span="3" class="row" style="margin-bottom: 35px;">
+      <div data-field-span="4" class="form-inline col-lg-6">
         <label>Number of prenatal visits</label>
         <input type="number" name="prenatal_visits_number" id="prenatal_visits_number">
       </div>
@@ -505,7 +511,6 @@
         <input type="number" name="born_alive_number_living" id="born_alive_number_living">
       </div>
     </div>
-
   </fieldset>
 
   <fieldset id="father" style="display: none">
@@ -766,13 +771,6 @@
 
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Name of Village Headman:</label>
-        <input id="village_headman_name" type="text"  class="sentence-case"
-               name="village_headman_name" value=""
-               data-validation="required length" data-validation-length="2-50" value="">
-      </div>
-
-      <div data-field-span="1" class="form-inline col-lg-3">
         <label>Village Headman Signed?:</label>
         <select id="village_headman_signed" name="village_headman_signed" data-validation="required" value="">
           <option></option>
@@ -780,16 +778,16 @@
           <option>No</option>
         </select>
       </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Name of Village Headman:</label>
+        <input id="village_headman_name" type="text"  class="sentence-case"
+               name="village_headman_name" value=""
+               data-validation="required length" data-validation-length="2-50" value="">
+      </div>
     </div>
 
     <div data-row-span="2" class="row">
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Name of Senior Member of Village:</label>
-        <input id="senior_member_name" type="text"  class="sentence-case"
-               name="senior_member_name" value=""
-               data-validation="required length" data-validation-length="2-50" value="">
-      </div>
-
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Senior Member of Village Signed?:</label>
         <select id="senior_member_village_signed" name="senior_member_village_signed" data-validation="required" value="">
@@ -797,6 +795,31 @@
           <option>Yes</option>
           <option>No</option>
         </select>
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Name of Senior Member of Village:</label>
+        <input id="senior_member_name" type="text"  class="sentence-case"
+               name="senior_member_name" value=""
+               data-validation="required length" data-validation-length="2-50" value="">
+      </div>
+    </div>
+
+    <legend>Verification by Religious Leader</legend>
+    <div data-row-span="2" class="row">
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Religious Leader Signed?:</label>
+        <select id="senior_member_village_signed" name="senior_member_village_signed" data-validation="required" value="">
+          <option></option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Name of Religious Leaader:</label>
+        <input id="senior_member_name" type="text"  class="sentence-case"
+               name="senior_member_name" value=""
+               data-validation="required length" data-validation-length="2-50" value="">
       </div>
     </div>
 
@@ -1672,8 +1695,38 @@
 
     function saveRecord(){
         //jQuery('#form-create-person').submit(function(e){
-
         //e.preventDefault();
+        var childData = {
+            'last_name' : $('input[name=last_name]').val(),
+            'first_name' : $('input[name=first_name]').val(),
+            'middle_name' : $('input[name=middle_name]').val(),
+            'date_of_birth' : $('input[name=date_of_birth]').val(),
+            'gender' : $('input[name=gender]').val(),
+            'child_id_number' : $('input[name=child_id_number]').val()
+        };
+
+        <% if session[:multiple_births] == true %>
+        
+        jQuery.ajax(
+            {
+                url: "/save_record",
+                type: "POST",
+                data: childData,
+                success: function(response){
+                    if (response === "OK") {
+                        window.location = "/person/index?active_tab=home";
+                    } else if (response === "Redirect") {
+                        window.location = "/person/new?multiple_births=<%= session[:multiple_births_value] %>&number_of_child=<%= session[:number_of_child] %>"
+                    } else{
+                        alert("Oops!!! Something Went Wrong!!")
+                    }
+                },
+                error: function(){
+                    alert("Oops!!! Something Went Wrong!!");
+                }
+            }
+        )
+        <% else %>
         jQuery.ajax(
             {
                 url: "/save_record",
@@ -1693,6 +1746,7 @@
                 }
             }
         )
+        <% end %>
         //})
     }
 
@@ -1781,10 +1835,11 @@
 
     <% end %>
 
-
     var dobpicker;
+    var motherDOBpicker;
+    var fatherDOBpicker;
     var dompicker;
-    var dompicker;
+    var drpicker;
 
     jQuery(document).ready(function(){
         var d = new Date();
@@ -1821,7 +1876,7 @@
             maxDate: new Date()
         });
 
-        dompicker = new Pikaday({
+        drpicker = new Pikaday({
             field: document.getElementById('date_reported'),
             format: 'DD/MMM/YYYY',
             minDate: (new Date("01/Sep/2018")),
