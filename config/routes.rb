@@ -122,4 +122,9 @@ Rails.application.routes.draw do
 
   get "/report/download_all"
 
+  #Offloading data 
+  get "/person/offload"
+  post "/ebrs_connect" => "person#ebrs_connect"
+  get "/person/remote_format/:id" => "person#remote_format"
+
 end

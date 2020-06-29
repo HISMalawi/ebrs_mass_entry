@@ -1,0 +1,312 @@
+<style>
+  .status{
+      color: #008000;
+  }
+  .disabled .status {
+      background-color: #d59392;
+      color: #000;
+  }
+
+  #example{
+      background-color: #d3d3d3;
+  }
+  #example tr td{
+      border-left: 0.5px dotted lightgray;
+      padding: 7px;
+  }
+
+  .action-btn .fa{
+      min-width: 35px;
+      font-size: 18px;
+
+  }
+
+  .checkbox{
+      margin-left: 5px;
+
+  }
+
+  th{
+      background: lightsteelblue;
+      color: black;
+  }
+
+  .panel-heading{
+      margin-bottom: 20px;
+  }
+
+  .action-btn{
+      border: none !important;
+      margin-top: 0px;
+      min-width: 50px;
+      padding: 3px;
+      margin-left: 5px;
+
+  }
+
+  .fix-middle{
+      position: fixed;
+      z-index: 2000;
+      left: 55%;
+      top: 40%;
+  }
+
+  #roll-options{
+      width: 100%;
+  }
+
+  #roll-options td{
+      padding-right: 20px;
+  }
+
+
+</style>
+
+<div>
+  <ol class="breadcrumb " style="margin: 3px; padding: 5px;">
+    <li><a href="/">Home</a></li>
+    <li><a class='active' href="/person/index">Birth Records</a></li>
+  </ol>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-heading ">
+      <span class="glyphicon glyphicon-user"></span>
+      <b>List Birth Records</b>
+      <% if User.find(session[:user_id]).role.downcase == "data clerk"%>
+      <div class="panel-btn">
+        <a class="btn btn-sm btn-info" href="/person/new">
+          <span class="glyphicon glyphicon-plus-sign"></span>
+          New Birth Record
+        </a>
+      </div>
+      <% end %>
+    </div>
+
+
+
+    <div class="panel-body">
+
+
+      <table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+          <th style="text-align: left;">Name</th>
+          <th style="text-align: center;">Birthdate</th>
+          <th style="text-align: left;">Gender</th>
+          <th style="text-align: left;">Place Of Birth</th>
+          <th style="text-align: left;">Mother Name</th>
+          <th style="text-align: left;">Father Name</th>
+          <th>&nbsp;</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        </tbody>
+      </table>
+
+      <button onclick ='syncAll()'>Sync All </button>
+    </div>
+</div>
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="printerModalLabel" style="text-align: left;">
+            Are you sure you want to proceed?
+        </h4>
+      </div>
+      <div class="modal-body">
+        <span style="text-align:center;">
+
+        </span>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">cancel</button>
+          <button type="button" class="btn btn-primary" onclick="doDelete()">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="offload-credential" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="printerModalLabel" style="text-align: left;">
+            Please enter username and password of the main eBRS
+        </h4>
+      </div>
+      <div class="modal-body">
+        <span style="text-align:center;">
+                <table style="width:100%">
+                    <tr>
+                        <td width="40%">Protocol</td>
+                        <td>
+                            <input class ="form-control" value="http" id="protocol" name="protocol" style="width:70%" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="40%">IP Address</td>
+                        <td>
+                            <input class ="form-control" placeholder="0.0.0.0" id="ipaddress" name="ipaddress" style="width:70%" />
+                        </td>
+                    </tr>
+                    <tr>
+                      <td width="40%">Port</td>
+                      <td>
+                          <input class ="form-control" placeholder="3000"id="port" name="port" style="width:70%" />
+                      </td>
+                  </tr>
+                    <tr>
+                        <td width="40%">Username</td>
+                        <td>
+                            <input class="form-control" name="usename" id="username" style="width:70%" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                        <td>
+                            <input class="form-control" name="password" id="password" type="password" style="width:70%" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-primary" onclick="auth()" >Authenticate</button>
+                        </td>
+                        <td>
+                            
+                        </td>
+                    </tr>
+                </table>
+        </span>
+        <div class="modal-footer">
+          
+       
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  var people = {};
+
+  var selected = [];
+
+  function __$(id){
+    return document.createElement(id);
+  }
+
+    $(document).ready(function() {
+        initTable();
+        $('#offload-credential').modal('show');
+    });
+
+    function deletes(link){
+       __$('modal').setAttribute('link', link)
+       $('#modal').modal('show');
+    }
+
+    var url = "<%= request.url%>";
+    function initTable(){
+
+        table =  jQuery('#example').DataTable(
+                {
+                    "processing": true,
+                    "serverSide": true,
+                    "ordering": false,
+                    "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+
+                       // jQuery('td .action-btn', nRow).parent().parent().css('background', 'white');
+                    },
+                    "ajax": {
+                        "url": "",
+                        "data": function(d){
+
+                        },
+                        dataFilter: function(data){
+                            var json = jQuery.parseJSON( data );
+
+                            for(var i = 0; i < json['data'].length; i ++){
+
+                                var last_index = json['data'][i].length - 1;
+                                var person_id = json['data'][i][last_index]
+
+                                var clas = "nonid";
+                                var popup = "";
+
+                                var url = "/person/remote_format/"+person_id;
+                                jQuery.getJSON(url,function(formatedData){
+                                    if(people[formatedData['person_id']] === undefined){
+                                        people[formatedData['person_id']] = formatedData
+                                    }
+                                })
+
+                                json['data'][i][last_index] =  "<td id='"+ person_id+"'><i class='fa fa-ban' aria-hidden='true'></i></td>";
+                            }
+                            return JSON.stringify( json );
+                        }
+                    }}
+        );
+    }
+
+    function reloadDataTable(node){
+        type = __$('birth_type').value;
+        table.ajax.reload();
+    }
+
+    function auth(){
+        var protocol  = __$('protocol').value
+        var ipaddress = __$('ipaddress').value;
+        var port      = __$('port').value;
+        var username  = __$('username').value;
+        var password  = __$('password').value;
+
+        var url = protocol+"://"+ipaddress+":"+port+"/remote_auth"
+        jQuery.ajax(
+            {
+                url: url,
+                type: "POST",
+                data: {username: username, password: password},
+                success: function(response){
+                    var authData = JSON.parse(response);
+                    sessionStorage.remoteToken = authData['token'];
+                    sessionStorage.remoteExpiresAt = authData['remote_expires_at'];
+                    sessionStorage.remotePort =  __$('port').value;
+                    sessionStorage.remoteIP = __$('ipaddress').value;
+                    sessionStorage.protocol = __$('protocol').value;
+                    $('#offload-credential').modal('hide');
+                }
+        });
+    }
+
+    function syncSelected(){
+        for(var i = 0 ; i < selected.length; i++){
+          var url = sessionStorage.protocol+"://"+sessionStorage.remoteIP+":"+sessionStorage.remotePort+"/create_child_remote"
+          var data = people[selected[i]];
+          data["token"] = sessionStorage.remoteToken
+          data["remote_expires_at"] = sessionStorage.remoteExpiresAt
+          console.log(data)
+        
+          jQuery.ajax(
+              {
+                  url: url,
+                  type: "POST",
+                  data: data,
+                  success: function(response){
+                      var personData = JSON.parse(response);
+                      var td = document.getElementById(personData['person_id']);
+                      td.innerHTML ="<i class='fa fa-tick'></i>"
+                  }
+          });
+        }
+    }
+    function syncAll(){
+        selected = Object.keys(people)
+        syncSelected()
+    }
+</script>

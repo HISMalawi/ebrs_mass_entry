@@ -1,4 +1,5 @@
 class PersonController < ApplicationController
+  skip_before_action :verify_authenticity_token
   def index
     search_val = params[:search][:value] rescue nil
     search_val = '_' if search_val.blank?
@@ -575,5 +576,146 @@ class PersonController < ApplicationController
     render :text => "OK"
   end
 
+  def offload
+    search_val = params[:search][:value] rescue nil
+    search_val = '_' if search_val.blank?
 
+    if !params[:start].blank?
+
+      d = Person.order(" person.created_at DESC, person.village_of_birth, person.ta_of_birth, person.district_of_birth, person.first_name ")
+        .where(" concat_ws('_', person.first_name, person.last_name, person.middle_name,
+                          person.district_of_birth, person.ta_of_birth, person.village_of_birth,
+                          person.mother_first_name, person.mother_middle_name, person.mother_last_name,
+                          person.father_first_name, person.father_middle_name, person.father_last_name,
+                          DATE_FORMAT(person.date_of_birth, '%d/%b/%Y'), person.gender) REGEXP \"#{search_val}\" ")
+
+        total = d.select(" count(*) c ")[0]['c'] rescue 0
+        page = (params[:start].to_i / params[:length].to_i) + 1
+
+        data = d.group(" person.person_id ")
+        data = data.page(page)
+        .per_page(params[:length].to_i)
+
+        @records = []
+        data.each do |p|
+
+          arr = [p.name,
+                 p.date_of_birth.to_date.strftime('%d/%b/%Y'),
+                 p.gender,
+                 p.place_of_birth,
+                 p.mother_name,
+                 p.father_name,
+                 p.person_id
+          ]
+
+        @records << arr
+      end
+
+      render :text => {
+          "draw" => params[:draw].to_i,
+          "recordsTotal" => total,
+          "recordsFiltered" => total,
+          "data" => @records}.to_json and return
+    end
+
+    # @records = PersonService.query_for_display(@states)
+
+    render :template => "/person/offload"
+  end
+  def ebrs_connect
+    render :text=> {:remote_tocken => "HHHHHHHH"}.to_json
+  end
+
+  def remote_format
+      #Mothers birthdate and Fathers birthdate
+      person = Person.find(params[:id])
+      formated = {
+                        :person_id=> params[:id],
+                        :mother_id=>"",
+                        :father_id=> "",
+                        :informant_id => "",
+                        :person =>{
+                                    :mother =>{
+                                                :birthdate_estimated=>"",
+                                                :id_number=>person.mother_id_number,
+                                                :last_name => person.mother_last_name,
+                                                :first_name => person.mother_first_name,
+                                                :middle_name => person.mother_middle_name,
+                                                :birthdate => "",
+                                                :citizenship => person.mother_nationality,
+                                                :residential_country => person.mother_residential_country,
+                                                :current_district => person.mother_residential_district,
+                                                :current_ta => person.mother_residential_ta,
+                                                :current_village =>person.mother_residential_village,
+                                                :home_district =>person.mother_home_district,
+                                                :home_ta => person.mother_home_ta,
+                                                :home_village => person.mother_home_village
+                                    },
+                                    :duplicate => "",
+                                    :is_exact_duplicate=>"",
+                                    :relationship =>"normal",
+                                    :last_name => person.last_name ,
+                                    :first_name => person.first_name,
+                                    :middle_name => person.middle_name,
+                                    :birthdate => person.date_of_birth,
+                                    :birth_district => person.district_of_birth,
+                                    :gender => person.gender,
+                                    :place_of_birth => person.place_of_birth,
+                                    :birth_country => "Malawi",
+                                    :birth_ta => person.ta_of_birth,
+                                    :birth_village => person.village_of_birth,
+                                    :birth_weight => person.birth_weight,
+                                    :type_of_birth => person.type_of_birth,
+                                    :parents_married_to_each_other =>person.parents_married,
+                                    :court_order_attached => person.court_order_attached,
+                                    :parents_signed => person.parents_signed,
+                                    :mode_of_delivery => person.mode_of_delivery,
+                                    :level_of_education => person.level_of_education,
+                                    :father =>{
+                                                :birthdate_estimated=>"",
+                                                :id_number=>person.father_id_number,
+                                                :last_name => person.father_last_name,
+                                                :first_name => person.father_first_name,
+                                                :middle_name => person.father_middle_name,
+                                                :birthdate => "",
+                                                :citizenship => person.father_nationality,
+                                                :residential_country => person.father_residential_country,
+                                                :current_district => person.father_residential_district,
+                                                :current_ta => person.father_residential_ta,
+                                                :current_village =>person.father_residential_village,
+                                                :home_district =>person.father_home_district,
+                                                :home_ta => person.father_home_ta,
+                                                :home_village => person.father_home_village
+                                     },
+                                    :informant=>{
+                                                :id_number => "",
+                                                :last_name => person.informant_last_name,
+                                                :first_name => person.informant_first_name,
+                                                :middle_name =>  person.informant_middle_name,
+                                                :relationship_to_person => person.informant_relationship,
+                                                :current_district => person.informant_district,
+                                                :current_ta => person.informant_ta,
+                                                :current_village => person.informant_village,
+                                                :addressline1 => person.informant_address_line1,
+                                                :addressline2 => person.informant_address_line2,
+                                                :phone_number => person.informant_phone_number
+                                    },
+                                    :form_signed => person.form_signed,
+                                    :date_reported => person.date_reported
+                        },
+                        :home_address_same_as_physical=>"Yes",
+                        :gestation_at_birth => person.gestation_at_birth,
+                        :number_of_prenatal_visits =>person.number_of_prenatal_visits,
+                        :month_prenatal_care_started =>person.month_prenatal_care_started,
+                        :number_of_children_born_alive_inclusive =>person.number_of_children_born_alive_inclusive,
+                        :number_of_children_born_still_alive => person.number_of_children_born_still_alive,
+                        :details_of_father_known => (person.father_first_name.present? ? 'Yes' : 'No'),
+                        :same_address_with_mother => "No",
+                        :informant_same_as_mother => (person.informant_relationship == 'Mother'? 'Yes' : 'No'),
+                        :informant_same_as_father => (person.informant_relationship == 'Father'? 'Yes' : 'No'),
+                        :registration_type => "No" 
+                  }
+      render :text => formated.to_json
+      #render :text => person.to_json
+  end
 end
