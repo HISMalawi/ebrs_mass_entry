@@ -126,5 +126,6 @@ Rails.application.routes.draw do
   get "/person/offload"
   post "/ebrs_connect" => "person#ebrs_connect"
   get "/person/remote_format/:id" => "person#remote_format"
+  post "/update_upload_status" => "person#update_upload_status"
 
 end

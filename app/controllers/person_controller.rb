@@ -718,4 +718,11 @@ class PersonController < ApplicationController
       render :text => formated.to_json
       #render :text => person.to_json
   end
+
+  def update_upload_status
+    person = Person.find(params[:id])
+    person.upload_status ="UPLOADED"
+    person.save
+    render :text => {:person_id => params[:id], :status => "UPLOADED"}.to_json
+  end
 end

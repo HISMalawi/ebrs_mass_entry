@@ -246,7 +246,7 @@
                                     }
                                 })
 
-                                json['data'][i][last_index] =  "<td id='"+ person_id+"'><i class='fa fa-ban' aria-hidden='true'></i></td>";
+                                json['data'][i][last_index] =  "<span id='"+ person_id+"'><i style='color:red' class='fa fa-ban' aria-hidden='true'></i></span>";
                             }
                             return JSON.stringify( json );
                         }
@@ -288,10 +288,15 @@
         for(var i = 0 ; i < selected.length; i++){
           var url = sessionStorage.protocol+"://"+sessionStorage.remoteIP+":"+sessionStorage.remotePort+"/create_child_remote"
           var data = people[selected[i]];
-          data["token"] = sessionStorage.remoteToken
-          data["remote_expires_at"] = sessionStorage.remoteExpiresAt
-          console.log(data)
-        
+          data["token"] = sessionStorage.remoteToken;
+          data["remote_expires_at"] = sessionStorage.remoteExpiresAt;
+          var span = document.getElementById(selected[i]);
+          span.innerHTML = "";
+          var img = document.createElement("img");
+          img.src = "/assets/spinner.gif";
+          img.style.height ="40%";
+          img.style.width ="40%"
+          span.appendChild(img);
           jQuery.ajax(
               {
                   url: url,
@@ -299,8 +304,19 @@
                   data: data,
                   success: function(response){
                       var personData = JSON.parse(response);
-                      var td = document.getElementById(personData['person_id']);
-                      td.innerHTML ="<i class='fa fa-tick'></i>"
+                      var upload_status_url ="/update_upload_status"
+                      jQuery.ajax(
+                          {
+                              url: upload_status_url,
+                              type: "POST",
+                              data: { id: personData['remote_id']},
+                              success: function(response){
+                                  var uploadResponse = JSON.parse(response);
+                                  var span = document.getElementById(uploadResponse['person_id']);
+                                  span.innerHTML ="<i style='color:green' class='fa fa-check' aria-hidden='true'></i></span>"
+                              }
+                      });                      
+                      
                   }
           });
         }
