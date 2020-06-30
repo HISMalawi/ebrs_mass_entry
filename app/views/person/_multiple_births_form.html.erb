@@ -1,0 +1,1368 @@
+<script>
+    (function ($) {
+        $.fn.serializeHash = function () {
+            var hash = {}
+
+            function stringKey(key, value) {
+                var beginBracket = key.lastIndexOf('[');
+                if (beginBracket === -1) {
+                    var hash = {};
+                    hash[key] = value;
+                    return hash;
+                }
+                var newKey = key.substr(0, beginBracket);
+                var newValue = {};
+                newValue[key.substring(beginBracket + 1, key.length - 1)] = value;
+                return stringKey(newKey, newValue);
+            }
+
+            var els = $(this).find(':input').get();
+            $.each(els, function () {
+                if (this.name && !this.disabled && (this.checked || /select|textarea/i.test(this.nodeName) || /hidden|text|search|tel|url|email|password|datetime|date|month|week|time|datetime-local|number|range|color/i.test(this.type))) {
+                    var val = $(this).val();
+                    $.extend(true, hash, stringKey(this.name, val));
+                }
+            });
+            return hash;
+        };
+    })(jQuery);
+</script>
+
+<link href="/Pikaday/css/pikaday.css" rel="stylesheet">
+
+<style>
+    label {
+        margin-left: 20px;
+        margin-right: 10px;
+        min-width: 100px;
+        text-align: left;
+    }
+
+    input, select {
+        width: 200px;
+        background: lightblue;
+        font-weight: bold;
+        padding: 5px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -ms-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        -webkit-box-sizing: content-box;
+        box-sizing: content-box;
+    }
+
+    .row {
+        margin-bottom: 10px;
+    }
+
+    fieldset .form-error {
+        display: none;
+    }
+
+    fieldset {
+        min-height: 50vh;
+    }
+
+    #completeness_details tr {
+        border-top: 1px dotted lightgray
+    }
+
+    .labell {
+        text-align: left;
+        font-weight: bold !important;
+        padding: 0px;
+    }
+
+    .modal-header {
+        background: #006f95 none repeat scroll 0 0;
+        padding: 12px;
+    }
+
+    #completeness_details td {
+        padding: 8px;
+        border: 1px dotted ghostwhite;
+    }
+
+    #completeness_details .labell {
+    }
+
+    #mother_id_number, #father_id_number, #informant_id_number {
+        text-transform: uppercase;
+    }
+
+    .sentence-case, .cap {
+        text-transform: capitalize;
+    }
+
+    .edit {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+</style>
+<script src="/js/jquery.form-validator.min.js"></script>
+
+<form enctype="multipart/form-data" id="form-create-person" accept-charset="UTF-8"
+      action="/save_record" method="POST"><input type="hidden">
+
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
+  <%= hidden_field_tag :person_id, @person.person_id -%>
+
+  <div id="progress-div" style="height: 3px;background: #003366;width: 2%;">&nbsp;</div>
+
+  <fieldset id="child">
+    <legend>DETAILS OF CHILD <span id="multiple_births_badge"></span></legend>
+    <div data-row-span="2" class="row">
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Surname: <span style="color: red; ">*</span></label>
+        <input id="last_name" class="sentence-case" type="text" list="surname_list" autocomplete="off" pattern=""
+               value="<%= @person.last_name %>" name="last_name" data-validation="required length" data-validation-length="2-55">
+        <datalist id="surname_list">
+
+        </datalist>
+
+      </div>
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>First Name: <span style="color: red; ">*</span></label>
+        <input id="first_name" type="text" class="sentence-case" list="first_name_list" autocomplete="off"
+               value="<%= @person.first_name %>" name="first_name" data-validation="required length" data-validation-length="2-55">
+        <datalist id="first_name_list">
+
+        </datalist>
+
+      </div>
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Other Names:</label>
+        <input id="middle_name" class="sentence-case" type="text" name="middle_name" value="<%= @person.middle_name %>" list="middle_name_list"
+               autocomplete="off">
+        <datalist id="middle_name_list">
+
+        </datalist>
+      </div>
+    </div>
+
+    <div data-row-span="2" class="row">
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Date of Birth: <span style="color: red; ">*</span></label>
+        <input id="date_of_birth" type="text" name="date_of_birth" value="<%= @person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil %>"
+               class="datepicker" data-validation="required" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
+               onchange="compareWithDOB()">
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Sex: <span style="color: red; ">*</span></label>
+        <div>
+          <select id="gender" name="gender" data-validation="required">
+            <option></option>
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+        </div>
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+
+        <label>ID Number: </label>
+        <input value="<%#=@person.mother_id_number%>" id="child_id_number" type="text" name="child_id_number"
+
+               data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
+               data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
+      </div>
+    </div>
+
+    <legend>Place of Birth</legend>
+
+    <div data-row-span="2" class="row " style="margin-bottom: 30px;">
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label for="place">Place of birth <span style="color: red; ">*</span></label>
+        <select type="text" class="input-small" id="place_of_birth" name="place_of_birth" onchange="showFields(this)">
+          <option></option>
+          <option>Home</option>
+          <option>Hospital</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label for="district_of_birth">District of birth</label>
+        <select type="text" class="input-small" id="district_of_birth" name="district_of_birth" onchange="load_tas(this)">
+          <option></option>
+          <% @districts.each do |d| %>
+            <option value="<%= d.name %>"><%= d.name %></option>
+          <% end %>
+        </select>
+
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+
+        <label for="ta_of_birth" class=" place home">TA of birth</label>
+        <select type="text" class="input-small  place home" id="ta_of_birth" name="ta_of_birth" onchange="load_villages(this)">
+          <option></option>
+          <% @districts.each do |d| %>
+            <option value="<%= d.name %>"><%= d.name %></option>
+          <% end %>
+        </select>
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+
+        <label for="village_of_birth" class=" place home">Village of birth</label>
+        <select type="text" class="input-small place home" id="village_of_birth" name="village_of_birth">
+          <option></option>
+          <% @districts.each do |d| %>
+            <option value="<%= d.name %>"><%= d.name %></option>
+          <% end %>
+        </select>
+
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+
+        <label for="hospital_of_birth" class=" place hospital">Hospital of birth</label>
+        <select type="text" class="input-small place hospital" id="hospital_of_birth" name="hospital_of_birth">
+          <option></option>
+          <% @districts.each do |d| %>
+            <option value="<%= d.name %>"><%= d.name %></option>
+          <% end %>
+        </select>
+
+      </div>
+
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+
+        <label for="other_birth_place" class=" place other">Specify other birth place</label>
+        <input type="text" class="input-small place other" id="other_birth_place" name="other_birth_place">
+      </div>
+    </div>
+
+    <div data-row-span="2" class="row " style="margin-bottom: 35px;">
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Birth Weight:</label>
+        <input id="birth_weight" type="text" name="birth_weight" data-validation-length="0-4">
+      </div>
+
+    </div>
+  </fieldset>
+
+  <fieldset id="headman" style="display: none">
+    <legend>DETAILS OF VILLAGE HEADMAN</legend>
+    <div data-row-span="2" class="row">
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>District: <span style="color: red; ">*</span></label>
+        <select id="village_headman_district" type="text" name="village_headman_district" data-validation="required"
+                onchange="tas('village_headman_ta', this.value, ['village_headman_village'])"></select>
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label for="village_headman_ta">TA:</label>
+        <select id="village_headman_ta" type="text" name="village_headman_ta" class="sentence-case"
+                data-validation="required"
+                onchange="villages('village_headman_village', document.getElementById('village_headman_district').value,
+                    document.getElementById('village_headman_ta').value)">
+        </select>
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label for="village_headman_village">Village Name:</label>
+        <select id="village_headman_village" type="text" name="village_headman_village" data-validation="required">
+        </select>
+      </div>
+    </div>
+
+    <div data-row-span="2" class="row">
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Village Headman Signed?:</label>
+        <select id="village_headman_signed" name="village_headman_signed" data-validation="required" value="">
+          <option></option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Name of Village Headman:</label>
+        <input id="village_headman_name" type="text" class="sentence-case"
+               name="village_headman_name" value=""
+               data-validation="required length" data-validation-length="2-50" value="">
+      </div>
+    </div>
+
+    <div data-row-span="2" class="row">
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Senior Member of Village Signed?:</label>
+        <select id="senior_member_village_signed" name="senior_member_village_signed" data-validation="required" value="">
+          <option></option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Name of Senior Member of Village:</label>
+        <input id="senior_member_name" type="text" class="sentence-case"
+               name="senior_member_name" value=""
+               data-validation="required length" data-validation-length="2-50" value="">
+      </div>
+    </div>
+
+    <legend>Verification by Religious Leader</legend>
+    <div data-row-span="2" class="row">
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Religious Leader Signed?:</label>
+        <select id="senior_member_village_signed" name="senior_member_village_signed" data-validation="required" value="">
+          <option></option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+      <div data-field-span="1" class="form-inline col-lg-3">
+        <label>Name of Religious Leaader:</label>
+        <input id="senior_member_name" type="text" class="sentence-case"
+               name="senior_member_name" value=""
+               data-validation="required length" data-validation-length="2-50" value="">
+      </div>
+    </div>
+
+  </fieldset>
+
+  <div class="form-group actions-row" style="width: 100%;padding-right: 45%;">
+    <button style="display: none" id="finish-btn" type="button" onclick="validateForm()" class="btn btn-primary">
+      <span class="glyphicon glyphicon-save"></span> Finish
+    </button>
+    <% if false %>
+      <button type="button" onclick="clearForm()" class="btn btn-warning"><span></span> Clear</button>
+    <% end %>
+
+    <div type="next submit" id="next-btn" style="font-weight: bold;" class="btn btn-next btn-success" onclick="next()">
+      <span></span> Next >>
+    </div>
+    <div type="back submit" id="back-btn" style="font-weight: bold;" class="btn btn-next btn-success" onclick="back()">
+      <span></span> << Back
+    </div>
+    <button type="button" class="btn btn-danger" style="margin-left: 10px;" onclick="window.location = '/person/index?active_tab=person'; ">
+      <b>Cancel</b></button>
+
+  </div>
+
+
+  <div class="modal fade" id="dob_marriage" tabindex="-1" role="dialog" aria-labelledby="completenessModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="printerModalLabel" style="text-align: left; color: white; font-weight: bold; text-align: center;">
+            Date of Marriage is Greater Than Date of Birth
+          </h4>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal fade" id="completenessModal" tabindex="-1" role="dialog" aria-labelledby="completenessModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="printerModalLabel" style="text-align: left; color: white; font-weight: bold; text-align: center;">
+            Check Completeness
+          </h4>
+        </div>
+        <div class="modal-body">
+        <span style="text-align:center;">
+          <table align="center" id="completeness_details">
+
+            <tr>
+              <td class="labell">Child Name</td>
+              <td style="text-align: left; padding-left:50px;" id="child_name" class="edit 0 cap"></td>
+            </tr>
+            <tr>
+              <td class="labell">Child Gender</td>
+              <td style="text-align: left; padding-left:50px;" id="child_gender" class="edit 0">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Child Date of Birth</td>
+              <td style="text-align: left; padding-left:50px;" id="child_date_of_birth" class="edit 0">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Child Place of Birth</td>
+              <td style="text-align: left; padding-left:50px;" id="child_place_of_birth" class="edit 0">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Mother Name</td>
+              <td style="text-align: left; padding-left:50px;" id="mother_name" class="edit 1 cap">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Nationality of Mother</td>
+              <td style="text-align: left; padding-left:50px;" id="mother_nationality" class="edit 1">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Mother National ID</td>
+              <td style="text-align: left; padding-left:50px;" id="mother_id_number" class="edit 1">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Father Name</td>
+              <td style="text-align: left; padding-left:50px;" id="father_name" class="edit 2 cap">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Nationality of Father</td>
+              <td style="text-align: left; padding-left:50px;" id="father_nationality" class="edit 2">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Father National ID</td>
+              <td style="text-align: left; padding-left:50px;" id="father_id_number" class="edit 2">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Parents Married to each Other?</td>
+              <td style="text-align: left; padding-left:50px;" id="parents_married" class="edit 0">&nbsp;</td>
+            </tr>
+            <tr>
+              <td class="labell">Parents signed?</td>
+              <td style="text-align: left; padding-left:50px;" id="form_signed" class="edit 3">&nbsp;</td>
+            </tr>
+
+          </table>
+        </span>
+
+          <div class="modal-footer">
+            <button type="button submit" class="btn btn-primary" onmousedown="saveRecord()"><b>Save Record</b></button>
+            <button type="button" class="btn btn-warning" data-dismiss="modal"><b>Keep Editing</b></button>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</form>
+
+<script src="/Pikaday/moment.js"></script>
+<script src="/Pikaday/pikaday.js"></script>
+
+<script>
+    function __$(id) {
+        return document.getElementById(id);
+    }
+
+    function checkResidenceSimilarity(parentID) {
+        if (__$(parentID).value === 'Yes') {
+            autoPopulateAddress(parentID);
+        }
+    }
+
+    function autoPopulateAddress(residenceSimilarityType) {
+        if (residenceSimilarityType === 'mother_home_as_residence') {
+            __$('mother_home_district').value = __$('mother_physical_district').value;
+            __$('mother_home_district').selected = true;
+            __$('mother_home_district').onchange = tas('mother_home_ta', __$('mother_physical_district').value, ['mother_home_village'])
+
+            __$('mother_home_ta').value = __$('mother_physical_ta').value;
+
+            var tasDropdown = __$('mother_home_ta');
+
+            var j = 0;
+
+            for (var i = 0; i === tasDropdown.options[j]; j++) {
+                if (i.value === __$('mother_home_ta').value) {
+                    tasDropdown.selectedIndex = j;
+                    break;
+                }
+            }
+
+            __$('mother_home_ta').selected = true;
+            __$('mother_home_ta').onchange = villages('mother_home_village', __$('mother_home_district').value, __$('mother_home_ta').value)
+
+            __$('mother_home_village').value = __$('mother_physical_village').value;
+            __$('mother_home_village').selected = true;
+
+        } else if (residenceSimilarityType === 'father_home_as_residence') {
+            __$('father_home_district').value = __$('father_physical_district').value;
+            __$('father_home_ta').value = __$('father_physical_ta').value;
+            __$('father_home_village').value = __$('father_physical_village').value;
+        }
+    }
+
+
+    function compareWithDOB() {
+
+
+        if ((new Date(__$("date_of_marriage").value) == "Invalid Date") || (new Date(__$("date_of_marriage").value)) == undefined) {
+            __$("date_of_marriage").value = ""
+        }
+
+        if ((new Date(__$("date_of_birth").value) == "Invalid Date") || (new Date(__$("date_of_birth").value)) == undefined) {
+            __$("date_of_birth").value = ""
+        }
+
+        if (new Date(__$("date_of_marriage").value) > new Date(__$("date_of_birth").value)) {
+            jQuery("#dob_marriage").modal("show");
+        }
+    }
+
+    var sets = document.getElementsByTagName("fieldset");
+    var cur_pos = 0;
+
+    const multiple_births = "<%= session[:multiple_births] %>"
+
+    const multiple_births_value = "<%= session[:multiple_births_value] %>"
+
+    const number_of_child = "<%= session[:number_of_child] %>"
+
+    if (multiple_births) {
+        for (var loop = 0; loop <= parseInt(multiple_births_value); loop++) {
+            __$('multiple_births_badge').innerHTML = '(' + number_of_child + ' of ' + multiple_births_value + ')';
+        }
+    }
+
+    $.validate({
+        validateOnBlur: true,
+        showHelpOnFocus: true,
+        addSuggestions: true,
+        errorMessagePosition: 'top',
+        scrollToTopOnError: false,
+        onError: function () {
+            alert("Could not validate some input elements");
+        }
+    });
+
+    <% (["Malawi"] + @countries).uniq.each do |country|
+      next if country.blank?
+    %>
+    var opt = document.createElement("option");
+    opt.value = "<%=country%>";
+    opt.innerHTML = "<%=country%>";
+    __$("mother_country").appendChild(opt);
+    <% end %>
+
+    <% (["Malawi"] + @countries).uniq.each do |country|
+        next if country.blank?
+    %>
+    var opt = document.createElement("option");
+    opt.value = "<%=country%>";
+    opt.innerHTML = "<%=country%>";
+    __$("father_country").appendChild(opt);
+    <% end %>
+
+    <% (["Malawian"] + @nationalities).uniq.each do |n|
+    next if n.blank?
+    %>
+    var opt = document.createElement("option");
+    opt.value = "<%=n%>";
+    opt.innerHTML = "<%=n%>";
+    __$("mother_nationality").appendChild(opt);
+    <% end %>
+
+    <% (["Malawian"] + @nationalities).uniq.each do |n|
+    next if n.blank?
+    %>
+    var opt = document.createElement("option");
+    opt.value = "<%=n%>";
+    opt.innerHTML = "<%=n%>";
+    __$("father_nationality").appendChild(opt);
+    <% end %>
+
+    function removeSpace(node) {
+        node.value = node.value.trim().replace(/\s+/g, "").match(/\d/g).join("");
+
+    }
+
+    function next() {
+
+        jQuery(sets[cur_pos]).find("input, select").validate();
+        if (jQuery(sets[cur_pos]).find(".error").length > 0) {
+            jQuery('#form-create-person').submit();
+            jQuery("fieldset .form-error").hide();
+        } else {
+            jQuery('.form-error').hide();
+            if (cur_pos < sets.length - 1) {
+                for (var i = 0; i < sets.length; i++) {
+                    sets[i].style.display = "none";
+                }
+                cur_pos += 1;
+                sets[cur_pos].style.display = "block";
+            }
+        }
+
+        if (cur_pos == sets.length - 1) {
+            //Show Finish Button And Hide Next Button
+            jQuery("#next-btn").hide();
+            jQuery("#finish-btn").show();
+        } else {
+            jQuery("#next-btn").show();
+            jQuery("#finish-btn").hide();
+        }
+        __$("progress-div").style.width = (cur_pos / sets.length) * 100 + "%";
+
+        checkRelationship();
+    }
+
+    function back() {
+        if (cur_pos > 0) {
+            for (var i = 0; i < sets.length; i++) {
+                sets[i].style.display = "none";
+            }
+            cur_pos -= 1;
+            sets[cur_pos].style.display = "block";
+        }
+
+        if (cur_pos == sets.length - 1) {
+            //Show Finish Button And Hide Next Button
+            jQuery("#next-btn").hide();
+            jQuery("#finish-btn").show();
+        } else {
+            jQuery("#next-btn").show();
+            jQuery("#finish-btn").hide();
+        }
+
+        checkRelationship();
+    }
+
+    function clearForm() {
+        jQuery(sets[cur_pos]).find("input, select").val("");
+        __$("progress-div").style.width = "0%";
+
+    }
+
+    function countries(id, dep) {
+        for (var i = 0; i < dep.length; i++) {
+            jQuery("#" + dep[i]).val("");
+            jQuery(document.getElementById(dep[i])).empty();
+        }
+
+        var node = document.getElementById(id);
+        jQuery(node).empty();
+
+        jQuery.ajax({
+            url: "/countries",
+            success: function (results) {
+
+                var opts = JSON.parse(results);
+                for (var i in opts) {
+                    var option = document.createElement("option");
+                    option.innerHTML = opts[i];
+                    option.setAttribute("value", opts[i]);
+
+                    <% if request.path.match("/edit")%>
+                    if ('<%= @person.district_of_birth%>' == opts[i] && id == "birth_district") {
+                        option.setAttribute("selected", "true");
+                        tas('birth_ta', opts[i], ['birth_village'])
+                    }
+
+                    if ('<%= @person.informant_district%>' == opts[i] && id == "informant_district") {
+                        option.setAttribute("selected", "true");
+                        tas('informant_ta', opts[i], ['informant_village'])
+                    }
+                    <% end %>
+                    node.appendChild(option);
+                }
+
+            },
+            error: function () {
+
+            }
+        })
+    }
+
+    function districts(id, dep) {
+        for (var i = 0; i < dep.length; i++) {
+            jQuery("#" + dep[i]).val("");
+            jQuery(document.getElementById(dep[i])).empty();
+        }
+
+        var node = document.getElementById(id);
+        jQuery(node).empty();
+
+        jQuery.ajax({
+            url: "/districts",
+            success: function (results) {
+
+                var opts = JSON.parse(results);
+                for (var i in opts) {
+                    var option = document.createElement("option");
+                    option.innerHTML = opts[i];
+                    option.setAttribute("value", opts[i]);
+
+                    <% if request.path.match("/edit")%>
+                    if ('<%= @person.district_of_birth%>' == opts[i] && id == "birth_district") {
+                        option.setAttribute("selected", "true");
+                        tas('birth_ta', opts[i], ['birth_village'])
+                    }
+
+                    if ('<%= @person.informant_district%>' == opts[i] && id == "informant_district") {
+                        option.setAttribute("selected", "true");
+                        tas('informant_ta', opts[i], ['informant_village'])
+                    }
+                    <% end %>
+                    node.appendChild(option);
+                }
+
+            },
+            error: function () {
+
+            }
+        })
+    }
+
+    function tas(id, parent, dep) {
+        for (var i = 0; i < dep.length; i++) {
+            jQuery("#" + dep[i]).val("");
+            jQuery(document.getElementById(dep[i])).empty();
+        }
+
+        var node = document.getElementById(id);
+        jQuery(node).empty();
+
+        jQuery.ajax({
+            url: ("/tas?parent=" + parent),
+            success: function (results) {
+
+                var opts = JSON.parse(results);
+                for (var i in opts) {
+                    var option = document.createElement("option");
+                    option.innerHTML = opts[i];
+                    option.setAttribute("value", opts[i]);
+                    <% if request.path.match("/edit")%>
+
+                    if ('<%= @person.ta_of_birth%>' == opts[i] && id == "birth_ta") {
+                        option.setAttribute("selected", "true");
+                        villages('birth_village', __$('birth_district').value, opts[i]);
+                    }
+
+                    if ('<%= @person.informant_ta%>' == opts[i] && id == "informant_ta") {
+                        option.setAttribute("selected", "true");
+                        villages('informant_village', __$('informant_district').value, opts[i]);
+                    }
+                    <% end %>
+                    node.appendChild(option);
+                }
+
+            },
+            error: function () {
+
+            }
+        })
+    }
+
+    function checkMarriage() {
+        if (__$("married").value.trim() == "Yes") {
+            __$("date_of_marriage").removeAttribute("disabled");
+            //__$("date_of_marriage").setAttribute("data-validation", "required");
+            __$("date_of_marriage").setAttribute("data-validation-format", "dd/mm/yyyy")
+
+        } else {
+            //__$("date_of_marriage").removeAttribute("data-validation");
+            __$("date_of_marriage").removeAttribute("data-validation-format");
+            __$("date_of_marriage").setAttribute("disabled", "disabled");
+            __$("date_of_marriage").value = "";
+            __$("court_order").removeAttribute("disabled");
+        }
+    }
+
+    function checkValue(passedValue, elementType) {
+        if (elementType === 'country') {
+            if (passedValue !== 'Malawi') {
+                __$('mother_physical_district_div').style.visibility = 'hidden';
+                __$('mother_physical_ta_div').style.visibility = 'hidden';
+                __$('mother_physical_village_div').style.visibility = 'hidden';
+                __$('mother_physical_district').removeAttribute('data-validation');
+                __$('mother_physical_ta').removeAttribute('data-validation');
+                __$('mother_physical_village').removeAttribute('data-validation');
+
+                __$('mother_physical_state_div').style.visibility = 'visible'
+                __$('mother_physical_town_div').style.visibility = 'visible'
+                __$('mother_physical_address_div').style.visibility = 'visible'
+            } else {
+                __$('mother_physical_district_div').style.visibility = 'visible';
+                __$('mother_physical_ta_div').style.visibility = 'visible';
+                __$('mother_physical_village_div').style.visibility = 'visible';
+                __$('mother_physical_district').setAttribute('data-validation', 'required');
+                __$('mother_physical_ta').setAttribute('data-validation', 'required');
+                __$('mother_physical_village').setAttribute('data-validation', 'required');
+
+                __$('mother_physical_state_div').style.visibility = 'hidden'
+                __$('mother_physical_town_div').style.visibility = 'hidden'
+                __$('mother_physical_address_div').style.visibility = 'hidden'
+            }
+        }
+    }
+
+    function checkSigned() {
+        if (__$("court_order").value.trim() == "No") {
+            __$("parents_signed").removeAttribute("disabled");
+        } else {
+            __$("parents_signed").removeAttribute("data-validation-format");
+            __$("parents_signed").setAttribute("disabled", "disabled");
+            __$("parents_signed").value = "";
+        }
+    }
+
+    function villages(id, district, ta) {
+
+        var node = document.getElementById(id);
+        jQuery(node).empty();
+
+        jQuery.ajax({
+            url: ("/villages?district=" + district + "&ta=" + ta),
+            success: function (results) {
+
+                var opts = JSON.parse(results);
+
+                for (var i in opts) {
+                    var option = document.createElement("option");
+                    option.innerHTML = opts[i];
+                    option.setAttribute("value", opts[i]);
+
+                    <% if request.path.match("/edit")%>
+                    if ('<%= @person.village_of_birth%>' == opts[i] && id == "birth_village") {
+                        option.setAttribute("selected", "true");
+                    }
+
+                    if ('<%= @person.informant_village%>' == opts[i] && id == "informant_village") {
+                        option.setAttribute("selected", "true");
+                    }
+                    <% end %>
+                    node.appendChild(option);
+                }
+
+            },
+            error: function () {
+            }
+        })
+    }
+
+    function validateForm() {
+        checkRelationship();
+
+        jQuery(sets[cur_pos]).find("input, select").validate();
+        if (jQuery(sets[cur_pos]).find(".error").length > 0) {
+            jQuery('#form-create-person').submit();
+            jQuery("fieldset .form-error").hide();
+            return;
+        }
+
+        var hash = jQuery("#form-create-person").serializeHash();
+        for (var k in hash) {
+            if (hash[k] == null) {
+                hash[k] = "";
+            }
+        }
+
+        $("#completeness_details #child_name").html(hash['first_name'] + " " + hash['middle_name'] + " " + hash["last_name"]);
+        $("#completeness_details #child_gender").html(hash['gender']);
+        $("#completeness_details #child_date_of_birth").html(hash['date_of_birth']);
+
+        var arr = []
+        if (hash['birth_village']) {
+            arr.push(hash['birth_village']);
+        }
+
+        if (hash['birth_ta']) {
+            arr.push(hash['birth_ta']);
+        }
+
+        arr.push(hash['birth_district'])
+
+        $("#completeness_details #child_place_of_birth").html(arr.join(", "));
+
+        $("#completeness_details #mother_name").html(hash['mother_first_name'] + " " + hash['mother_middle_name'] + " " + hash["mother_last_name"]);
+        $("#completeness_details #father_name").html(hash['father_first_name'] + " " + hash['father_middle_name'] + " " + hash["father_last_name"]);
+
+        $("#completeness_details #mother_nationality").html(hash['mother_nationality']);
+        $("#completeness_details #father_nationality").html(hash['father_nationality']);
+
+        $("#completeness_details #mother_id_number").html(hash['mother_id_number']);
+        $("#completeness_details #father_id_number").html(hash['father_id_number']);
+
+        $("#completeness_details #parents_married").html(hash['parents_married']);
+        $("#completeness_details #form_signed").html(hash['form_signed']);
+
+        var nodes = document.getElementsByClassName("edit");
+        for (var i = 0; i < nodes.length; i++) {
+            var section = parseInt(nodes[i].className.split(/\s/)[1].trim());
+            nodes[i].setAttribute("section", section);
+            nodes[i].onmousedown = function () {
+                moveToSection(parseInt(this.getAttribute("section")));
+            }
+        }
+
+        jQuery('#completenessModal').modal('show');
+    }
+
+    function saveRecord() {
+        //jQuery('#form-create-person').submit(function(e){
+        //e.preventDefault();
+        var childData = {
+            'last_name': $('input[name=last_name]').val(),
+            'first_name': $('input[name=first_name]').val(),
+            'middle_name': $('input[name=middle_name]').val(),
+            'date_of_birth': $('input[name=date_of_birth]').val(),
+            'gender': $('input[name=gender]').val(),
+            'child_id_number': $('input[name=child_id_number]').val()
+        };
+
+        <% if session[:multiple_births] == true %>
+
+        jQuery.ajax(
+            {
+                url: "/save_record",
+                type: "POST",
+                data: childData,
+                success: function (response) {
+                    if (response === "OK") {
+                        window.location = "/person/index?active_tab=home";
+                    } else if (response === "Redirect") {
+                        window.location = "/person/new?multiple_births=<%= session[:multiple_births_value] %>&number_of_child=<%= session[:number_of_child] %>"
+                    } else {
+                        alert("Oops!!! Something Went Wrong!!")
+                    }
+                },
+                error: function () {
+                    alert("Oops!!! Something Went Wrong!!");
+                }
+            }
+        )
+        <% else %>
+        jQuery.ajax(
+            {
+                url: "/save_record",
+                type: "POST",
+                data: $("#form-create-person").serialize(),
+                success: function (response) {
+                    if (response === "OK") {
+                        window.location = "/person/index?active_tab=home";
+                    } else if (response === "Redirect") {
+                        window.location = "/person/new?multiple_births=<%= session[:multiple_births_value] %>&number_of_child=<%= session[:number_of_child] %>"
+                    } else {
+                        alert("Oops!!! Something Went Wrong!!")
+                    }
+                },
+                error: function () {
+                    alert("Oops!!! Something Went Wrong!!");
+                }
+            }
+        )
+        <% end %>
+        //})
+    }
+
+    function moveToSection(section) {
+        console.log(section);
+        cur_pos = section;
+        jQuery('.form-error').hide();
+        for (var i = 0; i < sets.length; i++) {
+            sets[i].style.display = "none";
+        }
+        sets[section].style.display = "block";
+        jQuery("#next-btn").show();
+        jQuery("#back-btn").show();
+
+        jQuery('#completenessModal').modal('hide');
+    }
+
+    function copyMother() {
+        __$("informant_first_name").value = __$("mother_first_name").value;
+        __$("informant_last_name").value = __$("mother_last_name").value;
+        __$("informant_middle_name").value = __$("mother_middle_name").value;
+        __$("informant_id_number").value = __$("mother_id_number").value;
+    }
+
+    function copyFather() {
+        __$("informant_first_name").value = __$("father_first_name").value;
+        __$("informant_last_name").value = __$("father_last_name").value;
+        __$("informant_middle_name").value = __$("father_middle_name").value;
+        __$("informant_id_number").value = __$("father_id_number").value;
+    }
+
+    function lockFields(lockableFields) {
+        for (var i = 0; i < lockableFields.length; i++) {
+            __$(lockableFields[i]).setAttribute("disabled", "disabled");
+        }
+    }
+
+    function unlockFields(unlockableFields) {
+        for (var i = 0; i < unlockableFields.length; i++) {
+            __$(unlockableFields[i]).value = ""
+            __$(unlockableFields[i]).removeAttribute("disabled");
+        }
+    }
+
+    function checkRelationship() {
+        if (__$("informant_relationship").value == "Mother") {
+            copyMother();
+            lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
+        } else if (__$("informant_relationship").value == "Father") {
+            copyFather();
+            lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
+        } else {
+            unlockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"]);
+        }
+    }
+
+    function nullify(id, field) {
+        if (field.value.trim() != "Malawian") {
+            __$(id).value = "";
+            __$(id).setAttribute("disabled", "disabled")
+        } else {
+            __$(id).removeAttribute("disabled")
+        }
+    }
+
+    districts("birth_district", ['birth_ta', 'birth_village']);
+    districts("mother_physical_district", ['mother_physical_ta', 'mother_physical_village']);
+    districts("mother_home_district", ['mother_home_ta', 'mother_home_village']);
+    districts("father_physical_district", ['father_physical_ta', 'father_physical_village']);
+    districts("father_home_district", ['father_home_ta', 'father_home_village']);
+    districts("informant_district", ['informant_ta', 'informant_village']);
+    districts("village_headman_district", ['village_headman_ta', 'village_headman_village'])
+
+    <% if request.path.match("/edit")
+    %>
+
+    __$("gender").value = "<%= @person.gender%>";
+    __$("married").value = "<%= @person.parents_married%>";
+    __$("mother_nationality").value = "<%= @person.mother_nationality%>";
+    __$("father_nationality").value = "<%= @person.father_nationality%>";
+    __$("informant_relationship").value = "<%= @person.informant_relationship%>";
+    __$("informant_district").value = "<%= @person.informant_district%>";
+    __$("form_signed").value = "<%= @person.form_signed%>";
+    __$("date_of_marriage").value = "<%= @person.date_of_marriage%>";
+    __$("court_order").value = "<%= @person.court_order_attached%>";
+    __$("village_headman_signed").value = "<%= @person.village_headman_signed%>";
+    <% else %>
+
+    <% end %>
+
+    var dobpicker;
+    var motherDOBpicker;
+    var fatherDOBpicker;
+    var dompicker;
+    var drpicker;
+
+    jQuery(document).ready(function () {
+        var d = new Date();
+        d.setFullYear(d.getFullYear() - 16);
+
+        var d2 = new Date();
+        d2.setFullYear(d.getFullYear() - 50);
+
+        dobpicker = new Pikaday({
+            field: document.getElementById('date_of_birth'),
+            format: 'DD/MMM/YYYY',
+            minDate: d,
+            maxDate: new Date()
+        });
+
+        motherDOBpicker = new Pikaday({
+            field: document.getElementById('mother_date_of_birth'),
+            format: 'DD/MMM/YYYY',
+            minDate: d2,
+            maxDate: new Date(),
+        });
+
+        fatherDOBpicker = new Pikaday({
+            field: document.getElementById('father_date_of_birth'),
+            format: 'DD/MMM/YYYY',
+            minDate: d2,
+            maxDate: new Date(),
+        });
+
+        dompicker = new Pikaday({
+            field: document.getElementById('date_of_marriage'),
+            format: 'DD/MMM/YYYY',
+            minDate: d2,
+            maxDate: new Date()
+        });
+
+        drpicker = new Pikaday({
+            field: document.getElementById('date_reported'),
+            format: 'DD/MMM/YYYY',
+            minDate: (new Date("01/Sep/2018")),
+            maxDate: new Date()
+        });
+
+        tas('village_headman_ta', 'village_headman_district', [])
+
+        villages('village_headman_village', 'village_headman_district', 'village_headman_ta');
+
+        setTimeout(function () {
+            <% if !request.path.match("/edit")%>
+            __$("ta_name").value = "<%= @cur_location['ta']%>";
+            __$("village_name").value = "<%= @cur_location['village']%>";
+            <% else %>
+            __$("ta_name").value = "<%= @person.ta_created_at%>";
+            __$("village_name").value = "<%= @person.location_created_at%>";
+            <% end %>
+        }, 1000)
+
+        checkRelationship();
+
+    })
+
+    $("select option").css("background-color", "red");
+
+
+    $("input").on('input', function () {
+        var list_id = $(this).attr("list");
+        if (list_id && list_id.length > 0) {
+            console.log(list_id)
+            jQuery.ajax(
+                {
+                    url: "/person/suggest?field=" + this.id + "&search_value=" + this.value,
+                    success: function (data) {
+                        jQuery("#" + list_id).empty();
+                        data = JSON.parse(data);
+                        for (var i = 0; i < data.length; i++) {
+                            var opt = document.createElement("option");
+                            opt.innerHTML = data[i];
+                            __$(list_id).appendChild(opt);
+                        }
+                    }
+                }
+            )
+        }
+    })
+
+    jQuery(".filters input, .filters select").attr('disabled', true).val('');
+    jQuery(".check").attr('disabled', false).val('');
+    jQuery(".home, .hospital, .other").hide().val('');
+
+    selected = [];
+    table = null;
+    initt = false;
+
+    $i(document).ready(function () {
+
+    });
+
+    function initTable() {
+        table = $i('#example').DataTable(
+            {
+                "processing": true,
+                "serverSide": true,
+                "ordering": false,
+                "ajax": {
+                    "url": "/search_cases",
+                    "data": function (d) {
+                        var ids = ['ben', 'brn', 'last_name', 'middle_name', 'first_name', 'gender', 'status',
+                            'place_of_birth', 'district_of_birth', 'ta_of_birth', 'village_of_birth',
+                            'hospital_of_birth', 'other_birth_place', 'start_date', 'end_date'];
+
+                        for (var i = 0; i < ids.length; i++) {
+                            var node = document.getElementById(ids[i]);
+                            d[node.getAttribute('name')] = node.value;
+                        }
+                    },
+                    dataFilter: function (data) {
+                        var json = jQuery.parseJSON(data);
+                        for (var i = 0; i < json['data'].length; i++) {
+                            var last_index = json['data'][i].length - 1;
+                            var person_id = json['data'][i][last_index]
+                            json['data'][i][last_index] = '<td class="act-btn"> ' +
+                                '<button onclick="javascript:location=\'/show_person/' + person_id + ' \'"     ' +
+
+                                '    class="action-btn btn btn-success btn-xs"><i class="fa fa-eye"></i></button></td>';
+                        }
+                        return JSON.stringify(json);
+                    }
+                }
+            }
+        );
+    }
+
+    function activeDate() {
+        jQuery(function () {
+            jQuery("#start_date").datepicker({dateFormat: 'dd/mm/yy'});
+        });
+        jQuery(function () {
+            jQuery("#end_date").datepicker({dateFormat: 'dd/mm/yy'});
+        });
+    }
+
+    function enableField(fields) {
+        for (var i = 0; i < fields.length; i++) {
+            jQuery("#" + fields[i]).removeAttr("disabled")
+        }
+    }
+
+    function disableField(fields) {
+        for (var i = 0; i < fields.length; i++) {
+            jQuery("#" + fields[i]).attr("disabled", "disabled")
+            jQuery("#" + fields[i]).val("")
+        }
+    }
+
+    function check(node) {
+        var nodes = jQuery(node).parent().children();
+
+        if (jQuery(node).is(':checked')) {
+            nodes.attr('disabled', false)
+        } else {
+            nodes.attr('disabled', true).val('')
+        }
+
+        jQuery(node).attr('disabled', false)
+    }
+
+    function loadData(data) {
+        var row = document.createElement('tr');
+        __$('tbody').appendChild(row);
+        var td = document.createElement('td');
+        td.className = 'table-cell'
+        td.style.textAlign = 'center';
+        td.innerHTML = data['ben'];
+        row.appendChild(td);
+
+        var td = document.createElement('td');
+        td.className = 'table-cell'
+        td.style.textAlign = 'center';
+        td.innerHTML = data['name'];
+        row.appendChild(td);
+
+        var td = document.createElement('td');
+        td.className = 'table-cell'
+        td.style.textAlign = 'center';
+        td.innerHTML = data['dob'];
+        row.appendChild(td);
+
+        var td = document.createElement('td');
+        td.className = 'table-cell'
+        td.style.textAlign = 'center';
+        td.innerHTML = data['gender'];
+        row.appendChild(td);
+
+        var td = document.createElement('td');
+        td.className = 'table-cell'
+        td.style.textAlign = 'center';
+        td.innerHTML = data['mother_name'];
+        row.appendChild(td);
+
+        var td = document.createElement('td');
+        td.className = 'table-cell'
+        td.style.textAlign = 'center';
+        td.innerHTML = data['father_name'];
+        row.appendChild(td);
+
+        var td = document.createElement('td');
+        td.className = 'table-cell'
+        td.style.textAlign = 'center';
+        td.innerHTML = data['status'];
+        row.appendChild(td);
+    }
+
+    function showFields(select) {
+        var clas = select.value.toLowerCase();
+        jQuery(".place").hide().val('');
+        jQuery("." + clas).show().val('');
+    }
+
+    function fields(select) {
+        var clas = select.value.toLowerCase();
+        jQuery(".married").hide().val('');
+        jQuery("." + clas).show().val('');
+    }
+
+    function checkTypeOfBirth(typeOfBirthValue) {
+        if (typeOfBirthValue == 'Other') {
+            __$('specify_birth_type').style.visibility = 'visible';
+            __$('specify_type_of_birth').setAttribute('data-validation', 'required');
+        } else {
+            __$('specify_birth_type').style.visibility = 'hidden';
+            __$('specify_type_of_birth').removeAttribute('data-validation');
+            __$('specify_type_of_birth').value = '';
+        }
+    }
+
+    function reloadDataTable(node) {
+
+        if (initt == true) {
+            table.ajax.reload();
+        } else {
+            initt = true;
+            initTable();
+        }
+
+
+    }
+
+    function capitalize(string) {
+        string = string.replace(/\_/g, ' ');
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    function __$(id) {
+        return document.getElementById(id);
+    }
+
+    function load_tas(district) {
+        var district_name = district.options[district.selectedIndex].text;
+
+        jQuery("#village_of_birth").empty();
+        jQuery("#ta_of_birth").empty();
+        jQuery("#hospital_of_birth").empty();
+
+        if (__$('place_of_birth').value == 'Home') {
+            jQuery.ajax({
+                url: '/person/get_ta_complete?district=' + district_name,
+                success: function (result) {
+                    var list = JSON.parse(result);
+
+                    for (var i = 0; i < list.length; i++) {
+                        var o = document.createElement('option');
+                        o.innerHTML = list[i][1];
+                        o.setAttribute('value', list[i][1]);
+                        __$('ta_of_birth').appendChild(o);
+                    }
+                }
+            })
+        }
+
+        if (__$('place_of_birth').value == 'Hospital') {
+            jQuery.ajax({
+                url: '/person/get_hospital_complete?district=' + district_name,
+                success: function (result) {
+                    var list = JSON.parse(result);
+
+
+                    for (var i = 0; i < list.length; i++) {
+                        var o = document.createElement('option');
+                        o.innerHTML = list[i][1];
+                        o.setAttribute('value', list[i][0]);
+                        __$('hospital_of_birth').appendChild(o);
+                    }
+                }
+            })
+        }
+    }
+
+    function load_villages(ta) {
+        var district_name = __$('district_of_birth').options[__$('district_of_birth').selectedIndex].text;
+        var ta_name = ta.options[ta.selectedIndex].text;
+
+        jQuery.ajax({
+            url: '/person/get_village_complete?district=' + district_name + "&ta=" + ta_name,
+            success: function (result) {
+                var list = JSON.parse(result);
+                jQuery("#village_of_birth").empty();
+                for (var i = 0; i < list.length; i++) {
+                    var o = document.createElement('option');
+                    o.innerHTML = list[i][1];
+                    o.setAttribute('value', list[i][1]);
+                    __$('village_of_birth').appendChild(o);
+                }
+            }
+        })
+    }
+
+    activeDate();
+
+
+</script>
