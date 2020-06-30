@@ -96,6 +96,7 @@
           <th style="text-align: left;">Place Of Birth</th>
           <th style="text-align: left;">Mother Name</th>
           <th style="text-align: left;">Father Name</th>
+          <th>Upload Status</th>
           <th>&nbsp;</th>
         </tr>
         </thead>
@@ -245,8 +246,14 @@
                                         people[formatedData['person_id']] = formatedData
                                     }
                                 })
+                                
+                                if(json['data'][i][json['data'][i].length - 2] == "UPLOADED"){
+                                  json['data'][i][last_index] =  "<span id='"+ person_id+"'><i style='color:green' class='fa fa-check' aria-hidden='true'></i></span>";
 
-                                json['data'][i][last_index] =  "<span id='"+ person_id+"'><i style='color:red' class='fa fa-ban' aria-hidden='true'></i></span>";
+                                }else{
+                                  json['data'][i][last_index] =  "<span id='"+ person_id+"'><i style='color:red' class='fa fa-ban' aria-hidden='true'></i></span>";
+
+                                }
                             }
                             return JSON.stringify( json );
                         }

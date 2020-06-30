@@ -605,6 +605,7 @@ class PersonController < ApplicationController
                  p.place_of_birth,
                  p.mother_name,
                  p.father_name,
+                 p.upload_status,
                  p.person_id
           ]
 
