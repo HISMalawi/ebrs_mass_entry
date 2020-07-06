@@ -80,6 +80,7 @@
         </a>
       </div>
       <% end %>
+      <diV id="auth" style="float:right;color:red"> Authenticating...<img width="35px" height="35px" src="/assets/spinner.gif" /></div>
     </div>
 
 
@@ -96,6 +97,7 @@
           <th style="text-align: left;">Place Of Birth</th>
           <th style="text-align: left;">Mother Name</th>
           <th style="text-align: left;">Father Name</th>
+          <th>Upload Status</th>
           <th>&nbsp;</th>
         </tr>
         </thead>
@@ -103,8 +105,9 @@
         <tbody>
         </tbody>
       </table>
-
-      <button onclick ='syncAll()'>Sync All </button>
+      <br/>
+      <br/>
+      <button class="btn btn-primary pull-right" onclick ='syncAll()'>Upload Records </button>
     </div>
 </div>
 
@@ -130,16 +133,17 @@
   </div>
 </div>
 
-<div class="modal fade" id="offload-credential" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal fade" id="offload-credential" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="printerModalLabel" style="text-align: left;">
+        <button type="button" class="close hidden" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="printerModalLabel" style="text-align: center;">
             Please enter username and password of the main eBRS
         </h4>
       </div>
       <div class="modal-body">
+        <div id="authFailed" style="text-align:center;color:red;font-size:2em;display:none"> Authentication Failed !!!</div>
         <span style="text-align:center;">
                 <table style="width:100%">
                     <tr>
@@ -203,7 +207,39 @@
 
     $(document).ready(function() {
         initTable();
-        $('#offload-credential').modal('show');
+        if(sessionStorage.remoteToken === undefined){
+            $('#offload-credential').modal('show');
+        }else{
+          var token = sessionStorage.remoteToken;
+          var remoteExpiresAt = sessionStorage.remoteExpiresAt;
+
+          var protocol  =  sessionStorage.protocol;
+          var ipaddress =  sessionStorage.remoteIP;
+          var port      =  sessionStorage.remotePort;
+          var url = protocol+"://"+ipaddress+":"+port+"/remote_auth"
+
+          jQuery.ajax(
+              {
+                  url: url,
+                  type: "POST",
+                  data: {token: token, remote_expires_at: remoteExpiresAt},
+                  success: function(response){
+                      var authData = JSON.parse(response);
+                      if(authData.action =="Failed"){
+                        $('#offload-credential').modal('show');
+                      }else{
+                        sessionStorage.remoteToken = authData['token'];
+                        sessionStorage.remoteExpiresAt = authData['remote_expires_at'];
+                        __$("auth").style.visibility ="hidden";
+                      }
+                  },
+                  error:function(error){
+                    $('#offload-credential').modal('show');
+                      console.log(error);
+                  }
+          });
+        }
+        
     });
 
     function deletes(link){
@@ -245,8 +281,16 @@
                                         people[formatedData['person_id']] = formatedData
                                     }
                                 })
+                                
+                                if(json['data'][i][json['data'][i].length - 2] == "UPLOADED"){
+                                  json['data'][i][json['data'][i].length - 2] = "<span id='upstatus"+person_id+"'>UPLOADED</span>"
+                                  json['data'][i][last_index] =  "<span id='"+ person_id+"'><i style='color:green' class='fa fa-check' aria-hidden='true'></i></span>";
 
-                                json['data'][i][last_index] =  "<span id='"+ person_id+"'><i style='color:red' class='fa fa-ban' aria-hidden='true'></i></span>";
+                                }else{
+                                  json['data'][i][json['data'][i].length - 2] = "<span id='upstatus"+person_id+"'>NOT UPLOADED</span>"
+                                  json['data'][i][last_index] =  "<span id='"+ person_id+"'><i style='color:red' class='fa fa-ban' aria-hidden='true'></i></span>";
+
+                                }
                             }
                             return JSON.stringify( json );
                         }
@@ -274,12 +318,22 @@
                 data: {username: username, password: password},
                 success: function(response){
                     var authData = JSON.parse(response);
-                    sessionStorage.remoteToken = authData['token'];
-                    sessionStorage.remoteExpiresAt = authData['remote_expires_at'];
-                    sessionStorage.remotePort =  __$('port').value;
-                    sessionStorage.remoteIP = __$('ipaddress').value;
-                    sessionStorage.protocol = __$('protocol').value;
-                    $('#offload-credential').modal('hide');
+                    if(authData.action =="Failed"){
+                      __$("authFailed").style.display ="block";
+                    }else{
+                        sessionStorage.remoteToken = authData['token'];
+                        sessionStorage.remoteExpiresAt = authData['remote_expires_at'];
+                        sessionStorage.remotePort =  __$('port').value;
+                        sessionStorage.remoteIP = __$('ipaddress').value;
+                        sessionStorage.protocol = __$('protocol').value;
+                        $('#offload-credential').modal('hide');
+                        __$("auth").style.visibility ="hidden";
+                        __$("authFailed").style.display ="none";
+                    }
+                },
+                error:function(error){
+                  __$("authFailed").style.display ="none";
+                    console.log(error);
                 }
         });
     }
@@ -309,11 +363,13 @@
                           {
                               url: upload_status_url,
                               type: "POST",
-                              data: { id: personData['remote_id']},
+                              data: { id: personData['remote_id'],upload_id: personData["person"]['person_id']},
                               success: function(response){
-                                  var uploadResponse = JSON.parse(response);
+                                  var uploadResponse = JSON.parse(response);                              
+                                  var uploadStatus = document.getElementById("upstatus"+uploadResponse['person_id']);
+                                  uploadStatus.innerHTML ="UPLOADED";
                                   var span = document.getElementById(uploadResponse['person_id']);
-                                  span.innerHTML ="<i style='color:green' class='fa fa-check' aria-hidden='true'></i></span>"
+                                  span.innerHTML ="<i style='color:green' class='fa fa-check' aria-hidden='true'></i></span>";
                               }
                       });                      
                       

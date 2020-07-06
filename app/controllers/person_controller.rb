@@ -598,13 +598,14 @@ class PersonController < ApplicationController
 
         @records = []
         data.each do |p|
-
+          next if p.upload_status == "UPLOADED"
           arr = [p.name,
                  p.date_of_birth.to_date.strftime('%d/%b/%Y'),
                  p.gender,
                  p.place_of_birth,
                  p.mother_name,
                  p.father_name,
+                 p.upload_status,
                  p.person_id
           ]
 
@@ -722,6 +723,8 @@ class PersonController < ApplicationController
   def update_upload_status
     person = Person.find(params[:id])
     person.upload_status ="UPLOADED"
+    person.upload_datetime = Time.now
+    person.upload_number = params[:upload_id]
     person.save
     render :text => {:person_id => params[:id], :status => "UPLOADED"}.to_json
   end
