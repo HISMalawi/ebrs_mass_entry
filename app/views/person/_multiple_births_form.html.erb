@@ -609,63 +609,6 @@
 
     }
 
-    function next() {
-
-        jQuery(sets[cur_pos]).find("input, select").validate();
-        if (jQuery(sets[cur_pos]).find(".error").length > 0) {
-            jQuery('#form-create-person').submit();
-            jQuery("fieldset .form-error").hide();
-        }else {
-            jQuery('.form-error').hide();
-            if (cur_pos < sets.length - 1) {
-                for (var i = 0; i < sets.length; i++) {
-                    sets[i].style.display = "none";
-                }
-                cur_pos += 1;
-                sets[cur_pos].style.display = "block";
-            }
-        }
-
-        if (cur_pos == sets.length - 1){
-            //Show Finish Button And Hide Next Button
-            jQuery("#next-btn").hide();
-            jQuery("#finish-btn").show();
-        }else{
-            jQuery("#next-btn").show();
-            jQuery("#finish-btn").hide();
-        }
-        __$("progress-div").style.width = (cur_pos/sets.length)*100 + "%";
-
-        checkRelationship();
-    }
-
-    function back(){
-        if(cur_pos > 0){
-            for(var i = 0; i < sets.length; i++){
-                sets[i].style.display = "none";
-            }
-            cur_pos -= 1;
-            sets[cur_pos].style.display = "block";
-        }
-
-        if (cur_pos == sets.length - 1){
-            //Show Finish Button And Hide Next Button
-            jQuery("#next-btn").hide();
-            jQuery("#finish-btn").show();
-        }else{
-            jQuery("#next-btn").show();
-            jQuery("#finish-btn").hide();
-        }
-
-        checkRelationship();
-    }
-
-    function clearForm(){
-        jQuery(sets[cur_pos]).find("input, select").val("");
-        __$("progress-div").style.width = "0%";
-
-    }
-
     function countries(id, dep){
         for(var i = 0; i < dep.length; i++){
             jQuery("#" + dep[i]).val("");
@@ -786,63 +729,6 @@
         })
     }
 
-    function checkMarriage(){
-        if (__$("married").value.trim() == "Yes"){
-            __$("date_of_marriage").removeAttribute("disabled");
-            //__$("date_of_marriage").setAttribute("data-validation", "required");
-            __$("date_of_marriage").setAttribute("data-validation-format", "dd/mm/yyyy")
-
-        }
-
-        else{
-            //__$("date_of_marriage").removeAttribute("data-validation");
-            __$("date_of_marriage").removeAttribute("data-validation-format");
-            __$("date_of_marriage").setAttribute("disabled", "disabled");
-            __$("date_of_marriage").value = "";
-            __$("court_order").removeAttribute("disabled");
-        }
-    }
-
-    function checkValue(passedValue, elementType) {
-        if (elementType === 'country') {
-            if (passedValue !== 'Malawi') {
-                __$('mother_physical_district_div').style.visibility = 'hidden';
-                __$('mother_physical_ta_div').style.visibility = 'hidden';
-                __$('mother_physical_village_div').style.visibility = 'hidden';
-                __$('mother_physical_district').removeAttribute('data-validation');
-                __$('mother_physical_ta').removeAttribute('data-validation');
-                __$('mother_physical_village').removeAttribute('data-validation');
-
-                __$('mother_physical_state_div').style.visibility = 'visible'
-                __$('mother_physical_town_div').style.visibility = 'visible'
-                __$('mother_physical_address_div').style.visibility = 'visible'
-            } else {
-                __$('mother_physical_district_div').style.visibility = 'visible';
-                __$('mother_physical_ta_div').style.visibility = 'visible';
-                __$('mother_physical_village_div').style.visibility = 'visible';
-                __$('mother_physical_district').setAttribute('data-validation','required');
-                __$('mother_physical_ta').setAttribute('data-validation','required');
-                __$('mother_physical_village').setAttribute('data-validation','required');
-
-                __$('mother_physical_state_div').style.visibility = 'hidden'
-                __$('mother_physical_town_div').style.visibility = 'hidden'
-                __$('mother_physical_address_div').style.visibility = 'hidden'
-            }
-        }
-    }
-
-    function checkSigned(){
-        if (__$("court_order").value.trim() == "No"){
-            __$("parents_signed").removeAttribute("disabled");
-        }
-
-        else{
-            __$("parents_signed").removeAttribute("data-validation-format");
-            __$("parents_signed").setAttribute("disabled", "disabled");
-            __$("parents_signed").value = "";
-        }
-    }
-
     function villages(id, district, ta){
 
         var node = document.getElementById(id);
@@ -879,12 +765,12 @@
 
     function validateForm(){
 
-        jQuery(sets[cur_pos]).find("input, select").validate();
-        if (jQuery(sets[cur_pos]).find(".error").length > 0) {
-            jQuery('#form-create-person').submit();
-            jQuery("fieldset .form-error").hide();
-            return;
-        }
+        // jQuery(sets[cur_pos]).find("input, select").validate();
+        // if (jQuery(sets[cur_pos]).find(".error").length > 0) {
+        //     jQuery('#form-create-person').submit();
+        //     jQuery("fieldset .form-error").hide();
+        //     return;
+        // }
 
         var hash = jQuery("#form-create-person").serializeHash();
         for(var k in hash){
@@ -921,15 +807,6 @@
 
         $("#completeness_details #parents_married").html(hash['parents_married']);
         $("#completeness_details #form_signed").html(hash['form_signed']);
-
-        var nodes = document.getElementsByClassName("edit");
-        for(var i = 0; i < nodes.length; i++){
-            var section = parseInt(nodes[i].className.split(/\s/)[1].trim());
-            nodes[i].setAttribute("section", section);
-            nodes[i].onmousedown = function() {
-                moveToSection(parseInt(this.getAttribute("section")));
-            }
-        }
 
         jQuery('#completenessModal').modal('show');
     }
@@ -1079,10 +956,6 @@
     selected = [];
     table = null;
     initt = false;
-
-    $i(document).ready(function() {
-
-    });
 
     function initTable(){
         table =  $i('#example').DataTable(
