@@ -996,6 +996,36 @@
             father_village_option.innerHTML = __$('father_physical_village').value;
             father_village_option.selected = true;
             __$('father_home_village').appendChild(father_village_option);
+        } else if (residenceSimilarityType === 'informant_same_as_mother') {
+            __$('informant_district').value = __$('mother_physical_district').value;
+            __$('informant_district').selected = true;
+
+            var informant_mother_ta_option = document.createElement('option');
+            informant_mother_ta_option.value = __$('mother_physical_ta').value;
+            informant_mother_ta_option.innerHTML = __$('mother_physical_ta').value;
+            informant_mother_ta_option.selected = true;
+            __$('informant_ta').appendChild(informant_mother_ta_option);
+
+            var informant_mother_village_option = document.createElement('option');
+            informant_mother_village_option.value = __$('mother_physical_village').value;
+            informant_mother_village_option.innerHTML = __$('mother_physical_village').value;
+            informant_mother_village_option.selected = true;
+            __$('informant_village').appendChild(informant_mother_village_option);
+        } else if (residenceSimilarityType === 'informant_same_as_father') {
+            __$('informant_district').value = __$('father_physical_district').value;
+            __$('informant_district').selected = true;
+
+            var informant_ta_option = document.createElement('option');
+            informant_ta_option.value = __$('father_physical_ta').value;
+            informant_ta_option.innerHTML = __$('father_physical_ta').value;
+            informant_ta_option.selected = true;
+            __$('informant_ta').appendChild(informant_ta_option);
+
+            var informant_village_option = document.createElement('option');
+            informant_village_option.value = __$('father_physical_village').value;
+            informant_village_option.innerHTML = __$('father_physical_village').value;
+            informant_village_option.selected = true;
+            __$('informant_village').appendChild(informant_village_option);
         }
     }
 
@@ -1781,9 +1811,11 @@
     function checkRelationship() {
         if (__$("informant_relationship").value == "Mother") {
             copyMother();
+            autoPopulateAddress('informant_same_as_mother');
             lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
         } else if (__$("informant_relationship").value == "Father") {
             copyFather();
+            autoPopulateAddress('informant_same_as_father');
             lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
         } else {
             unlockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"]);
