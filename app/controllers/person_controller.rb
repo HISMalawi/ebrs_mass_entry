@@ -535,8 +535,73 @@ class PersonController < ApplicationController
     person.date_of_birth      = params[:date_of_birth].to_date.to_s(:db)
     person.child_id_number    = params[:child_id_number]
 
-    session[:temp_person_details] ? get_temp_details(person) : set_common_details(user, person, params)
+    # session[:temp_person_details] ? get_temp_details(person) : set_common_details(user, person, params)
 
+    person.place_of_birth     = params[:place_of_birth]
+    person.district_of_birth  = params[:district_of_birth]
+    person.ta_of_birth        = params[:ta_of_birth]
+    person.village_of_birth   = params[:village_of_birth]
+    person.hospital_of_birth  = params[:hospital_of_birth]
+    person.other_place_of_birth_details = params[:other_birth_place]
+
+    person.birth_weight       = params[:birth_weight]
+    person.type_of_birth      = params[:type_of_birth]
+
+
+    person.parents_married    = params[:parents_married]
+    person.mother_first_name  = params[:mother_first_name].titleize rescue nil
+    person.mother_middle_name = params[:mother_middle_name].titleize rescue nil
+    person.mother_last_name   = params[:mother_last_name].titleize rescue nil
+    person.mother_nationality = params[:mother_nationality]
+    person.mother_id_number   = params[:mother_id_number].to_s.upcase
+    person.date_of_marriage   = params[:date_of_marriage]
+
+    person.court_order_attached = params[:court_order]
+    person.parents_signed     = params[:parents_signed]
+
+    person.father_first_name  = params[:father_first_name].titleize rescue nil
+    person.father_last_name   = params[:father_last_name].titleize rescue nil
+    person.father_middle_name = params[:father_middle_name].titleize rescue nil
+    person.father_nationality = params[:father_nationality]
+    person.father_id_number   = params[:father_id_number].to_s.upcase
+
+    person.informant_first_name  = params[:informant_first_name].titleize rescue nil
+    person.informant_middle_name = params[:informant_middle_name].titleize rescue nil
+    person.informant_last_name   = params[:informant_last_name].titleize rescue nil
+    person.informant_nationality = params[:informant_nationality]
+    person.informant_id_number   = params[:informant_id_number].to_s.upcase
+
+    person.informant_district    = params[:informant_district]
+    person.informant_ta          = params[:informant_ta]
+    person.informant_village     = params[:informant_village]
+
+    person.informant_address_line1 = params[:informant_address_line1]
+    person.informant_address_line2 = params[:informant_address_line2]
+    person.informant_address_line3 = params[:informant_address_line3]
+    person.informant_phone_number  = params[:informant_phone_number]
+    person.informant_relationship  = params[:informant_relationship]
+
+    person.form_signed             = params[:form_signed]
+    person.date_reported           = params[:date_reported]
+
+    person.village_headman_name    = params[:village_headman_name]
+    #person.village_senior_name     = params[:village_senior_name]
+    person.village_headman_signed  = params[:village_headman_signed]
+
+    person.district_created_at     = @cur_location['district']
+    person.ta_created_at           = (params[:ta_name].blank? ? @cur_location['ta'] : params[:ta_name])
+    case @cur_location['type']
+    when "DRO"
+      person.location_created_at = @cur_location['district']
+    when "Village"
+      person.location_created_at = @cur_location['village']
+    when "Health Facility"
+      person.location_created_at  = @cur_location['health_facility']
+    end
+
+    person.upload_status           = "NOT UPLOADED"
+    person.creator                 = "#{user.id}|#{user.username}|#{user.first_name} #{user.middle_name} #{user.last_name}"
+    
     person.created_at              = DateTime.now if person.created_at.blank?
     person.updated_at              = DateTime.now
     person.save
