@@ -1,6 +1,6 @@
 <script>
-    (function($){
-        $.fn.serializeHash = function() {
+    (function ($) {
+        $.fn.serializeHash = function () {
             var hash = {}
 
             function stringKey(key, value) {
@@ -17,7 +17,7 @@
             }
 
             var els = $(this).find(':input').get();
-            $.each(els, function() {
+            $.each(els, function () {
                 if (this.name && !this.disabled && (this.checked || /select|textarea/i.test(this.nodeName) || /hidden|text|search|tel|url|email|password|datetime|date|month|week|time|datetime-local|number|range|color/i.test(this.type))) {
                     var val = $(this).val();
                     $.extend(true, hash, stringKey(this.name, val));
@@ -31,74 +31,80 @@
 <link href="/Pikaday/css/pikaday.css" rel="stylesheet">
 
 <style>
-  label{
-    margin-left: 20px;
-    margin-right: 10px;
-    min-width: 100px;
-    text-align: left;
-  }
+    label {
+        margin-left: 20px;
+        margin-right: 10px;
+        min-width: 100px;
+        text-align: left;
+    }
 
-  input, select{
-    width: 200px;
-    background: lightblue;
-    font-weight: bold;
-    padding: 5px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -ms-box-sizing:content-box;
-    -moz-box-sizing:content-box;
-    -webkit-box-sizing:content-box;
-    box-sizing:content-box;
-  }
+    input, select {
+        width: 200px;
+        background: lightblue;
+        font-weight: bold;
+        padding: 5px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -ms-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        -webkit-box-sizing: content-box;
+        box-sizing: content-box;
+    }
 
-  .row{
-    margin-bottom: 10px;
-  }
-  fieldset .form-error{
-    display: none;
-  }
-  fieldset{
-    min-height: 50vh;
-  }
+    .row {
+        margin-bottom: 10px;
+    }
 
-  #completeness_details tr{
-    border-top: 1px dotted lightgray
-  }
+    fieldset .form-error {
+        display: none;
+    }
 
-  .labell{
-    text-align: left;
-    font-weight: bold !important;
-    padding: 0px;
-  }
-  .modal-header{
-    background: #006f95 none repeat scroll 0 0;
-    padding: 12px;
-  }
-  #completeness_details td{
-    padding: 8px;
-    border: 1px dotted ghostwhite;
-  }
-  #completeness_details .labell{
-  }
-  #mother_id_number, #father_id_number, #informant_id_number{
-    text-transform: uppercase;
-  }
+    fieldset {
+        min-height: 50vh;
+    }
 
-  .sentence-case, .cap{
-    text-transform: capitalize;
-  }
+    #completeness_details tr {
+        border-top: 1px dotted lightgray
+    }
 
-  .edit{
-    text-decoration: underline;
-    cursor: pointer;
-  }
+    .labell {
+        text-align: left;
+        font-weight: bold !important;
+        padding: 0px;
+    }
+
+    .modal-header {
+        background: #006f95 none repeat scroll 0 0;
+        padding: 12px;
+    }
+
+    #completeness_details td {
+        padding: 8px;
+        border: 1px dotted ghostwhite;
+    }
+
+    #completeness_details .labell {
+    }
+
+    #mother_id_number, #father_id_number, #informant_id_number {
+        text-transform: uppercase;
+    }
+
+    .sentence-case, .cap {
+        text-transform: capitalize;
+    }
+
+    .edit {
+        text-decoration: underline;
+        cursor: pointer;
+    }
 
 </style>
 <script src="/js/jquery.form-validator.min.js"></script>
 
 <form enctype="multipart/form-data" id="form-create-person" accept-charset="UTF-8"
-      action="/save_record" method="POST"><input type="hidden" >
+      action="/save_record" method="POST"><input type="hidden">
 
   <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
   <%= hidden_field_tag :person_id, @person.person_id -%>
@@ -134,7 +140,7 @@
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Surname: <span style="color: red; ">*</span></label>
         <input id="last_name" class="sentence-case" type="text" list="surname_list" autocomplete="off" pattern=""
-               value="<%=@person.last_name%>" name="last_name" data-validation="required length" data-validation-length="2-55">
+               value="<%= @person.last_name %>" name="last_name" data-validation="required length" data-validation-length="2-55">
         <datalist id="surname_list">
 
         </datalist>
@@ -142,8 +148,8 @@
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>First Name: <span style="color: red; ">*</span></label>
-        <input id="first_name" type="text"  class="sentence-case" list="first_name_list" autocomplete="off"
-               value="<%=@person.first_name%>" name="first_name" data-validation="required length" data-validation-length="2-55">
+        <input id="first_name" type="text" class="sentence-case" list="first_name_list" autocomplete="off"
+               value="<%= @person.first_name %>" name="first_name" data-validation="required length" data-validation-length="2-55">
         <datalist id="first_name_list">
 
         </datalist>
@@ -151,7 +157,7 @@
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Other Names:</label>
-        <input id="middle_name"  class="sentence-case" type="text" name="middle_name" value="<%=@person.middle_name%>" list="middle_name_list"
+        <input id="middle_name" class="sentence-case" type="text" name="middle_name" value="<%= @person.middle_name %>" list="middle_name_list"
                autocomplete="off">
         <datalist id="middle_name_list">
 
@@ -163,7 +169,7 @@
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Date of Birth: <span style="color: red; ">*</span></label>
-        <input id="date_of_birth" type="text" name="date_of_birth" value="<%=@person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil%>"
+        <input id="date_of_birth" type="text" name="date_of_birth" value="<%= @person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil %>"
                class="datepicker" data-validation="required" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
                onchange="compareWithDOB()">
       </div>
@@ -185,9 +191,9 @@
         <input value="<%#=@person.mother_id_number%>" id="child_id_number" type="text" name="child_id_number"
 
                data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
-               data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
+               data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
       </div>
-    </div>  
+    </div>
 
     <legend>Place of Birth</legend>
 
@@ -195,7 +201,7 @@
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label for="place">Place of birth <span style="color: red; ">*</span></label>
-        <select type="text" class="input-small"  id="place_of_birth" name="place_of_birth" onchange="showFields(this)">
+        <select type="text" class="input-small" id="place_of_birth" name="place_of_birth" onchange="showFields(this)">
           <option></option>
           <option>Home</option>
           <option>Hospital</option>
@@ -205,10 +211,10 @@
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label for="district_of_birth">District of birth</label>
-        <select type="text" class="input-small"  id="district_of_birth" name="district_of_birth" onchange="load_tas(this)">
+        <select type="text" class="input-small" id="district_of_birth" name="district_of_birth" onchange="load_tas(this)">
           <option></option>
-          <% @districts.each do |d|%>
-            <option value="<%= d.name%>"><%= d.name%></option>
+          <% @districts.each do |d| %>
+            <option value="<%= d.name %>"><%= d.name %></option>
           <% end %>
         </select>
 
@@ -217,10 +223,10 @@
       <div data-field-span="1" class="form-inline col-lg-3">
 
         <label for="ta_of_birth" class=" place home">TA of birth</label>
-        <select type="text" class="input-small  place home"  id="ta_of_birth" name="ta_of_birth" onchange="load_villages(this)">
+        <select type="text" class="input-small  place home" id="ta_of_birth" name="ta_of_birth" onchange="load_villages(this)">
           <option></option>
-          <% @districts.each do |d|%>
-            <option value="<%= d.name%>"><%= d.name%></option>
+          <% @districts.each do |d| %>
+            <option value="<%= d.name %>"><%= d.name %></option>
           <% end %>
         </select>
       </div>
@@ -228,10 +234,10 @@
       <div data-field-span="1" class="form-inline col-lg-3">
 
         <label for="village_of_birth" class=" place home">Village of birth</label>
-        <select type="text" class="input-small place home"  id="village_of_birth" name="village_of_birth">
+        <select type="text" class="input-small place home" id="village_of_birth" name="village_of_birth">
           <option></option>
-          <% @districts.each do |d|%>
-            <option value="<%= d.name%>"><%= d.name%></option>
+          <% @districts.each do |d| %>
+            <option value="<%= d.name %>"><%= d.name %></option>
           <% end %>
         </select>
 
@@ -240,21 +246,20 @@
       <div data-field-span="1" class="form-inline col-lg-3">
 
         <label for="hospital_of_birth" class=" place hospital">Hospital of birth</label>
-        <select type="text" class="input-small place hospital"  id="hospital_of_birth" name="hospital_of_birth">
+        <select type="text" class="input-small place hospital" id="hospital_of_birth" name="hospital_of_birth">
           <option></option>
-          <% @districts.each do |d|%>
-            <option value="<%= d.name%>"><%= d.name%></option>
+          <% @districts.each do |d| %>
+            <option value="<%= d.name %>"><%= d.name %></option>
           <% end %>
         </select>
 
       </div>
 
 
-
       <div data-field-span="1" class="form-inline col-lg-3">
 
         <label for="other_birth_place" class=" place other">Specify other birth place</label>
-        <input type="text" class="input-small place other"  id="other_birth_place" name="other_birth_place">
+        <input type="text" class="input-small place other" id="other_birth_place" name="other_birth_place">
       </div>
     </div>
 
@@ -262,10 +267,10 @@
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Birth Weight:</label>
-        <input id="birth_weight" type="text" name="birth_weight" data-validation-length="0-4" >
+        <input id="birth_weight" type="text" name="birth_weight" data-validation-length="0-4">
       </div>
 
-      <div data-field-span="1"  class="form-inline col-lg-3">
+      <div data-field-span="1" class="form-inline col-lg-3">
         <label>Type of Birth: <span style="color: red; ">*</span></label>
         <select id="type_of_birth" name="type_of_birth" data-validation="required" onchange="checkTypeOfBirth(this.value)">
           <option></option>
@@ -276,7 +281,7 @@
         </select>
       </div>
 
-      <div id="specify_birth_type" data-field-span="1"  class="form-inline col-lg-3" style="visibility: hidden">
+      <div id="specify_birth_type" data-field-span="1" class="form-inline col-lg-3" style="visibility: hidden">
         <label>Specify Other: <span style="color: red; ">*</span></label>
         <select id="specify_type_of_birth" name="specify_type_of_birth">
           <option></option>
@@ -298,7 +303,7 @@
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Parents married: <span style="color: red; ">*</span></label>
-        <select id="married" name="parents_married" data-validation="required"  onchange="checkMarriage()">
+        <select id="married" name="parents_married" data-validation="required" onchange="checkMarriage()">
           <option></option>
           <option>Yes</option>
           <option>No</option>
@@ -308,7 +313,7 @@
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Date of marriage:</label>
         <input type="text" name="date_of_marriage" id="date_of_marriage" disabled="disabled"
-               class="datepicker"  data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
+               class="datepicker" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
                onchange="compareWithDOB()">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
@@ -337,44 +342,44 @@
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Surname: <span style="color: red; ">*</span></label>
-        <input id="mother_last_name"  class="sentence-case" type="text" name="mother_last_name"  autocomplete="off" list="surname_list"
-               data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_last_name%>">
+        <input id="mother_last_name" class="sentence-case" type="text" name="mother_last_name" autocomplete="off" list="surname_list"
+               data-validation="required length" data-validation-length="2-30" value="<%= @person.mother_last_name %>">
 
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>First Name: <span style="color: red; ">*</span></label>
-        <input id="mother_first_name"  class="sentence-case" type="text" name="mother_first_name" autocomplete="off" list="first_name_list"
-               data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_first_name%>">
+        <input id="mother_first_name" class="sentence-case" type="text" name="mother_first_name" autocomplete="off" list="first_name_list"
+               data-validation="required length" data-validation-length="2-30" value="<%= @person.mother_first_name %>">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Other Names:</label>
-        <input id="mother_middle_name"  class="sentence-case" type="text" name="mother_middle_name" autocomplete="off" list="middle_name_list"
-               value="<%=@person.mother_middle_name%>">
+        <input id="mother_middle_name" class="sentence-case" type="text" name="mother_middle_name" autocomplete="off" list="middle_name_list"
+               value="<%= @person.mother_middle_name %>">
       </div>
     </div>
 
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Date of Birth:</label>
-        <input id="mother_date_of_birth" type="text" name="mother_date_of_birth" value="<%=@person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil%>"
+        <input id="mother_date_of_birth" type="text" name="mother_date_of_birth" value="<%= @person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil %>"
                class="datepicker" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
                onchange="compareWithDOB()">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Nationality: <span style="color: red; ">*</span></label>
         <select id="mother_nationality" name="mother_nationality" data-validation="required"
-                onchange = "nullify('mother_id_number', this)"
-                value="<%=@person.mother_nationality%>">
+                onchange="nullify('mother_id_number', this)"
+                value="<%= @person.mother_nationality %>">
           <option></option>
         </select>
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
 
         <label>ID Number: </label>
-        <input value="<%=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number"
+        <input value="<%= @person.mother_id_number %>" id="mother_id_number" type="text" name="mother_id_number"
 
                data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
-               data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
+               data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
       </div>
     </div>
 
@@ -395,13 +400,13 @@
         <select id="mother_physical_district" type="text" name="mother_physical_district" data-validation="required"
                 onchange="tas('mother_physical_ta', this.value, ['mother_physical_village'])"></select>
       </div>
-      <div id="mother_physical_ta_div" data-field-span="1"  class="form-inline col-lg-3">
+      <div id="mother_physical_ta_div" data-field-span="1" class="form-inline col-lg-3">
         <label for="mother_physical_ta">TA: <span style="color: red; ">*</span></label>
         <select id="mother_physical_ta" type="text" name="mother_physical_ta" data-validation="required"
                 onchange="villages('mother_physical_village', document.getElementById('mother_physical_district').value, document.getElementById('mother_physical_ta').value)">
         </select>
       </div>
-      <div id="mother_physical_village_div" data-field-span="1"  class="form-inline col-lg-3">
+      <div id="mother_physical_village_div" data-field-span="1" class="form-inline col-lg-3">
         <label for="mother_physical_village">Village: <span style="color: red; ">*</span></label>
         <select id="mother_physical_village" type="text" name="mother_physical_village" data-validation="required"></select>
       </div>
@@ -410,15 +415,15 @@
       <!-- This section for when country is not Malawi -->
       <div id="mother_physical_state_div" data-field-span="1" class="form-inline col-lg-3" style="visibility: hidden">
         <label for="mother_physical_state">State: </label>
-        <input id="mother_physical_state" type="text" name="mother_physical_district" />
+        <input id="mother_physical_state" type="text" name="mother_physical_district"/>
       </div>
-      <div id="mother_physical_town_div" data-field-span="1"  class="form-inline col-lg-3" style="visibility: hidden">
+      <div id="mother_physical_town_div" data-field-span="1" class="form-inline col-lg-3" style="visibility: hidden">
         <label for="mother_physical_town">Town: </label>
-        <input id="mother_physical_town" type="text" name="mother_physical_ta" />
+        <input id="mother_physical_town" type="text" name="mother_physical_ta"/>
       </div>
-      <div id="mother_physical_address_div" data-field-span="1"  class="form-inline col-lg-3" style="visibility: hidden">
+      <div id="mother_physical_address_div" data-field-span="1" class="form-inline col-lg-3" style="visibility: hidden">
         <label for="mother_physical_address">Address: </label>
-        <input id="mother_physical_address" type="text" name="mother_physical_village" />
+        <input id="mother_physical_address" type="text" name="mother_physical_village"/>
       </div>
       <!-- End country not Malawi -->
     </div>
@@ -427,16 +432,16 @@
       <label style="color: gray;text-decoration: underline;">Home Address</label>
     </div>
 
-    <!--      <div data-row-span="2" class="row " style="margin-bottom: 35px;">-->
-    <!--        <div data-field-span="1"  class="form-inline col-lg-12">-->
-    <!--          <label>Same as Residence?</label>-->
-    <!--          <select id="mother_home_as_residence" type="text" name="mother_home_as_residence" onchange="checkResidenceSimilarity('mother_home_as_residence')">-->
-    <!--            <option></option>-->
-    <!--            <option>Yes</option>-->
-    <!--            <option>No</option>-->
-    <!--          </select>-->
-    <!--        </div>-->
-    <!--      </div>-->
+    <div data-row-span="2" class="row " style="margin-bottom: 35px;">
+      <div data-field-span="1" class="form-inline col-lg-12">
+        <label>Same as Residence?</label>
+        <select id="mother_home_as_residence" type="text" name="mother_home_as_residence" onchange="checkResidenceSimilarity('mother_home_as_residence')">
+          <option></option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+    </div>
 
     <div data-row-span="2" class="row " style="margin-bottom: 35px;">
       <div data-field-span="1" class="form-inline col-lg-3">
@@ -444,13 +449,13 @@
         <select id="mother_home_district" type="text" name="mother_home_district" data-validation="required"
                 onchange="tas('mother_home_ta', this.value, ['mother_home_village'])"></select>
       </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
+      <div data-field-span="1" class="form-inline col-lg-3">
         <label>TA: <span style="color: red; ">*</span></label>
         <select id="mother_home_ta" type="text" name="mother_home_ta" data-validation="required"
                 onchange="villages('mother_home_village', document.getElementById('mother_home_district').value, document.getElementById('mother_home_ta').value)">
         </select>
       </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
+      <div data-field-span="1" class="form-inline col-lg-3">
         <label>Village: <span style="color: red; ">*</span></label>
         <select id="mother_home_village" type="text" name="mother_home_village" data-validation="required"></select>
       </div>
@@ -461,9 +466,9 @@
         <label>Gestation Age:</label>
         <input id="gestation_age" type="number" name="gestation_age" data-validation="required" placeholder="(in weeks)">
       </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
+      <div data-field-span="1" class="form-inline col-lg-3">
         <label>Delivery Mode:</label>
-        <select id="delivery_mode" type="text" name="delivery_mode" >
+        <select id="delivery_mode" type="text" name="delivery_mode">
           <option></option>
           <option>SVD</option>
           <option>Vacuum Extraction</option>
@@ -472,13 +477,12 @@
           <option>Caesarean Section</option>
         </select>
       </div>
-      <div data-field-span="1"  class="form-inline col-lg-4">
+      <div data-field-span="1" class="form-inline col-lg-4">
         <label>Month prenatal care began</label>
-        <input type="number" name="prenatal_care_began", id="prenatal_care_began">
+        <input type="number" name="prenatal_care_began" , id="prenatal_care_began">
       </div>
     </div>
 
-    
 
   </fieldset>
 
@@ -489,9 +493,9 @@
         <label>Number of prenatal visits</label>
         <input type="number" name="prenatal_visits_number" id="prenatal_visits_number">
       </div>
-      <div data-field-span="1"  class="form-inline col-lg-6">
+      <div data-field-span="1" class="form-inline col-lg-6">
         <label>Level of Education:</label>
-        <select id="delivery_mode" type="text" name="delivery_mode" >
+        <select id="delivery_mode" type="text" name="delivery_mode">
           <option></option>
           <option>None</option>
           <option>Primary</option>
@@ -518,38 +522,38 @@
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Surname: </label>
-        <input type="text"  class="sentence-case" name="father_last_name"  autocomplete="off" list="surname_list"
-               data-validation="father" id="father_last_name" value="<%=@person.father_last_name%>">
+        <input type="text" class="sentence-case" name="father_last_name" autocomplete="off" list="surname_list"
+               data-validation="father" id="father_last_name" value="<%= @person.father_last_name %>">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>First Name:</label>
-        <input type="text" name="father_first_name" id="father_first_name"  class="sentence-case"  autocomplete="off" list="first_name_list"
-               data-validation="father" value="<%=@person.father_first_name%>">
+        <input type="text" name="father_first_name" id="father_first_name" class="sentence-case" autocomplete="off" list="first_name_list"
+               data-validation="father" value="<%= @person.father_first_name %>">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Other Names:</label>
-        <input type="text" name="father_middle_name" id="father_middle_name"  class="sentence-case"  autocomplete="off" list="middle_name_list"
-               value="<%=@person.father_middle_name%>">
+        <input type="text" name="father_middle_name" id="father_middle_name" class="sentence-case" autocomplete="off" list="middle_name_list"
+               value="<%= @person.father_middle_name %>">
       </div>
     </div>
 
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Date of Birth:</label>
-        <input id="father_date_of_birth" type="text" name="father_date_of_birth" value="<%=@person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil%>"
+        <input id="father_date_of_birth" type="text" name="father_date_of_birth" value="<%= @person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil %>"
                class="datepicker" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
                onchange="compareWithDOB()">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Nationality:</label>
-        <select id="father_nationality" name="father_nationality"  data-validation="father" value="<%=@person.father_nationality%>"
-                onchange = "nullify('father_id_number', this)">
+        <select id="father_nationality" name="father_nationality" data-validation="father" value="<%= @person.father_nationality %>"
+                onchange="nullify('father_id_number', this)">
           <option></option>
         </select>
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>ID Number:</label>
-        <input value="<%=@person.father_id_number%>" id="father_id_number" type="text" maxlength="8" size="8"
+        <input value="<%= @person.father_id_number %>" id="father_id_number" type="text" maxlength="8" size="8"
                name="father_id_number"
                data-validation="father_id_length father_id_special_char father_mother_id_check"
                data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
@@ -560,22 +564,22 @@
       <label style="color: gray;text-decoration: underline;">Residential Address</label>
     </div>
 
-    <!--      <div data-row-span="2" class="row " style="margin-bottom: 35px;">-->
-    <!--        <div data-field-span="1"  class="form-inline col-lg-12">-->
-    <!--          <label>Same as Mother?</label>-->
-    <!--          <select id="father_residence_as_mother" type="text" name="father_residence_as_mother" >-->
-    <!--            <option></option>-->
-    <!--            <option>Yes</option>-->
-    <!--            <option>No</option>-->
-    <!--          </select>-->
-    <!--        </div>-->
-    <!--      </div>-->
+    <div data-row-span="2" class="row " style="margin-bottom: 35px;">
+      <div data-field-span="1" class="form-inline col-lg-12">
+        <label>Same as Mother?</label>
+        <select id="father_residence_as_mother" type="text" name="father_residence_as_mother">
+          <option></option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+    </div>
 
     <div data-row-span="2" class="row " style="margin-bottom: 35px;">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Country:</label>
         <select id="father_country" name="father_country" data-validation="required"
-                onchange = "nullify('father_id_number', this)">
+                onchange="nullify('father_id_number', this)">
           <option></option>
         </select>
       </div>
@@ -584,14 +588,14 @@
         <select id="father_physical_district" type="text" name="father_physical_district" data-validation="required"
                 onchange="tas('father_physical_ta', this.value, ['father_physical_village'])"></select>
       </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
+      <div data-field-span="1" class="form-inline col-lg-3">
         <label>TA:</label>
         <select id="father_physical_ta" type="text" name="father_physical_ta"
                 onchange="villages('father_physical_village', document.getElementById('father_physical_district').value, document.getElementById('father_physical_ta').value)"> </select>
       </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
+      <div data-field-span="1" class="form-inline col-lg-3">
         <label>Village:</label>
-        <select id="father_physical_village" type="text" name="father_physical_village" ></select>
+        <select id="father_physical_village" type="text" name="father_physical_village"></select>
       </div>
     </div>
 
@@ -599,16 +603,16 @@
       <label style="color: gray;text-decoration: underline;">Home Address</label>
     </div>
 
-    <!--      <div data-row-span="2" class="row " style="margin-bottom: 35px;">-->
-    <!--        <div data-field-span="1"  class="form-inline col-lg-12">-->
-    <!--          <label>Same as Residence?</label>-->
-    <!--          <select id="father_home_as_residence" type="text" name="father_home_as_residence" >-->
-    <!--            <option></option>-->
-    <!--            <option>Yes</option>-->
-    <!--            <option>No</option>-->
-    <!--          </select>-->
-    <!--        </div>-->
-    <!--      </div>-->
+    <div data-row-span="2" class="row " style="margin-bottom: 35px;">
+      <div data-field-span="1" class="form-inline col-lg-12">
+        <label>Same as Residence?</label>
+        <select id="father_home_as_residence" type="text" name="father_home_as_residence" onchange="checkResidenceSimilarity('father_home_as_residence')">
+          <option></option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+    </div>
 
     <div data-row-span="2" class="row " style="margin-bottom: 35px;">
       <div data-field-span="1" class="form-inline col-lg-3">
@@ -616,14 +620,14 @@
         <select id="father_home_district" type="text" name="father_home_district" data-validation="required"
                 onchange="tas('father_home_ta', this.value, ['father_home_village'])"></select>
       </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
+      <div data-field-span="1" class="form-inline col-lg-3">
         <label>TA:</label>
         <select id="father_home_ta" type="text" name="father_home_ta"
                 onchange="villages('father_home_village', __$('father_home_district').value, __$('father_home_ta').value)"> </select>
       </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
+      <div data-field-span="1" class="form-inline col-lg-3">
         <label>Village:</label>
-        <select id="father_home_village" type="text" name="father_home_village" ></select>
+        <select id="father_home_village" type="text" name="father_home_village"></select>
       </div>
     </div>
 
@@ -637,7 +641,7 @@
         <label>Informant Relationship to Child: <span style="color: red; ">*</span></label>
         <select id="informant_relationship" name="informant_relationship"
                 onchange="checkRelationship()"
-                data-validation="required" value="<%=@person.informant_relationship%>">
+                data-validation="required" value="<%= @person.informant_relationship %>">
           <option></option>
           <option>Mother</option>
           <option>Father</option>
@@ -652,27 +656,27 @@
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>ID Number:</label>
-        <input value="<%=@person.informant_id_number%>" id="informant_id_number" type="text" name="informant_id_number" maxlength="8" size="8"
+        <input value="<%= @person.informant_id_number %>" id="informant_id_number" type="text" name="informant_id_number" maxlength="8" size="8"
                data-validation="informant_id_length informant_id_special_char"
-               data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
+               data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
       </div>
     </div>
 
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Surname: <span style="color: red; ">*</span></label>
-        <input type="text"  class="sentence-case" id="informant_last_name" name="informant_last_name"  autocomplete="off" list="surname_list"
-               value="<%=@person.informant_last_name%>" data-validation="required length" data-validation-length="2-30">
+        <input type="text" class="sentence-case" id="informant_last_name" name="informant_last_name" autocomplete="off" list="surname_list"
+               value="<%= @person.informant_last_name %>" data-validation="required length" data-validation-length="2-30">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>First Name: <span style="color: red; ">*</span></label>
-        <input type="text"  class="sentence-case" id="informant_first_name" name="informant_first_name"  autocomplete="off" list="first_name_list"
-               value="<%=@person.informant_first_name%>" data-validation="required length" data-validation-length="2-30">
+        <input type="text" class="sentence-case" id="informant_first_name" name="informant_first_name" autocomplete="off" list="first_name_list"
+               value="<%= @person.informant_first_name %>" data-validation="required length" data-validation-length="2-30">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Other Names:</label>
-        <input type="text"  class="sentence-case" id="informant_middle_name" name="informant_middle_name"  autocomplete="off" list="middle_name_list"
-               value="<%=@person.informant_middle_name%>">
+        <input type="text" class="sentence-case" id="informant_middle_name" name="informant_middle_name" autocomplete="off" list="middle_name_list"
+               value="<%= @person.informant_middle_name %>">
       </div>
     </div>
 
@@ -686,12 +690,12 @@
         <select id="informant_district" type="text" name="informant_district" data-validation="required"
                 onchange="tas('informant_ta', this.value, ['informant_village'])"></select>
       </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
+      <div data-field-span="1" class="form-inline col-lg-3">
         <label>TA:</label>
         <select id="informant_ta" type="text" name="informant_ta"
                 onchange="villages('informant_village', document.getElementById('informant_district').value, document.getElementById('informant_ta').value)"> </select>
       </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
+      <div data-field-span="1" class="form-inline col-lg-3">
         <label>Village:</label>
         <select id="informant_village" type="text" name="informant_village"></select>
       </div>
@@ -700,26 +704,26 @@
     <div data-row-span="1" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Postal Address:</label>
-        <input type="text"  class="sentence-case" name="informant_address_line1" placeholder="e.g CodeBuild Systems" value="<%=@person.informant_address_line1%>">
+        <input type="text" class="sentence-case" name="informant_address_line1" placeholder="e.g CodeBuild Systems" value="<%= @person.informant_address_line1 %>">
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Phone Number:</label>
         <input type="text" name="informant_phone_number" placeholder="e.g 0991763413" onkeyup="removeSpace(this)"
                data-validation="phone_number" data-validation-message="Input a valid phone number"
-               value="<%=@person.informant_phone_number%>">
+               value="<%= @person.informant_phone_number %>">
       </div>
     </div>
 
     <div data-row-span="1" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label style="color: white;">Postal Address:</label>
-        <input type="text"  class="sentence-case" name="informant_address_line2" placeholder="e.g P.O Box 31777" value="<%=@person.informant_address_line2%>">
+        <input type="text" class="sentence-case" name="informant_address_line2" placeholder="e.g P.O Box 31777" value="<%= @person.informant_address_line2 %>">
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Form Signed?: <span style="color: red; ">*</span></label>
-        <select id="form_signed" name="form_signed" data-validation="required" value="<%=@person.form_signed%>">
+        <select id="form_signed" name="form_signed" data-validation="required" value="<%= @person.form_signed %>">
           <option></option>
           <option>Yes</option>
           <option>No</option>
@@ -730,13 +734,13 @@
     <div data-row-span="1" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label style="color: white;">Postal Address:</label>
-        <input type="text" class="sentence-case"  name="informant_address_line3" placeholder="e.g Balaka" value="<%=@person.informant_address_line3%>">
+        <input type="text" class="sentence-case" name="informant_address_line3" placeholder="e.g Balaka" value="<%= @person.informant_address_line3 %>">
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Date of Reporting: <span style="color: red; ">*</span></label>
         <input id="date_reported" type="text" class="datepicker" name="date_reported"
-               data-validation="required" value="<%=@person.date_reported.to_date.strftime("%d/%m/%Y") rescue nil%>">
+               data-validation="required" value="<%= @person.date_reported.to_date.strftime("%d/%m/%Y") rescue nil %>">
       </div>
     </div>
 
@@ -745,7 +749,7 @@
 
   <fieldset id="headman" style="display: none">
     <legend>DETAILS OF VILLAGE HEADMAN</legend>
-    <div data-row-span="2" class="row" >
+    <div data-row-span="2" class="row">
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>District: <span style="color: red; ">*</span></label>
@@ -755,7 +759,7 @@
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label for="village_headman_ta">TA:</label>
-        <select id="village_headman_ta" type="text" name="village_headman_ta"  class="sentence-case"
+        <select id="village_headman_ta" type="text" name="village_headman_ta" class="sentence-case"
                 data-validation="required"
                 onchange="villages('village_headman_village', document.getElementById('village_headman_district').value,
                     document.getElementById('village_headman_ta').value)">
@@ -781,7 +785,7 @@
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Name of Village Headman:</label>
-        <input id="village_headman_name" type="text"  class="sentence-case"
+        <input id="village_headman_name" type="text" class="sentence-case"
                name="village_headman_name" value=""
                data-validation="required length" data-validation-length="2-50" value="">
       </div>
@@ -799,7 +803,7 @@
 
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Name of Senior Member of Village:</label>
-        <input id="senior_member_name" type="text"  class="sentence-case"
+        <input id="senior_member_name" type="text" class="sentence-case"
                name="senior_member_name" value=""
                data-validation="required length" data-validation-length="2-50" value="">
       </div>
@@ -816,8 +820,8 @@
         </select>
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Name of Religious Leaader:</label>
-        <input id="senior_member_name" type="text"  class="sentence-case"
+        <label>Name of Religious Leader:</label>
+        <input id="senior_member_name" type="text" class="sentence-case"
                name="senior_member_name" value=""
                data-validation="required length" data-validation-length="2-50" value="">
       </div>
@@ -826,14 +830,21 @@
   </fieldset>
 
   <div class="form-group actions-row" style="width: 100%;padding-right: 45%;">
-    <button style="display: none" id="finish-btn" type="button" onclick="validateForm()" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Finish </button>
+    <button style="display: none" id="finish-btn" type="button" onclick="validateForm()" class="btn btn-primary">
+      <span class="glyphicon glyphicon-save"></span> Finish
+    </button>
     <% if false %>
-      <button type="button" onclick="clearForm()" class="btn btn-warning" ><span></span> Clear </button>
+      <button type="button" onclick="clearForm()" class="btn btn-warning"><span></span> Clear</button>
     <% end %>
 
-    <div type="next submit"  id="next-btn" style="font-weight: bold;" class="btn btn-next btn-success" onclick="next()" ><span></span> Next >> </div>
-    <div type="back submit" id="back-btn"  style="font-weight: bold;" class="btn btn-next btn-success" onclick="back()"><span></span> << Back </div>
-    <button type="button" class="btn btn-danger" style="margin-left: 10px;" onclick="window.location = '/person/index?active_tab=person'; " ><b>Cancel</b></button>
+    <div type="next submit" id="next-btn" style="font-weight: bold;" class="btn btn-next btn-success" onclick="next()">
+      <span></span> Next >>
+    </div>
+    <div type="back submit" id="back-btn" style="font-weight: bold;" class="btn btn-next btn-success" onclick="back()">
+      <span></span> << Back
+    </div>
+    <button type="button" class="btn btn-danger" style="margin-left: 10px;" onclick="window.location = '/person/index?active_tab=person'; ">
+      <b>Cancel</b></button>
 
   </div>
 
@@ -935,7 +946,7 @@
 <script src="/Pikaday/pikaday.js"></script>
 
 <script>
-    function __$(id){
+    function __$(id) {
         return document.getElementById(id);
     }
 
@@ -945,51 +956,92 @@
         }
     }
 
+    function setSelectedIndex(s, i) {
+
+        s.options[i - 1].selected = true;
+
+
+
+    }
+
     function autoPopulateAddress(residenceSimilarityType) {
         if (residenceSimilarityType === 'mother_home_as_residence') {
             __$('mother_home_district').value = __$('mother_physical_district').value;
             __$('mother_home_district').selected = true;
-            __$('mother_home_district').onchange = tas('mother_home_ta', __$('mother_physical_district').value, ['mother_home_village'])
 
-            __$('mother_home_ta').value = __$('mother_physical_ta').value;
+            var mother_ta_option = document.createElement('option');
+            mother_ta_option.value = __$('mother_physical_ta').value;
+            mother_ta_option.innerHTML = __$('mother_physical_ta').value;
+            mother_ta_option.selected = true;
+            __$('mother_home_ta').appendChild(mother_ta_option);
 
-            var tasDropdown = __$('mother_home_ta');
-
-            var j = 0;
-
-            for(var i = 0; i === tasDropdown.options[j]; j++) {
-                if(i.value === __$('mother_home_ta').value) {
-                    tasDropdown.selectedIndex = j;
-                    break;
-                }
-            }
-
-            __$('mother_home_ta').selected = true;
-            __$('mother_home_ta').onchange = villages('mother_home_village', __$('mother_home_district').value, __$('mother_home_ta').value)
-
-            __$('mother_home_village').value = __$('mother_physical_village').value;
-            __$('mother_home_village').selected = true;
+            var mother_village_option = document.createElement('option');
+            mother_village_option.value = __$('mother_physical_village').value;
+            mother_village_option.innerHTML = __$('mother_physical_village').value;
+            mother_village_option.selected = true;
+            __$('mother_home_village').appendChild(mother_village_option);
 
         } else if (residenceSimilarityType === 'father_home_as_residence') {
             __$('father_home_district').value = __$('father_physical_district').value;
-            __$('father_home_ta').value = __$('father_physical_ta').value;
-            __$('father_home_village').value = __$('father_physical_village').value;
+            __$('father_home_district').selected = true;
+
+            var father_ta_option = document.createElement('option');
+            father_ta_option.value = __$('father_physical_ta').value;
+            father_ta_option.innerHTML = __$('father_physical_ta').value;
+            father_ta_option.selected = true;
+            __$('father_home_ta').appendChild(father_ta_option);
+
+            var father_village_option = document.createElement('option');
+            father_village_option.value = __$('father_physical_village').value;
+            father_village_option.innerHTML = __$('father_physical_village').value;
+            father_village_option.selected = true;
+            __$('father_home_village').appendChild(father_village_option);
+        } else if (residenceSimilarityType === 'informant_same_as_mother') {
+            __$('informant_district').value = __$('mother_physical_district').value;
+            __$('informant_district').selected = true;
+
+            var informant_mother_ta_option = document.createElement('option');
+            informant_mother_ta_option.value = __$('mother_physical_ta').value;
+            informant_mother_ta_option.innerHTML = __$('mother_physical_ta').value;
+            informant_mother_ta_option.selected = true;
+            __$('informant_ta').appendChild(informant_mother_ta_option);
+
+            var informant_mother_village_option = document.createElement('option');
+            informant_mother_village_option.value = __$('mother_physical_village').value;
+            informant_mother_village_option.innerHTML = __$('mother_physical_village').value;
+            informant_mother_village_option.selected = true;
+            __$('informant_village').appendChild(informant_mother_village_option);
+        } else if (residenceSimilarityType === 'informant_same_as_father') {
+            __$('informant_district').value = __$('father_physical_district').value;
+            __$('informant_district').selected = true;
+
+            var informant_ta_option = document.createElement('option');
+            informant_ta_option.value = __$('father_physical_ta').value;
+            informant_ta_option.innerHTML = __$('father_physical_ta').value;
+            informant_ta_option.selected = true;
+            __$('informant_ta').appendChild(informant_ta_option);
+
+            var informant_village_option = document.createElement('option');
+            informant_village_option.value = __$('father_physical_village').value;
+            informant_village_option.innerHTML = __$('father_physical_village').value;
+            informant_village_option.selected = true;
+            __$('informant_village').appendChild(informant_village_option);
         }
     }
 
 
-    function compareWithDOB(){
+    function compareWithDOB() {
 
 
-        if ((new Date(__$("date_of_marriage").value) == "Invalid Date") || (new Date(__$("date_of_marriage").value)) == undefined){
+        if ((new Date(__$("date_of_marriage").value) == "Invalid Date") || (new Date(__$("date_of_marriage").value)) == undefined) {
             __$("date_of_marriage").value = ""
         }
 
-        if ((new Date(__$("date_of_birth").value) == "Invalid Date") || (new Date(__$("date_of_birth").value)) == undefined){
+        if ((new Date(__$("date_of_birth").value) == "Invalid Date") || (new Date(__$("date_of_birth").value)) == undefined) {
             __$("date_of_birth").value = ""
         }
 
-        if (new Date(__$("date_of_marriage").value) > new Date(__$("date_of_birth").value)){
+        if (new Date(__$("date_of_marriage").value) > new Date(__$("date_of_birth").value)) {
             jQuery("#dob_marriage").modal("show");
         }
     }
@@ -1004,7 +1056,7 @@
     const number_of_child = "<%= session[:number_of_child] %>"
 
     if (multiple_births) {
-        for (var loop=0; loop<= parseInt(multiple_births_value); loop++) {
+        for (var loop = 0; loop <= parseInt(multiple_births_value); loop++) {
             __$('multiple_births_badge').innerHTML = '(' + number_of_child + ' of ' + multiple_births_value + ')';
         }
 
@@ -1023,8 +1075,8 @@
     }
 
     $.formUtils.addValidator({
-        name : 'father',
-        validatorFunction : function(value, $el, config, language, $form) {
+        name: 'father',
+        validatorFunction: function (value, $el, config, language, $form) {
             var validate;
             var id = $el.attr("id");
 
@@ -1032,296 +1084,296 @@
                 __$("father_last_name").value.trim().length > 0 ||
                 __$("father_middle_name").value.trim().length > 0 ||
                 __$("father_nationality").value.trim().length > 0 ||
-                __$("father_id_number").value.trim().length > 0)){
+                __$("father_id_number").value.trim().length > 0)) {
 
                 validate = true;
-            }else{
+            } else {
                 validate = false
             }
 
-            if (validate && value.trim().length == 0){
+            if (validate && value.trim().length == 0) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         },
-        errorMessage : 'Field is required',
+        errorMessage: 'Field is required',
         errorMessageKey: 'FatherNotComplete'
     });
 
     $.formUtils.addValidator({
-        name : 'phone_number',
-        validatorFunction : function(value, $el, config, language, $form) {
+        name: 'phone_number',
+        validatorFunction: function (value, $el, config, language, $form) {
 
-            if (value.trim().length > 0 && !value.trim().match("^0\\d{7}$|^0\\d{9}$")){
+            if (value.trim().length > 0 && !value.trim().match("^0\\d{7}$|^0\\d{9}$")) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         },
-        errorMessage : 'Input a valid phone number',
+        errorMessage: 'Input a valid phone number',
         errorMessageKey: 'InvalidPhoneNumber'
     });
 
     $.formUtils.addValidator({
-        name : 'father_mother_id_check',
-        validatorFunction : function(value, $el, config, language, $form) {
+        name: 'father_mother_id_check',
+        validatorFunction: function (value, $el, config, language, $form) {
             var validate;
             var id = $el.attr("id");
 
             if (__$("father_nationality").value.trim() == "Malawian" && (__$("father_first_name").value.trim().length > 0 ||
                 __$("father_last_name").value.trim().length > 0 ||
                 __$("father_middle_name").value.trim().length > 0 ||
-                __$("father_id_number").value.trim().length > 0) && __$("father_id_number").value.trim() != ""){
+                __$("father_id_number").value.trim().length > 0) && __$("father_id_number").value.trim() != "") {
 
                 validate = true;
-            }else{
+            } else {
                 validate = false;
                 __$("father_id_number").value = "";
             }
 
-            if(__$("father_id_number").value.trim().length > 0 && __$("mother_id_number").value.toUpperCase().trim() == __$("father_id_number").value.toUpperCase().trim()){
+            if (__$("father_id_number").value.trim().length > 0 && __$("mother_id_number").value.toUpperCase().trim() == __$("father_id_number").value.toUpperCase().trim()) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
         },
-        errorMessage : 'Mother ID Number cannot be the same as father ID Number',
+        errorMessage: 'Mother ID Number cannot be the same as father ID Number',
         errorMessageKey: 'MotherFatherIdSimilar'
     });
 
 
     $.formUtils.addValidator({
-        name : 'father_id',
-        validatorFunction : function(value, $el, config, language, $form) {
+        name: 'father_id',
+        validatorFunction: function (value, $el, config, language, $form) {
             var validate;
             var id = $el.attr("id");
 
             if (__$("father_nationality").value.trim() == "Malawian" && (__$("father_first_name").value.trim().length > 0 ||
                 __$("father_last_name").value.trim().length > 0 ||
                 __$("father_middle_name").value.trim().length > 0 ||
-                __$("father_id_number").value.trim().length > 0) && __$("father_id_number").value.trim() != ""){
+                __$("father_id_number").value.trim().length > 0) && __$("father_id_number").value.trim() != "") {
 
                 validate = true;
-            }else{
+            } else {
                 validate = false;
                 __$("father_id_number").value = "";
             }
 
             if (validate && ((__$("father_id_number").value.trim().length != 8) ||
-                (__$("father_id_number").value.trim().match(/\i|o|I|O|L|U/g)))){
+                (__$("father_id_number").value.trim().match(/\i|o|I|O|L|U/g)))) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         },
-        errorMessage : 'ID Number must have length of 8; does not contain letters I, O, L and U; should be different from mother ID Number',
+        errorMessage: 'ID Number must have length of 8; does not contain letters I, O, L and U; should be different from mother ID Number',
         errorMessageKey: 'IDNotComplete'
     });
 
     $.formUtils.addValidator({
-        name : 'father_id_length',
-        validatorFunction : function(value, $el, config, language, $form) {
+        name: 'father_id_length',
+        validatorFunction: function (value, $el, config, language, $form) {
             var validate;
             var id = $el.attr("id");
 
             if (__$("father_nationality").value.trim() == "Malawian" && (__$("father_first_name").value.trim().length > 0 ||
                 __$("father_last_name").value.trim().length > 0 ||
                 __$("father_middle_name").value.trim().length > 0 ||
-                __$("father_id_number").value.trim().length > 0) && __$("father_id_number").value.trim() != ""){
+                __$("father_id_number").value.trim().length > 0) && __$("father_id_number").value.trim() != "") {
 
                 validate = true;
-            }else{
+            } else {
                 validate = false;
                 __$("father_id_number").value = "";
             }
 
-            if (validate && (__$("father_id_number").value.trim().length != 8)){
+            if (validate && (__$("father_id_number").value.trim().length != 8)) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         },
-        errorMessage : 'ID Number must have length of 8',
+        errorMessage: 'ID Number must have length of 8',
         errorMessageKey: 'IDNotBadLength'
     });
 
     $.formUtils.addValidator({
-        name : 'father_id_special_char',
-        validatorFunction : function(value, $el, config, language, $form) {
+        name: 'father_id_special_char',
+        validatorFunction: function (value, $el, config, language, $form) {
             var validate;
             var id = $el.attr("id");
 
             if (__$("father_nationality").value.trim() == "Malawian" && (__$("father_first_name").value.trim().length > 0 ||
                 __$("father_last_name").value.trim().length > 0 ||
                 __$("father_middle_name").value.trim().length > 0 ||
-                __$("father_id_number").value.trim().length > 0) && __$("father_id_number").value.trim() != ""){
+                __$("father_id_number").value.trim().length > 0) && __$("father_id_number").value.trim() != "") {
 
                 validate = true;
-            }else{
+            } else {
                 validate = false;
                 __$("father_id_number").value = "";
             }
 
             if (validate && ((__$("father_id_number").value.trim().length > 0) &&
-                (__$("father_id_number").value.trim().match(/\i|o|I|O|L|U/g)))){
+                (__$("father_id_number").value.trim().match(/\i|o|I|O|L|U/g)))) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         },
-        errorMessage : 'ID Number does not contain letters I, O, L and U',
+        errorMessage: 'ID Number does not contain letters I, O, L and U',
         errorMessageKey: 'IDSpecialChar'
     });
 
 
     $.formUtils.addValidator({
-        name : 'mother_id',
-        validatorFunction : function(value, $el, config, language, $form) {
+        name: 'mother_id',
+        validatorFunction: function (value, $el, config, language, $form) {
             var validate;
             var id = $el.attr("id");
 
-            if (__$("mother_nationality").value.trim() == "Malawian" && __$("mother_id_number").value.trim() != ""){
+            if (__$("mother_nationality").value.trim() == "Malawian" && __$("mother_id_number").value.trim() != "") {
                 validate = true;
-            }else{
+            } else {
                 validate = false;
                 __$("mother_id_number").value = "";
             }
 
             if (validate && ((__$("mother_id_number").value.trim().length != 8) ||
-                (__$("mother_id_number").value.trim().match(/\i|o|I|O|L|U/g)))){
+                (__$("mother_id_number").value.trim().match(/\i|o|I|O|L|U/g)))) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         },
-        errorMessage : 'ID Number must have length of 8; does not contain letters I, L, O and U;  should be different from Father ID Number',
+        errorMessage: 'ID Number must have length of 8; does not contain letters I, L, O and U;  should be different from Father ID Number',
         errorMessageKey: 'IDNotComplete'
     });
 
     $.formUtils.addValidator({
-        name : 'mother_id_special_char',
-        validatorFunction : function(value, $el, config, language, $form) {
+        name: 'mother_id_special_char',
+        validatorFunction: function (value, $el, config, language, $form) {
             var validate;
             var id = $el.attr("id");
 
-            if (__$("mother_nationality").value.trim() == "Malawian" && __$("mother_id_number").value.trim() != ""){
+            if (__$("mother_nationality").value.trim() == "Malawian" && __$("mother_id_number").value.trim() != "") {
                 validate = true;
-            }else{
+            } else {
                 validate = false;
                 __$("mother_id_number").value = "";
             }
 
-            if (validate && (__$("mother_id_number").value.trim().match(/\i|o|I|O|L|U/g))){
+            if (validate && (__$("mother_id_number").value.trim().match(/\i|o|I|O|L|U/g))) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         },
-        errorMessage : 'ID Number does not contain letters I, L, O and U',
+        errorMessage: 'ID Number does not contain letters I, L, O and U',
         errorMessageKey: 'MIDNotComplete'
     });
 
     $.formUtils.addValidator({
-        name : 'mother_id_length',
-        validatorFunction : function(value, $el, config, language, $form) {
+        name: 'mother_id_length',
+        validatorFunction: function (value, $el, config, language, $form) {
             var validate;
             var id = $el.attr("id");
 
-            if (__$("mother_nationality").value.trim() == "Malawian" && __$("mother_id_number").value.trim() != ""){
+            if (__$("mother_nationality").value.trim() == "Malawian" && __$("mother_id_number").value.trim() != "") {
                 validate = true;
-            }else{
+            } else {
                 validate = false;
                 __$("mother_id_number").value = "";
             }
 
-            if (validate && (__$("mother_id_number").value.trim().length != 8)){
+            if (validate && (__$("mother_id_number").value.trim().length != 8)) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         },
-        errorMessage : 'ID Number must have length of 8',
+        errorMessage: 'ID Number must have length of 8',
         errorMessageKey: 'MIDNotComplete'
     });
 
     $.formUtils.addValidator({
-        name : 'informant_id',
-        validatorFunction : function(value, $el, config, language, $form) {
+        name: 'informant_id',
+        validatorFunction: function (value, $el, config, language, $form) {
             var validate;
             var id = $el.attr("id");
 
-            if (__$("informant_id_number").value.trim() != ""){
+            if (__$("informant_id_number").value.trim() != "") {
                 validate = true;
-            }else{
+            } else {
                 validate = false;
                 __$("informant_id_number").value = "";
             }
 
             if (validate && ((__$("informant_id_number").value.trim().length != 8) ||
-                (__$("informant_id_number").value.trim().match(/\i|o|I|L|U|O/g)))){
+                (__$("informant_id_number").value.trim().match(/\i|o|I|L|U|O/g)))) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         },
-        errorMessage : 'ID Number must have length of 8; does not contain letters I, O, L and U',
+        errorMessage: 'ID Number must have length of 8; does not contain letters I, O, L and U',
         errorMessageKey: 'IDNotComplete'
     });
 
     $.formUtils.addValidator({
-        name : 'informant_id_length',
-        validatorFunction : function(value, $el, config, language, $form) {
+        name: 'informant_id_length',
+        validatorFunction: function (value, $el, config, language, $form) {
             var validate;
             var id = $el.attr("id");
 
-            if (__$("informant_id_number").value.trim() != ""){
+            if (__$("informant_id_number").value.trim() != "") {
                 validate = true;
-            }else{
+            } else {
                 validate = false;
                 __$("informant_id_number").value = "";
             }
 
-            if (validate && (__$("informant_id_number").value.trim().length != 8)){
+            if (validate && (__$("informant_id_number").value.trim().length != 8)) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         },
-        errorMessage : 'ID Number must have length of 8',
+        errorMessage: 'ID Number must have length of 8',
         errorMessageKey: 'IDNotCompleteLength'
     });
 
     $.formUtils.addValidator({
-        name : 'informant_id_special_char',
-        validatorFunction : function(value, $el, config, language, $form) {
+        name: 'informant_id_special_char',
+        validatorFunction: function (value, $el, config, language, $form) {
             var validate;
             var id = $el.attr("id");
 
-            if (__$("informant_id_number").value.trim() != ""){
+            if (__$("informant_id_number").value.trim() != "") {
                 validate = true;
-            }else{
+            } else {
                 validate = false;
                 __$("informant_id_number").value = "";
             }
 
-            if (validate && (__$("informant_id_number").value.trim().match(/\i|o|I|O|L|U/g))){
+            if (validate && (__$("informant_id_number").value.trim().match(/\i|o|I|O|L|U/g))) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         },
-        errorMessage : 'ID Number does not contain letters I, O, L and U',
+        errorMessage: 'ID Number does not contain letters I, O, L and U',
         errorMessageKey: 'IDNotComplete'
     });
 
     $.validate({
-        validateOnBlur : true,
-        showHelpOnFocus : true,
-        addSuggestions : true,
-        errorMessagePosition : 'top',
-        scrollToTopOnError : false,
-        onError : function(){
+        validateOnBlur: true,
+        showHelpOnFocus: true,
+        addSuggestions: true,
+        errorMessagePosition: 'top',
+        scrollToTopOnError: false,
+        onError: function () {
             alert("Could not validate some input elements");
         }
     });
@@ -1362,7 +1414,7 @@
     __$("father_nationality").appendChild(opt);
     <% end %>
 
-    function removeSpace(node){
+    function removeSpace(node) {
         node.value = node.value.trim().replace(/\s+/g, "").match(/\d/g).join("");
 
     }
@@ -1373,7 +1425,7 @@
         if (jQuery(sets[cur_pos]).find(".error").length > 0) {
             jQuery('#form-create-person').submit();
             jQuery("fieldset .form-error").hide();
-        }else {
+        } else {
             jQuery('.form-error').hide();
             if (cur_pos < sets.length - 1) {
                 for (var i = 0; i < sets.length; i++) {
@@ -1384,33 +1436,33 @@
             }
         }
 
-        if (cur_pos == sets.length - 1){
+        if (cur_pos == sets.length - 1) {
             //Show Finish Button And Hide Next Button
             jQuery("#next-btn").hide();
             jQuery("#finish-btn").show();
-        }else{
+        } else {
             jQuery("#next-btn").show();
             jQuery("#finish-btn").hide();
         }
-        __$("progress-div").style.width = (cur_pos/sets.length)*100 + "%";
+        __$("progress-div").style.width = (cur_pos / sets.length) * 100 + "%";
 
         checkRelationship();
     }
 
-    function back(){
-        if(cur_pos > 0){
-            for(var i = 0; i < sets.length; i++){
+    function back() {
+        if (cur_pos > 0) {
+            for (var i = 0; i < sets.length; i++) {
                 sets[i].style.display = "none";
             }
             cur_pos -= 1;
             sets[cur_pos].style.display = "block";
         }
 
-        if (cur_pos == sets.length - 1){
+        if (cur_pos == sets.length - 1) {
             //Show Finish Button And Hide Next Button
             jQuery("#next-btn").hide();
             jQuery("#finish-btn").show();
-        }else{
+        } else {
             jQuery("#next-btn").show();
             jQuery("#finish-btn").hide();
         }
@@ -1418,14 +1470,14 @@
         checkRelationship();
     }
 
-    function clearForm(){
+    function clearForm() {
         jQuery(sets[cur_pos]).find("input, select").val("");
         __$("progress-div").style.width = "0%";
 
     }
 
-    function countries(id, dep){
-        for(var i = 0; i < dep.length; i++){
+    function countries(id, dep) {
+        for (var i = 0; i < dep.length; i++) {
             jQuery("#" + dep[i]).val("");
             jQuery(document.getElementById(dep[i])).empty();
         }
@@ -1435,21 +1487,21 @@
 
         jQuery.ajax({
             url: "/countries",
-            success: function(results){
+            success: function (results) {
 
                 var opts = JSON.parse(results);
-                for(var i in opts){
+                for (var i in opts) {
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
                     option.setAttribute("value", opts[i]);
 
                     <% if request.path.match("/edit")%>
-                    if('<%= @person.district_of_birth%>' == opts[i] && id=="birth_district") {
+                    if ('<%= @person.district_of_birth%>' == opts[i] && id == "birth_district") {
                         option.setAttribute("selected", "true");
                         tas('birth_ta', opts[i], ['birth_village'])
                     }
 
-                    if('<%= @person.informant_district%>' == opts[i] && id=="informant_district") {
+                    if ('<%= @person.informant_district%>' == opts[i] && id == "informant_district") {
                         option.setAttribute("selected", "true");
                         tas('informant_ta', opts[i], ['informant_village'])
                     }
@@ -1458,14 +1510,14 @@
                 }
 
             },
-            error: function(){
+            error: function () {
 
             }
         })
     }
 
-    function districts(id, dep){
-        for(var i = 0; i < dep.length; i++){
+    function districts(id, dep) {
+        for (var i = 0; i < dep.length; i++) {
             jQuery("#" + dep[i]).val("");
             jQuery(document.getElementById(dep[i])).empty();
         }
@@ -1475,21 +1527,21 @@
 
         jQuery.ajax({
             url: "/districts",
-            success: function(results){
+            success: function (results) {
 
                 var opts = JSON.parse(results);
-                for(var i in opts){
+                for (var i in opts) {
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
                     option.setAttribute("value", opts[i]);
 
                     <% if request.path.match("/edit")%>
-                    if('<%= @person.district_of_birth%>' == opts[i] && id=="birth_district") {
+                    if ('<%= @person.district_of_birth%>' == opts[i] && id == "birth_district") {
                         option.setAttribute("selected", "true");
                         tas('birth_ta', opts[i], ['birth_village'])
                     }
 
-                    if('<%= @person.informant_district%>' == opts[i] && id=="informant_district") {
+                    if ('<%= @person.informant_district%>' == opts[i] && id == "informant_district") {
                         option.setAttribute("selected", "true");
                         tas('informant_ta', opts[i], ['informant_village'])
                     }
@@ -1498,14 +1550,14 @@
                 }
 
             },
-            error: function(){
+            error: function () {
 
             }
         })
     }
 
-    function tas(id, parent, dep){
-        for(var i = 0; i < dep.length; i++){
+    function tas(id, parent, dep) {
+        for (var i = 0; i < dep.length; i++) {
             jQuery("#" + dep[i]).val("");
             jQuery(document.getElementById(dep[i])).empty();
         }
@@ -1515,21 +1567,21 @@
 
         jQuery.ajax({
             url: ("/tas?parent=" + parent),
-            success: function(results){
+            success: function (results) {
 
                 var opts = JSON.parse(results);
-                for(var i in opts){
+                for (var i in opts) {
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
                     option.setAttribute("value", opts[i]);
                     <% if request.path.match("/edit")%>
 
-                    if('<%= @person.ta_of_birth%>' == opts[i] && id=="birth_ta") {
+                    if ('<%= @person.ta_of_birth%>' == opts[i] && id == "birth_ta") {
                         option.setAttribute("selected", "true");
                         villages('birth_village', __$('birth_district').value, opts[i]);
                     }
 
-                    if('<%= @person.informant_ta%>' == opts[i] && id=="informant_ta") {
+                    if ('<%= @person.informant_ta%>' == opts[i] && id == "informant_ta") {
                         option.setAttribute("selected", "true");
                         villages('informant_village', __$('informant_district').value, opts[i]);
                     }
@@ -1538,21 +1590,19 @@
                 }
 
             },
-            error: function(){
+            error: function () {
 
             }
         })
     }
 
-    function checkMarriage(){
-        if (__$("married").value.trim() == "Yes"){
+    function checkMarriage() {
+        if (__$("married").value.trim() == "Yes") {
             __$("date_of_marriage").removeAttribute("disabled");
             //__$("date_of_marriage").setAttribute("data-validation", "required");
             __$("date_of_marriage").setAttribute("data-validation-format", "dd/mm/yyyy")
 
-        }
-
-        else{
+        } else {
             //__$("date_of_marriage").removeAttribute("data-validation");
             __$("date_of_marriage").removeAttribute("data-validation-format");
             __$("date_of_marriage").setAttribute("disabled", "disabled");
@@ -1560,69 +1610,67 @@
             __$("court_order").removeAttribute("disabled");
         }
     }
-    
+
     function checkValue(passedValue, elementType) {
-      if (elementType === 'country') {
-        if (passedValue !== 'Malawi') {
-          __$('mother_physical_district_div').style.visibility = 'hidden';
-          __$('mother_physical_ta_div').style.visibility = 'hidden';
-          __$('mother_physical_village_div').style.visibility = 'hidden';
-          __$('mother_physical_district').removeAttribute('data-validation');
-          __$('mother_physical_ta').removeAttribute('data-validation');
-          __$('mother_physical_village').removeAttribute('data-validation');
+        if (elementType === 'country') {
+            if (passedValue !== 'Malawi') {
+                __$('mother_physical_district_div').style.visibility = 'hidden';
+                __$('mother_physical_ta_div').style.visibility = 'hidden';
+                __$('mother_physical_village_div').style.visibility = 'hidden';
+                __$('mother_physical_district').removeAttribute('data-validation');
+                __$('mother_physical_ta').removeAttribute('data-validation');
+                __$('mother_physical_village').removeAttribute('data-validation');
 
-          __$('mother_physical_state_div').style.visibility = 'visible'
-          __$('mother_physical_town_div').style.visibility = 'visible'
-          __$('mother_physical_address_div').style.visibility = 'visible'
-        } else {
-            __$('mother_physical_district_div').style.visibility = 'visible';
-            __$('mother_physical_ta_div').style.visibility = 'visible';
-            __$('mother_physical_village_div').style.visibility = 'visible';
-            __$('mother_physical_district').setAttribute('data-validation','required');
-            __$('mother_physical_ta').setAttribute('data-validation','required');
-            __$('mother_physical_village').setAttribute('data-validation','required');
+                __$('mother_physical_state_div').style.visibility = 'visible'
+                __$('mother_physical_town_div').style.visibility = 'visible'
+                __$('mother_physical_address_div').style.visibility = 'visible'
+            } else {
+                __$('mother_physical_district_div').style.visibility = 'visible';
+                __$('mother_physical_ta_div').style.visibility = 'visible';
+                __$('mother_physical_village_div').style.visibility = 'visible';
+                __$('mother_physical_district').setAttribute('data-validation', 'required');
+                __$('mother_physical_ta').setAttribute('data-validation', 'required');
+                __$('mother_physical_village').setAttribute('data-validation', 'required');
 
-            __$('mother_physical_state_div').style.visibility = 'hidden'
-            __$('mother_physical_town_div').style.visibility = 'hidden'
-            __$('mother_physical_address_div').style.visibility = 'hidden'
+                __$('mother_physical_state_div').style.visibility = 'hidden'
+                __$('mother_physical_town_div').style.visibility = 'hidden'
+                __$('mother_physical_address_div').style.visibility = 'hidden'
+            }
         }
-      }
     }
 
-    function checkSigned(){
-        if (__$("court_order").value.trim() == "No"){
+    function checkSigned() {
+        if (__$("court_order").value.trim() == "No") {
             __$("parents_signed").removeAttribute("disabled");
-        }
-
-        else{
+        } else {
             __$("parents_signed").removeAttribute("data-validation-format");
             __$("parents_signed").setAttribute("disabled", "disabled");
             __$("parents_signed").value = "";
         }
     }
 
-    function villages(id, district, ta){
+    function villages(id, district, ta) {
 
         var node = document.getElementById(id);
         jQuery(node).empty();
 
         jQuery.ajax({
             url: ("/villages?district=" + district + "&ta=" + ta),
-            success: function(results){
+            success: function (results) {
 
                 var opts = JSON.parse(results);
 
-                for(var i in opts){
+                for (var i in opts) {
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
                     option.setAttribute("value", opts[i]);
 
                     <% if request.path.match("/edit")%>
-                    if('<%= @person.village_of_birth%>' == opts[i] && id=="birth_village") {
+                    if ('<%= @person.village_of_birth%>' == opts[i] && id == "birth_village") {
                         option.setAttribute("selected", "true");
                     }
 
-                    if('<%= @person.informant_village%>' == opts[i] && id=="informant_village") {
+                    if ('<%= @person.informant_village%>' == opts[i] && id == "informant_village") {
                         option.setAttribute("selected", "true");
                     }
                     <% end %>
@@ -1630,12 +1678,12 @@
                 }
 
             },
-            error: function(){
+            error: function () {
             }
         })
     }
 
-    function validateForm(){
+    function validateForm() {
         checkRelationship();
 
         jQuery(sets[cur_pos]).find("input, select").validate();
@@ -1646,8 +1694,8 @@
         }
 
         var hash = jQuery("#form-create-person").serializeHash();
-        for(var k in hash){
-            if (hash[k] == null){
+        for (var k in hash) {
+            if (hash[k] == null) {
                 hash[k] = "";
             }
         }
@@ -1657,11 +1705,11 @@
         $("#completeness_details #child_date_of_birth").html(hash['date_of_birth']);
 
         var arr = []
-        if (hash['birth_village']){
+        if (hash['birth_village']) {
             arr.push(hash['birth_village']);
         }
 
-        if (hash['birth_ta']){
+        if (hash['birth_ta']) {
             arr.push(hash['birth_ta']);
         }
 
@@ -1682,10 +1730,10 @@
         $("#completeness_details #form_signed").html(hash['form_signed']);
 
         var nodes = document.getElementsByClassName("edit");
-        for(var i = 0; i < nodes.length; i++){
+        for (var i = 0; i < nodes.length; i++) {
             var section = parseInt(nodes[i].className.split(/\s/)[1].trim());
             nodes[i].setAttribute("section", section);
-            nodes[i].onmousedown = function() {
+            nodes[i].onmousedown = function () {
                 moveToSection(parseInt(this.getAttribute("section")));
             }
         }
@@ -1693,64 +1741,33 @@
         jQuery('#completenessModal').modal('show');
     }
 
-    function saveRecord(){
+    function saveRecord() {
         //jQuery('#form-create-person').submit(function(e){
         //e.preventDefault();
-        var childData = {
-            'last_name' : $('input[name=last_name]').val(),
-            'first_name' : $('input[name=first_name]').val(),
-            'middle_name' : $('input[name=middle_name]').val(),
-            'date_of_birth' : $('input[name=date_of_birth]').val(),
-            'gender' : $('input[name=gender]').val(),
-            'child_id_number' : $('input[name=child_id_number]').val()
-        };
 
-        <% if session[:multiple_births] == true %>
-        
-        jQuery.ajax(
-            {
-                url: "/save_record",
-                type: "POST",
-                data: childData,
-                success: function(response){
-                    if (response === "OK") {
-                        window.location = "/person/index?active_tab=home";
-                    } else if (response === "Redirect") {
-                        window.location = "/person/new?multiple_births=<%= session[:multiple_births_value] %>&number_of_child=<%= session[:number_of_child] %>"
-                    } else{
-                        alert("Oops!!! Something Went Wrong!!")
-                    }
-                },
-                error: function(){
-                    alert("Oops!!! Something Went Wrong!!");
-                }
-            }
-        )
-        <% else %>
         jQuery.ajax(
             {
                 url: "/save_record",
                 type: "POST",
                 data: $("#form-create-person").serialize(),
-                success: function(response){
+                success: function (response) {
                     if (response === "OK") {
                         window.location = "/person/index?active_tab=home";
                     } else if (response === "Redirect") {
                         window.location = "/person/new?multiple_births=<%= session[:multiple_births_value] %>&number_of_child=<%= session[:number_of_child] %>"
-                    } else{
+                    } else {
                         alert("Oops!!! Something Went Wrong!!")
                     }
                 },
-                error: function(){
+                error: function () {
                     alert("Oops!!! Something Went Wrong!!");
                 }
             }
-        )
-        <% end %>
+        );
         //})
     }
 
-    function moveToSection(section){
+    function moveToSection(section) {
         console.log(section);
         cur_pos = section;
         jQuery('.form-error').hide();
@@ -1764,48 +1781,52 @@
         jQuery('#completenessModal').modal('hide');
     }
 
-    function copyMother(){
-        __$("informant_first_name").value =  __$("mother_first_name").value;
-        __$("informant_last_name").value =  __$("mother_last_name").value;
-        __$("informant_middle_name").value =  __$("mother_middle_name").value;
-        __$("informant_id_number").value =  __$("mother_id_number").value;
+    function copyMother() {
+        __$("informant_first_name").value = __$("mother_first_name").value;
+        __$("informant_last_name").value = __$("mother_last_name").value;
+        __$("informant_middle_name").value = __$("mother_middle_name").value;
+        __$("informant_id_number").value = __$("mother_id_number").value;
     }
 
-    function copyFather(){
-        __$("informant_first_name").value =  __$("father_first_name").value;
-        __$("informant_last_name").value =  __$("father_last_name").value;
-        __$("informant_middle_name").value =  __$("father_middle_name").value;
-        __$("informant_id_number").value =  __$("father_id_number").value;
+    function copyFather() {
+        __$("informant_first_name").value = __$("father_first_name").value;
+        __$("informant_last_name").value = __$("father_last_name").value;
+        __$("informant_middle_name").value = __$("father_middle_name").value;
+        __$("informant_id_number").value = __$("father_id_number").value;
     }
 
-    function lockFields(lockableFields){
-        for(var i = 0; i < lockableFields.length; i++){
+    function lockFields(lockableFields) {
+        for (var i = 0; i < lockableFields.length; i++) {
             __$(lockableFields[i]).setAttribute("disabled", "disabled");
         }
     }
 
-    function unlockFields(unlockableFields){
-        for(var i = 0; i < unlockableFields.length; i++){
+    function unlockFields(unlockableFields) {
+        for (var i = 0; i < unlockableFields.length; i++) {
             __$(unlockableFields[i]).value = ""
             __$(unlockableFields[i]).removeAttribute("disabled");
         }
     }
 
-    function checkRelationship(){
-        if (__$("informant_relationship").value == "Mother"){
-            copyMother(); lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
-        }else if(__$("informant_relationship").value == "Father") {
-            copyFather(); lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
-        }else{
+    function checkRelationship() {
+        if (__$("informant_relationship").value == "Mother") {
+            copyMother();
+            autoPopulateAddress('informant_same_as_mother');
+            lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
+        } else if (__$("informant_relationship").value == "Father") {
+            copyFather();
+            autoPopulateAddress('informant_same_as_father');
+            lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
+        } else {
             unlockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"]);
         }
     }
 
-    function nullify(id, field){
-        if (field.value.trim() != "Malawian"){
+    function nullify(id, field) {
+        if (field.value.trim() != "Malawian") {
             __$(id).value = "";
             __$(id).setAttribute("disabled", "disabled")
-        }else{
+        } else {
             __$(id).removeAttribute("disabled")
         }
     }
@@ -1841,7 +1862,7 @@
     var dompicker;
     var drpicker;
 
-    jQuery(document).ready(function(){
+    jQuery(document).ready(function () {
         var d = new Date();
         d.setFullYear(d.getFullYear() - 16);
 
@@ -1853,7 +1874,7 @@
             format: 'DD/MMM/YYYY',
             minDate: d,
             maxDate: new Date()
-        } );
+        });
 
         motherDOBpicker = new Pikaday({
             field: document.getElementById('mother_date_of_birth'),
@@ -1887,7 +1908,7 @@
 
         villages('village_headman_village', 'village_headman_district', 'village_headman_ta');
 
-        setTimeout(function(){
+        setTimeout(function () {
             <% if !request.path.match("/edit")%>
             __$("ta_name").value = "<%= @cur_location['ta']%>";
             __$("village_name").value = "<%= @cur_location['village']%>";
@@ -1901,12 +1922,12 @@
 
     })
 
-    $("select option").css("background-color","red");
+    $("select option").css("background-color", "red");
 
 
-    $("input").on('input', function(){
+    $("input").on('input', function () {
         var list_id = $(this).attr("list");
-        if (list_id && list_id.length > 0){
+        if (list_id && list_id.length > 0) {
             console.log(list_id)
             jQuery.ajax(
                 {
@@ -1933,39 +1954,39 @@
     table = null;
     initt = false;
 
-    $i(document).ready(function() {
+    $i(document).ready(function () {
 
     });
 
-    function initTable(){
-        table =  $i('#example').DataTable(
+    function initTable() {
+        table = $i('#example').DataTable(
             {
                 "processing": true,
                 "serverSide": true,
                 "ordering": false,
                 "ajax": {
                     "url": "/search_cases",
-                    "data": function(d){
-                        var ids =['ben', 'brn', 'last_name', 'middle_name', 'first_name', 'gender', 'status',
+                    "data": function (d) {
+                        var ids = ['ben', 'brn', 'last_name', 'middle_name', 'first_name', 'gender', 'status',
                             'place_of_birth', 'district_of_birth', 'ta_of_birth', 'village_of_birth',
-                            'hospital_of_birth', 'other_birth_place','start_date','end_date'];
+                            'hospital_of_birth', 'other_birth_place', 'start_date', 'end_date'];
 
-                        for(var i = 0; i < ids.length; i++){
+                        for (var i = 0; i < ids.length; i++) {
                             var node = document.getElementById(ids[i]);
                             d[node.getAttribute('name')] = node.value;
                         }
                     },
-                    dataFilter: function(data){
-                        var json = jQuery.parseJSON( data );
-                        for(var i = 0; i < json['data'].length; i ++){
+                    dataFilter: function (data) {
+                        var json = jQuery.parseJSON(data);
+                        for (var i = 0; i < json['data'].length; i++) {
                             var last_index = json['data'][i].length - 1;
                             var person_id = json['data'][i][last_index]
-                            json['data'][i][last_index] =   '<td class="act-btn"> ' +
-                                '<button onclick="javascript:location=\'/show_person/' + person_id + ' \'"     ' +
+                            json['data'][i][last_index] = '<td class="act-btn"> ' +
+                                '<button onclick="location=\'/show_person/' + person_id + ' \'"     ' +
 
                                 '    class="action-btn btn btn-success btn-xs"><i class="fa fa-eye"></i></button></td>';
                         }
-                        return JSON.stringify( json );
+                        return JSON.stringify(json);
                     }
                 }
             }
@@ -1973,36 +1994,40 @@
     }
 
     function activeDate() {
-        jQuery(function() {
-            jQuery( "#start_date" ).datepicker({ dateFormat: 'dd/mm/yy' });
+        jQuery(function () {
+            jQuery("#start_date").datepicker({dateFormat: 'dd/mm/yy'});
         });
-        jQuery(function() {
-            jQuery( "#end_date" ).datepicker({ dateFormat: 'dd/mm/yy' });
+        jQuery(function () {
+            jQuery("#end_date").datepicker({dateFormat: 'dd/mm/yy'});
         });
     }
-    function enableField(fields){
-        for(var i = 0 ; i< fields.length ; i++){
-            jQuery("#"+fields[i]).removeAttr("disabled")
+
+    function enableField(fields) {
+        for (var i = 0; i < fields.length; i++) {
+            jQuery("#" + fields[i]).removeAttr("disabled")
         }
     }
-    function disableField(fields){
-        for(var i = 0 ; i< fields.length ; i++){
-            jQuery("#"+fields[i]).attr("disabled","disabled")
-            jQuery("#"+fields[i]).val("")
+
+    function disableField(fields) {
+        for (var i = 0; i < fields.length; i++) {
+            jQuery("#" + fields[i]).attr("disabled", "disabled")
+            jQuery("#" + fields[i]).val("")
         }
     }
-    function check(node){
+
+    function check(node) {
         var nodes = jQuery(node).parent().children();
 
-        if(jQuery(node).is(':checked')){
+        if (jQuery(node).is(':checked')) {
             nodes.attr('disabled', false)
-        }else{
+        } else {
             nodes.attr('disabled', true).val('')
         }
 
         jQuery(node).attr('disabled', false)
     }
-    function loadData(data){
+
+    function loadData(data) {
         var row = document.createElement('tr');
         __$('tbody').appendChild(row);
         var td = document.createElement('td');
@@ -2048,13 +2073,13 @@
         row.appendChild(td);
     }
 
-    function showFields(select){
+    function showFields(select) {
         var clas = select.value.toLowerCase();
         jQuery(".place").hide().val('');
         jQuery("." + clas).show().val('');
     }
 
-    function fields(select){
+    function fields(select) {
         var clas = select.value.toLowerCase();
         jQuery(".married").hide().val('');
         jQuery("." + clas).show().val('');
@@ -2071,11 +2096,11 @@
         }
     }
 
-    function reloadDataTable(node){
+    function reloadDataTable(node) {
 
         if (initt == true) {
             table.ajax.reload();
-        }else{
+        } else {
             initt = true;
             initTable();
         }
@@ -2083,16 +2108,16 @@
 
     }
 
-    function capitalize(string){
+    function capitalize(string) {
         string = string.replace(/\_/g, ' ');
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    function __$(id){
+    function __$(id) {
         return document.getElementById(id);
     }
 
-    function load_tas(district){
+    function load_tas(district) {
         var district_name = district.options[district.selectedIndex].text;
 
         jQuery("#village_of_birth").empty();
@@ -2133,16 +2158,16 @@
         }
     }
 
-    function load_villages(ta){
+    function load_villages(ta) {
         var district_name = __$('district_of_birth').options[__$('district_of_birth').selectedIndex].text;
         var ta_name = ta.options[ta.selectedIndex].text;
 
         jQuery.ajax({
             url: '/person/get_village_complete?district=' + district_name + "&ta=" + ta_name,
-            success: function(result){
+            success: function (result) {
                 var list = JSON.parse(result);
                 jQuery("#village_of_birth").empty();
-                for(var i = 0; i < list.length; i++){
+                for (var i = 0; i < list.length; i++) {
                     var o = document.createElement('option');
                     o.innerHTML = list[i][1];
                     o.setAttribute('value', list[i][1]);
