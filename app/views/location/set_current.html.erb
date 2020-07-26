@@ -175,7 +175,7 @@
         jQuery(node).empty();
 
         jQuery.ajax({
-            url: "/districts",
+            url: "/districts?exclude_cities=false",
             success: function(results){
                 var opts = JSON.parse(results);
                 for(var i in opts){

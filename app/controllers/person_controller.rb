@@ -668,6 +668,7 @@ class PersonController < ApplicationController
     search_val = params[:search][:value] rescue nil
     search_val = '_' if search_val.blank?
 
+    cur_location = JSON.parse(File.read("#{Rails.root}/public/current.json")) rescue {}
     if !params[:start].blank?
 
       d = Person.order(" person.created_at DESC, person.village_of_birth, person.ta_of_birth, person.district_of_birth, person.first_name ")
@@ -687,6 +688,7 @@ class PersonController < ApplicationController
         @records = []
         data.each do |p|
           next if p.upload_status == "UPLOADED"
+          next if p.district_created_at != cur_location['district']
           arr = [p.name,
                  p.date_of_birth.to_date.strftime('%d/%b/%Y'),
                  p.gender,
