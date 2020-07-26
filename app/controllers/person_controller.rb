@@ -566,6 +566,14 @@ class PersonController < ApplicationController
     person.mother_home_ta = params[:mother_home_ta]
     person.mother_home_village = params[:mother_home_village]
 
+    person.gestation_at_birth = params[:gestation_age]
+    person.number_of_prenatal_visits = params[:prenatal_visits_number]
+    person.month_prenatal_care_started = params[:prenatal_care_began]
+    person.mode_of_delivery = params[:delivery_mode]
+    person.number_of_children_born_alive_inclusive = params[:born_alive_number]
+    person.number_of_children_born_still_alive = params[:born_alive_number_living]
+    person.level_of_education = params[:level_of_education]
+
     person.father_first_name  = params[:father_first_name].titleize rescue nil
     person.father_last_name   = params[:father_last_name].titleize rescue nil
     person.father_middle_name = params[:father_middle_name].titleize rescue nil
@@ -601,7 +609,7 @@ class PersonController < ApplicationController
     person.date_reported           = params[:date_reported]
 
     person.village_headman_name    = params[:village_headman_name]
-    #person.village_senior_name     = params[:village_senior_name]
+    person.village_senior_name     = params[:senior_member_name]
     person.village_headman_signed  = params[:village_headman_signed]
 
     person.district_created_at     = @cur_location['district']
