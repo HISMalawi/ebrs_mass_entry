@@ -1,4 +1,4 @@
-class LocationTag < ActiveRecord::Base
+class LocationTag < ApplicationRecord
   self.table_name = :location_tag
   self.primary_key = :location_tag_id
 
