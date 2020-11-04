@@ -1,3 +1,5 @@
+require "csv"
+
 puts "Loading health facilities"
 
 location_tag = LocationTag.where(name: 'Health facility').first

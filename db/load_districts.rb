@@ -1,3 +1,4 @@
+require "csv"
 
 puts "Loading Districts"
 
