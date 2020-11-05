@@ -177,7 +177,7 @@
         jQuery.ajax({
             url: "/districts?exclude_cities=false",
             success: function(results){
-                var opts = JSON.parse(results);
+                var opts = results;
                 for(var i in opts){
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
