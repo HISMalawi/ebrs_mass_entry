@@ -344,7 +344,7 @@ class PersonController < ApplicationController
       data << [l.id, l.name]
     end
 
-    render json: data.to_json
+    render json: data
   end
 
   def set_details_to_temp_session(user, params)
