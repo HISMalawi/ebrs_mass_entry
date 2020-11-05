@@ -35,7 +35,7 @@ class PersonController < ApplicationController
         @records << arr
       end
 
-      render :text => {
+      render json: {
           "draw" => params[:draw].to_i,
           "recordsTotal" => total,
           "recordsFiltered" => total,
@@ -93,7 +93,7 @@ class PersonController < ApplicationController
 
     names = names.delete_if{|name| name if !name.match(/^#{params[:search_value]}/i)}
     names = names.collect{|n| n.titleize}.sort
-    render :text => names[0 .. 20].to_json
+    render json: names[0 .. 20].to_json
   end
 
   def edit
@@ -300,7 +300,7 @@ class PersonController < ApplicationController
       data << [l.id, l.name]
     end
 
-    render text: data.to_json
+    render json: data.to_json
   end
 
   def get_village_complete
@@ -321,7 +321,7 @@ class PersonController < ApplicationController
       data << [l.id, l.name]
     end
 
-    render text: data.to_json
+    render json: data.to_json
   end
 
   def get_hospital_complete
@@ -344,7 +344,7 @@ class PersonController < ApplicationController
       data << [l.id, l.name]
     end
 
-    render text: data.to_json
+    render json: data.to_json
   end
 
   def set_details_to_temp_session(user, params)
@@ -702,7 +702,7 @@ class PersonController < ApplicationController
         @records << arr
       end
 
-      render :text => {
+      render json: {
           "draw" => params[:draw].to_i,
           "recordsTotal" => total,
           "recordsFiltered" => total,
@@ -714,13 +714,13 @@ class PersonController < ApplicationController
     render :template => "/person/offload"
   end
   def ebrs_connect
-    render :text=> {:remote_tocken => "HHHHHHHH"}.to_json
+    render json: {:remote_tocken => "HHHHHHHH"}.to_json
   end
 
   def remote_format
       #Mothers birthdate and Fathers birthdate
       person = Person.find(params[:id])
-      formated = {
+      formatted = {
                         :person_id=> params[:id],
                         :mother_id=>"",
                         :father_id=> "",
@@ -806,7 +806,7 @@ class PersonController < ApplicationController
                         :informant_same_as_father => (person.informant_relationship == 'Father'? 'Yes' : 'No'),
                         :registration_type => "No" 
                   }
-      render :text => formated.to_json
+      render json: formatted.to_json
       #render :text => person.to_json
   end
 
@@ -816,6 +816,6 @@ class PersonController < ApplicationController
     person.upload_datetime = Time.now
     person.upload_number = params[:upload_id]
     person.save
-    render :text => {:person_id => params[:id], :status => "UPLOADED"}.to_json
+    render json: {:person_id => params[:id], :status => "UPLOADED"}.to_json
   end
 end
