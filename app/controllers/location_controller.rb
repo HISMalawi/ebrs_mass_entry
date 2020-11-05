@@ -156,7 +156,7 @@ class LocationController < ApplicationController
     locations = Location.find_by_sql(
         "SELECT l.name FROM location l INNER JOIN location_tag_map m ON l.location_id = m.location_id  WHERE m.location_tag_id = #{tag_id} ").collect{|s| s.name.force_encoding('utf-8').encode}
 
-    render json: ([""] + locations.sort).to_json
+    render json: ([""] + locations.sort)
   end
 
   def districts
@@ -184,7 +184,7 @@ class LocationController < ApplicationController
           INNER JOIN location_tag_map m ON l.location_id = m.location_id
           WHERE m.location_tag_id = #{tag_id} AND l.parent_location = #{district_id}").collect{|s| s.name.force_encoding('utf-8').encode}
 
-    render json: ([""] + locations.sort).to_json
+    render json: ([""] + locations.sort)
   end
 
   def villages
@@ -212,7 +212,7 @@ class LocationController < ApplicationController
           INNER JOIN location_tag_map m ON l.location_id = m.location_id
           WHERE m.location_tag_id = #{tag_id} AND l.parent_location = #{ta_id}").collect{|s| s.name.force_encoding('utf-8').encode}
 
-    render json: ([""] + locations.sort).to_json
+    render json: ([""] + locations.sort)
   end
 
   def health_facilities
@@ -232,7 +232,7 @@ class LocationController < ApplicationController
         INNER JOIN location_tag_map m ON l.location_id = m.location_id
         WHERE m.location_tag_id = #{health_facility_location_tag.id} AND l.parent_location = #{ district_id}").collect{|s| s.name.force_encoding('utf-8').encode}  
         
-      render json: ([""] + locations.sort).to_json
+      render json: ([""] + locations.sort)
   end
 
   def set_current
