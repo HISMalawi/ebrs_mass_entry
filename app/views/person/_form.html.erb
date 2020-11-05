@@ -1489,7 +1489,7 @@
             url: "/countries",
             success: function (results) {
 
-                var opts = JSON.parse(results);
+                var opts = results;
                 for (var i in opts) {
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
@@ -1529,7 +1529,7 @@
             url: "/districts",
             success: function (results) {
 
-                var opts = JSON.parse(results);
+                var opts = results;
                 for (var i in opts) {
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
@@ -1569,7 +1569,7 @@
             url: ("/tas?parent=" + parent),
             success: function (results) {
 
-                var opts = JSON.parse(results);
+                var opts = results;
                 for (var i in opts) {
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
@@ -1658,7 +1658,7 @@
             url: ("/villages?district=" + district + "&ta=" + ta),
             success: function (results) {
 
-                var opts = JSON.parse(results);
+                var opts = results;
 
                 for (var i in opts) {
                     var option = document.createElement("option");
