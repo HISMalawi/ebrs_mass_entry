@@ -1,12 +1,15 @@
 Dependencies: 
   ruby 2.1.2
-  rails 4.2.6
+  rails 5.2.0
 
 Installation Steps
   bundle install 
-  bundle exec rake db:create
-  bundle exec rake db:schema:load
-  bundle exec rails runner db/seed.rb
+  rails db:create
+  rails db:schema:load
+  rails db:seed
+
+Run the application
+  rails s
 
 default login
  username: admin
