@@ -294,7 +294,7 @@
     }
     function setDRO(){
       if (__$('current_dro').value.trim().length > 0 ) {
-          jQuery.ajax =
+          jQuery.ajax({
               url: "/location/set_current?district=" + __$('current_dro').value + "&type=DRO",
               success: function (result) {
                 if(result == "OK"){
