@@ -210,7 +210,7 @@
             url: ("/tas?parent=" + parent),
             success: function(results){
 
-                var opts = JSON.parse(results);
+                var opts = results;
                 for(var i in opts){
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
@@ -239,7 +239,7 @@
             url: ("/villages?district=" + district + "&ta=" + ta),
             success: function(results){
 
-                var opts = JSON.parse(results);
+                var opts = results;
 
                 for(var i in opts){
                     var option = document.createElement("option");
@@ -265,7 +265,7 @@
           url: ("/health_facilities?district=" + district ),
           success: function(results){
 
-              var opts = JSON.parse(results);
+              var opts = results;
 
               for(var i in opts){
                   var option = document.createElement("option");
@@ -294,7 +294,7 @@
     }
     function setDRO(){
       if (__$('current_dro').value.trim().length > 0 ) {
-          jQuery.ajax({
+          jQuery.ajax =
               url: "/location/set_current?district=" + __$('current_dro').value + "&type=DRO",
               success: function (result) {
                 if(result == "OK"){
