@@ -613,7 +613,8 @@ class PersonController < ApplicationController
     person.village_headman_signed  = params[:village_headman_signed]
 
     person.district_created_at     = @cur_location['district']
-    person.ta_created_at           = (params[:ta_name].blank? ? @cur_location['ta'] : params[:ta_name])
+    person.ta_created_at           = ((params[:ta_name].blank?)? @cur_location['ta'] : params[:ta_name])
+    raise params.inspect
     case @cur_location['type']
     when "DRO"
       person.location_created_at = @cur_location['district']

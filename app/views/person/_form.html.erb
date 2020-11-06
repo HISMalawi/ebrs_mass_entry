@@ -1934,7 +1934,7 @@
                     url: "/person/suggest?field=" + this.id + "&search_value=" + this.value,
                     success: function (data) {
                         jQuery("#" + list_id).empty();
-                        data = JSON.parse(data);
+                        data = data;
                         for (var i = 0; i < data.length; i++) {
                             var opt = document.createElement("option");
                             opt.innerHTML = data[i];
@@ -1954,12 +1954,12 @@
     table = null;
     initt = false;
 
-    $i(document).ready(function () {
+    $(document).ready(function () {
 
     });
 
     function initTable() {
-        table = $i('#example').DataTable(
+        table = $('#example').DataTable(
             {
                 "processing": true,
                 "serverSide": true,
@@ -2128,7 +2128,7 @@
             jQuery.ajax({
                 url: '/person/get_ta_complete?district=' + district_name,
                 success: function (result) {
-                    var list = JSON.parse(result);
+                    var list = result;
 
                     for (var i = 0; i < list.length; i++) {
                         var o = document.createElement('option');
@@ -2144,7 +2144,7 @@
             jQuery.ajax({
                 url: '/person/get_hospital_complete?district=' + district_name,
                 success: function (result) {
-                    var list = JSON.parse(result);
+                    var list = result;
 
 
                     for (var i = 0; i < list.length; i++) {
@@ -2165,7 +2165,7 @@
         jQuery.ajax({
             url: '/person/get_village_complete?district=' + district_name + "&ta=" + ta_name,
             success: function (result) {
-                var list = JSON.parse(result);
+                var list = result;
                 jQuery("#village_of_birth").empty();
                 for (var i = 0; i < list.length; i++) {
                     var o = document.createElement('option');
