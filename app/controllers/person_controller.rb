@@ -613,8 +613,7 @@ class PersonController < ApplicationController
     person.village_headman_signed  = params[:village_headman_signed]
 
     person.district_created_at     = @cur_location['district']
-    person.ta_created_at           = ((params[:ta_name].blank?)? @cur_location['ta'] : params[:ta_name])
-    raise params.inspect
+    person.ta_created_at           = (@cur_location['ta']? @cur_location['ta'] : 'DRO Registered')
     case @cur_location['type']
     when "DRO"
       person.location_created_at = @cur_location['district']
@@ -622,6 +621,8 @@ class PersonController < ApplicationController
       person.location_created_at = @cur_location['village']
     when "Health Facility"
       person.location_created_at  = @cur_location['health_facility']
+    else
+      # type code here
     end
 
     person.upload_status           = "NOT UPLOADED"
@@ -662,7 +663,7 @@ class PersonController < ApplicationController
 
     end
 
-    render :text => "OK"
+    render plain: "OK"
   end
 
   def offload
