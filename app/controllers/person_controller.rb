@@ -613,7 +613,7 @@ class PersonController < ApplicationController
     person.village_headman_signed  = params[:village_headman_signed]
 
     person.district_created_at     = @cur_location['district']
-    person.ta_created_at           = (@cur_location['ta']? @cur_location['ta'] : 'DRO Registered')
+    person.ta_created_at           = (@cur_location['ta']? @cur_location['ta'] : params[:village_headman_ta])
     case @cur_location['type']
     when "DRO"
       person.location_created_at = @cur_location['district']
