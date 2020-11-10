@@ -1715,7 +1715,7 @@
 
         arr.push(hash['birth_district'])
 
-        $("#completeness_details #child_place_of_birth").html(arr.join(", "));
+        $("#completeness_details #child_place_of_birth").html(hash['place_of_birth'] + ", " + hash['district_of_birth'] + ", " + hash['village_of_birth']);
 
         $("#completeness_details #mother_name").html(hash['mother_first_name'] + " " + hash['mother_middle_name'] + " " + hash["mother_last_name"]);
         $("#completeness_details #father_name").html(hash['father_first_name'] + " " + hash['father_middle_name'] + " " + hash["father_last_name"]);
@@ -1823,7 +1823,7 @@
     }
 
     function nullify(id, field) {
-        if (field.value.trim() != "Malawian") {
+        if (field.value.trim() !== "Malawian" || field.value.trim() !== "Malawi") {
             __$(id).value = "";
             __$(id).setAttribute("disabled", "disabled")
         } else {
