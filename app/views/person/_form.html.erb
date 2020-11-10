@@ -578,8 +578,7 @@
     <div data-row-span="2" class="row " style="margin-bottom: 35px;">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Country:</label>
-        <select id="father_country" name="father_country" data-validation="required"
-                onchange="nullify('father_id_number', this)">
+        <select id="father_country" name="father_country" data-validation="required">
           <option></option>
         </select>
       </div>
@@ -906,15 +905,15 @@
             </tr>
             <tr>
               <td class="labell">Father Name</td>
-              <td style="text-align: left; padding-left:50px;" id="father_name" class="edit 3 cap">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="father_name" class="edit 4 cap">&nbsp;</td>
             </tr>
             <tr>
               <td class="labell">Nationality of Father</td>
-              <td style="text-align: left; padding-left:50px;" id="father_nationality" class="edit 3">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="father_nationality" class="edit 4">&nbsp;</td>
             </tr>
             <tr>
               <td class="labell">Father National ID</td>
-              <td style="text-align: left; padding-left:50px;" id="father_id_number" class="edit 3">&nbsp;</td>
+              <td style="text-align: left; padding-left:50px;" id="father_id_number" class="edit 4">&nbsp;</td>
             </tr>
             <tr>
               <td class="labell">Parents Married to each Other?</td>
@@ -1823,7 +1822,7 @@
     }
 
     function nullify(id, field) {
-        if (field.value.trim() !== "Malawian" || field.value.trim() !== "Malawi") {
+        if (field.value.trim() !== "Malawian") {
             __$(id).value = "";
             __$(id).setAttribute("disabled", "disabled")
         } else {
