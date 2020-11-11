@@ -1,5 +1,5 @@
 Dependencies: 
-  ruby 2.1.2
+  ruby 2.7.1
   rails 5.2.0
 
 Installation Steps
