@@ -1782,9 +1782,16 @@
 
     function copyMother() {
         __$("informant_first_name").value = __$("mother_first_name").value;
+        __$("informant_first_name").innerHTML = __$("informant_first_name").value;
+
         __$("informant_last_name").value = __$("mother_last_name").value;
+        __$("informant_last_name").innerHTML = __$("informant_last_name").value;
+
         __$("informant_middle_name").value = __$("mother_middle_name").value;
+        __$("informant_middle_name").innerHTML = __$("informant_middle_name").value;
+        
         __$("informant_id_number").value = __$("mother_id_number").value;
+        __$("informant_id_number").innerHTML = __$("informant_id_number").value;
     }
 
     function copyFather() {
