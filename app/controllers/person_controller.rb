@@ -166,7 +166,7 @@ class PersonController < ApplicationController
                 ["Maiden Surname", "mandatory"] => "#{@person.mother_last_name}"
             },
             {
-                "Date of birth" => "#{}", #to put date of mothers birth
+                "Date of birth" => "#{@person.mother_date_of_birth}",
                 "Nationality" => "#{@person.mother_nationality}",
                 "ID Number" => "#{@person.mother_id_number}"
             },
@@ -201,7 +201,7 @@ class PersonController < ApplicationController
                 "Surname" => "#{@person.father_last_name}"
             },
             {
-                "Date of birth" => "#{}",
+                "Date of birth" => "#{@person.father_date_of_birth}",
                 "Nationality" => "#{@person.father_nationality}",
                 "ID Number" => "#{@person.father_id_number}"
             },
@@ -220,7 +220,7 @@ class PersonController < ApplicationController
             {
                 "First Name" => "#{@person.informant_first_name}",
                 "Other Name" => "#{@person.informant_middle_name}",
-                "Family Name" => "#{@person.informant_last_name}"
+                "Surname" => "#{@person.informant_last_name}"
             },
             {
                 "Relationship to child" => "#{@person.informant_relationship}",

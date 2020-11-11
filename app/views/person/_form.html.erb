@@ -1101,7 +1101,7 @@
     });
 
     $.formUtils.addValidator({
-        name: 'phone_number',
+        name: 'informant_phone_number',
         validatorFunction: function (value, $el, config, language, $form) {
 
             if (value.trim().length > 0 && !value.trim().match("^0\\d{7}$|^0\\d{9}$")) {
@@ -1814,11 +1814,11 @@
         if (__$("informant_relationship").value == "Mother") {
             copyMother();
             autoPopulateAddress('informant_same_as_mother');
-            lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
+            // lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
         } else if (__$("informant_relationship").value == "Father") {
             copyFather();
             autoPopulateAddress('informant_same_as_father');
-            lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
+            // lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
         } else {
             unlockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"]);
         }
