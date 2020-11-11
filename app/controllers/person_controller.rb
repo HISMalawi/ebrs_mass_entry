@@ -555,6 +555,7 @@ class PersonController < ApplicationController
     person.mother_first_name  = params[:mother_first_name].titleize rescue nil
     person.mother_middle_name = params[:mother_middle_name].titleize rescue nil
     person.mother_last_name   = params[:mother_last_name].titleize rescue nil
+    person.mother_date_of_birth = params[:mother_date_of_birth]
     person.mother_nationality = params[:mother_nationality]
     person.mother_id_number   = params[:mother_id_number].to_s.upcase
     person.mother_residential_country = params[:mother_country]
@@ -577,6 +578,7 @@ class PersonController < ApplicationController
     person.father_first_name  = params[:father_first_name].titleize rescue nil
     person.father_last_name   = params[:father_last_name].titleize rescue nil
     person.father_middle_name = params[:father_middle_name].titleize rescue nil
+    person.father_date_of_birth = params[:father_date_of_birth]
     person.father_nationality = params[:father_nationality]
     person.father_id_number   = params[:father_id_number].to_s.upcase
 
