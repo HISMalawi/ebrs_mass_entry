@@ -1101,7 +1101,7 @@
     });
 
     $.formUtils.addValidator({
-        name: 'informant_phone_number',
+        name: 'phone_number',
         validatorFunction: function (value, $el, config, language, $form) {
 
             if (value.trim().length > 0 && !value.trim().match("^0\\d{7}$|^0\\d{9}$")) {
