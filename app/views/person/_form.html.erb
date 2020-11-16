@@ -1632,7 +1632,7 @@
     }
 
     function checkMarriage() {
-        if (__$("married").value.trim() == "Yes") {
+        if (__$("married").value.trim() === "Yes") {
             __$("date_of_marriage").removeAttribute("disabled");
             //__$("date_of_marriage").setAttribute("data-validation", "required");
             __$("date_of_marriage").setAttribute("data-validation-format", "dd/mm/yyyy")
@@ -1649,6 +1649,7 @@
     function checkValue(passedValue, elementType) {
         if (elementType === 'country') {
             if (passedValue !== 'Malawi') {
+                // mother states
                 __$('mother_physical_district_div').style.visibility = 'hidden';
                 __$('mother_physical_ta_div').style.visibility = 'hidden';
                 __$('mother_physical_village_div').style.visibility = 'hidden';
@@ -1659,7 +1660,20 @@
                 __$('mother_physical_state_div').style.visibility = 'visible'
                 __$('mother_physical_town_div').style.visibility = 'visible'
                 __$('mother_physical_address_div').style.visibility = 'visible'
+
+                // father states
+                __$('father_physical_district_div').style.visibility = 'hidden';
+                __$('father_physical_ta_div').style.visibility = 'hidden';
+                __$('father_physical_village_div').style.visibility = 'hidden';
+                __$('father_physical_district').removeAttribute('data-validation');
+                __$('father_physical_ta').removeAttribute('data-validation');
+                __$('father_physical_village').removeAttribute('data-validation');
+
+                __$('father_physical_state_div').style.visibility = 'visible'
+                __$('father_physical_town_div').style.visibility = 'visible'
+                __$('father_physical_address_div').style.visibility = 'visible'
             } else {
+                // mother address
                 __$('mother_physical_district_div').style.visibility = 'visible';
                 __$('mother_physical_ta_div').style.visibility = 'visible';
                 __$('mother_physical_village_div').style.visibility = 'visible';
@@ -1670,6 +1684,18 @@
                 __$('mother_physical_state_div').style.visibility = 'hidden'
                 __$('mother_physical_town_div').style.visibility = 'hidden'
                 __$('mother_physical_address_div').style.visibility = 'hidden'
+
+                // father address
+                __$('father_physical_district_div').style.visibility = 'hidden';
+                __$('father_physical_ta_div').style.visibility = 'hidden';
+                __$('father_physical_village_div').style.visibility = 'hidden';
+                __$('father_physical_district').removeAttribute('data-validation');
+                __$('father_physical_ta').removeAttribute('data-validation');
+                __$('father_physical_village').removeAttribute('data-validation');
+
+                __$('father_physical_state_div').style.visibility = 'visible'
+                __$('father_physical_town_div').style.visibility = 'visible'
+                __$('father_physical_address_div').style.visibility = 'visible'
             }
         }
     }
