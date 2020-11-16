@@ -567,7 +567,7 @@
     <div data-row-span="2" class="row " style="margin-bottom: 35px;">
       <div data-field-span="1" class="form-inline col-lg-12">
         <label>Same as Mother?</label>
-        <select id="father_residence_as_mother" type="text" name="father_residence_as_mother">
+        <select id="father_residence_as_mother" type="text" name="father_residence_as_mother" onchange="checkResidenceSimilarity('father_residence_as_mother')">
           <option></option>
           <option>Yes</option>
           <option>No</option>
@@ -578,10 +578,11 @@
     <div data-row-span="2" class="row " style="margin-bottom: 35px;">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Country:</label>
-        <select id="father_country" name="father_country" data-validation="required">
+        <select id="father_country" name="father_country" data-validation="required" onchange="checkValue(this.value, 'country')">
           <option></option>
         </select>
       </div>
+      <!-- This section for country Malawi -->
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>District:</label>
         <select id="father_physical_district" type="text" name="father_physical_district" data-validation="required"
@@ -596,6 +597,22 @@
         <label>Village:</label>
         <select id="father_physical_village" type="text" name="father_physical_village"></select>
       </div>
+      <!-- End country Malawi -->
+
+      <!-- This section for when country is not Malawi -->
+      <div id="father_physical_state_div" data-field-span="1" class="form-inline col-lg-3" style="visibility: hidden">
+        <label for="father_physical_state">State: </label>
+        <input id="father_physical_state" type="text" name="father_physical_state"/>
+      </div>
+      <div id="father_physical_town_div" data-field-span="1" class="form-inline col-lg-3" style="visibility: hidden">
+        <label for="father_physical_town">Town: </label>
+        <input id="father_physical_town" type="text" name="father_physical_town"/>
+      </div>
+      <div id="father_physical_address_div" data-field-span="1" class="form-inline col-lg-3" style="visibility: hidden">
+        <label for="father_physical_address">Address: </label>
+        <input id="father_physical_address" type="text" name="father_physical_address"/>
+      </div>
+      <!-- End country not Malawi -->
     </div>
 
     <div data-row-span="2" class="row" style="margin-bottom: 0px;">
@@ -979,6 +996,25 @@
             mother_village_option.innerHTML = __$('mother_physical_village').value;
             mother_village_option.selected = true;
             __$('mother_home_village').appendChild(mother_village_option);
+
+        } else if (residenceSimilarityType === 'father_residence_as_mother') {
+            __$('father_country').value = __$('mother_country').value;
+            __$('father_country').selected = true;
+
+            __$('father_physical_district').value = __$('mother_physical_district').value;
+            __$('father_physical_district').selected = true;
+
+            var father_physical_ta_option = document.createElement('option');
+            father_physical_ta_option.value = __$('mother_physical_ta').value;
+            father_physical_ta_option.innerHTML = __$('mother_physical_ta').value;
+            father_physical_ta_option.selected = true;
+            __$('father_physical_ta').appendChild(father_physical_ta_option);
+
+            var father_physical_village_option = document.createElement('option');
+            father_physical_village_option.value = __$('mother_physical_village').value;
+            father_physical_village_option.innerHTML = __$('mother_physical_village').value;
+            father_physical_village_option.selected = true;
+            __$('father_physical_village').appendChild(father_physical_village_option);
 
         } else if (residenceSimilarityType === 'father_home_as_residence') {
             __$('father_home_district').value = __$('father_physical_district').value;
@@ -1639,7 +1675,7 @@
     }
 
     function checkSigned() {
-        if (__$("court_order").value.trim() == "No") {
+        if (__$("court_order").value.trim() === "No") {
             __$("parents_signed").removeAttribute("disabled");
         } else {
             __$("parents_signed").removeAttribute("data-validation-format");
