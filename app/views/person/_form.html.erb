@@ -390,7 +390,7 @@
     <div data-row-span="2" class="row " style="margin-bottom: 35px;">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label for="mother_country">Country: <span style="color: red; ">*</span></label>
-        <select id="mother_country" name="mother_country" data-validation="required" onchange="checkValue(this.value, 'country')">
+        <select id="mother_country" name="mother_country" data-validation="required" onchange="checkValue(this.value, 'country', 'mother')">
           <option></option>
         </select>
       </div>
@@ -577,24 +577,24 @@
 
     <div data-row-span="2" class="row " style="margin-bottom: 35px;">
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Country:</label>
-        <select id="father_country" name="father_country" data-validation="required" onchange="checkValue(this.value, 'country')">
+        <label for="father_country">Country: <span style="color: red; ">*</span></label>
+        <select id="father_country" name="father_country" data-validation="required" onchange="checkValue(this.value, 'country', 'father')">
           <option></option>
         </select>
       </div>
       <!-- This section for country Malawi -->
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>District:</label>
+      <div id="father_physical_district_div" data-field-span="1" class="form-inline col-lg-3">
+        <label for="father_physical_district">District:</label>
         <select id="father_physical_district" type="text" name="father_physical_district" data-validation="required"
                 onchange="tas('father_physical_ta', this.value, ['father_physical_village'])"></select>
       </div>
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>TA:</label>
+      <div id="father_physical_ta_div" data-field-span="1" class="form-inline col-lg-3">
+        <label for="father_physical_ta">TA:</label>
         <select id="father_physical_ta" type="text" name="father_physical_ta"
                 onchange="villages('father_physical_village', document.getElementById('father_physical_district').value, document.getElementById('father_physical_ta').value)"> </select>
       </div>
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Village:</label>
+      <div id="father_physical_village_div" data-field-span="1" class="form-inline col-lg-3">
+        <label for="father_physical_village">Village:</label>
         <select id="father_physical_village" type="text" name="father_physical_village"></select>
       </div>
       <!-- End country Malawi -->
@@ -1646,9 +1646,9 @@
         }
     }
 
-    function checkValue(passedValue, elementType) {
+    function checkValue(passedValue, elementType, otherElement) {
         if (elementType === 'country') {
-            if (passedValue !== 'Malawi') {
+            if (passedValue !== 'Malawi' && otherElement === 'mother') {
                 // mother states
                 __$('mother_physical_district_div').style.visibility = 'hidden';
                 __$('mother_physical_ta_div').style.visibility = 'hidden';
@@ -1661,6 +1661,7 @@
                 __$('mother_physical_town_div').style.visibility = 'visible'
                 __$('mother_physical_address_div').style.visibility = 'visible'
 
+            } else if (passedValue !== 'Malawi' && otherElement === 'father') {
                 // father states
                 __$('father_physical_district_div').style.visibility = 'hidden';
                 __$('father_physical_ta_div').style.visibility = 'hidden';
@@ -1672,7 +1673,20 @@
                 __$('father_physical_state_div').style.visibility = 'visible'
                 __$('father_physical_town_div').style.visibility = 'visible'
                 __$('father_physical_address_div').style.visibility = 'visible'
-            } else {
+            } else if (passedValue === 'Malawi' && otherElement === 'father') {
+                // father address
+                __$('father_physical_district_div').style.visibility = 'visible';
+                __$('father_physical_ta_div').style.visibility = 'visible';
+                __$('father_physical_village_div').style.visibility = 'visible';
+                __$('father_physical_district').setAttribute('data-validation', 'required');
+                __$('father_physical_ta').setAttribute('data-validation', 'required');
+                __$('father_physical_village').setAttribute('data-validation', 'required');
+
+                __$('father_physical_state_div').style.visibility = 'hidden'
+                __$('father_physical_town_div').style.visibility = 'hidden'
+                __$('father_physical_address_div').style.visibility = 'hidden'
+
+            } else if (passedValue === 'Malawi' && otherElement === 'mother') {
                 // mother address
                 __$('mother_physical_district_div').style.visibility = 'visible';
                 __$('mother_physical_ta_div').style.visibility = 'visible';
@@ -1685,17 +1699,6 @@
                 __$('mother_physical_town_div').style.visibility = 'hidden'
                 __$('mother_physical_address_div').style.visibility = 'hidden'
 
-                // father address
-                __$('father_physical_district_div').style.visibility = 'hidden';
-                __$('father_physical_ta_div').style.visibility = 'hidden';
-                __$('father_physical_village_div').style.visibility = 'hidden';
-                __$('father_physical_district').removeAttribute('data-validation');
-                __$('father_physical_ta').removeAttribute('data-validation');
-                __$('father_physical_village').removeAttribute('data-validation');
-
-                __$('father_physical_state_div').style.visibility = 'visible'
-                __$('father_physical_town_div').style.visibility = 'visible'
-                __$('father_physical_address_div').style.visibility = 'visible'
             }
         }
     }
