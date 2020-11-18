@@ -438,7 +438,7 @@
   <div class="form-group actions-row" style="width: 100%;padding-right: 45%;">
     <button style="display: none" id="finish-btn" type="button" onclick="validateForm()" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Finish </button>
 
-    <button type="button" class="btn btn-danger" style="margin-left: 10px;" onclick="window.location = '/person/index?active_tab=person'; " ><b>Cancel</b></button>
+    <button type="button" class="btn btn-danger" style="margin-left: 10px;" onclick="clearMultipleBirths(); window.location = '/person/index?active_tab=person'; " ><b>Cancel</b></button>
   </div>
 
   <div class="modal fade" id="completenessModal" tabindex="-1" role="dialog" aria-labelledby="completenessModalLabel" aria-hidden="true">
@@ -532,7 +532,7 @@
     var sets = document.getElementsByTagName("fieldset");
     var cur_pos = 0;
 
-    const multiple_births = "<%= session[:multiple_births] %>"
+    let multiple_births = "<%= session[:multiple_births] %>"
 
     const multiple_births_value = "<%= session[:multiple_births_value] %>"
 
@@ -568,42 +568,6 @@
         }
     });
 
-    <% (["Malawi"] + @countries).uniq.each do |country|
-      next if country.blank?
-    %>
-    var opt = document.createElement("option");
-    opt.value = "<%=country%>";
-    opt.innerHTML = "<%=country%>";
-    __$("mother_country").appendChild(opt);
-    <% end %>
-
-    <% (["Malawi"] + @countries).uniq.each do |country|
-        next if country.blank?
-    %>
-    var opt = document.createElement("option");
-    opt.value = "<%=country%>";
-    opt.innerHTML = "<%=country%>";
-    __$("father_country").appendChild(opt);
-    <% end %>
-
-    <% (["Malawian"] + @nationalities).uniq.each do |n|
-    next if n.blank?
-    %>
-    var opt = document.createElement("option");
-    opt.value = "<%=n%>";
-    opt.innerHTML = "<%=n%>";
-    __$("mother_nationality").appendChild(opt);
-    <% end %>
-
-    <% (["Malawian"] + @nationalities).uniq.each do |n|
-    next if n.blank?
-    %>
-    var opt = document.createElement("option");
-    opt.value = "<%=n%>";
-    opt.innerHTML = "<%=n%>";
-    __$("father_nationality").appendChild(opt);
-    <% end %>
-
     function removeSpace(node){
         node.value = node.value.trim().replace(/\s+/g, "").match(/\d/g).join("");
 
@@ -622,7 +586,7 @@
             url: "/countries",
             success: function(results){
 
-                var opts = JSON.parse(results);
+                var opts = results;
                 for(var i in opts){
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
@@ -662,7 +626,7 @@
             url: "/districts",
             success: function(results){
 
-                var opts = JSON.parse(results);
+                var opts = results;
                 for(var i in opts){
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
@@ -702,7 +666,7 @@
             url: ("/tas?parent=" + parent),
             success: function(results){
 
-                var opts = JSON.parse(results);
+                var opts = results;
                 for(var i in opts){
                     var option = document.createElement("option");
                     option.innerHTML = opts[i];
@@ -738,7 +702,7 @@
             url: ("/villages?district=" + district + "&ta=" + ta),
             success: function(results){
 
-                var opts = JSON.parse(results);
+                var opts = results;
 
                 for(var i in opts){
                     var option = document.createElement("option");
@@ -870,26 +834,11 @@
     }
 
     districts("birth_district", ['birth_ta', 'birth_village']);
-    districts("mother_physical_district", ['mother_physical_ta', 'mother_physical_village']);
-    districts("mother_home_district", ['mother_home_ta', 'mother_home_village']);
-    districts("father_physical_district", ['father_physical_ta', 'father_physical_village']);
-    districts("father_home_district", ['father_home_ta', 'father_home_village']);
-    districts("informant_district", ['informant_ta', 'informant_village']);
-    districts("village_headman_district", ['village_headman_ta', 'village_headman_village'])
 
     <% if request.path.match("/edit")
     %>
 
     __$("gender").value = "<%= @person.gender%>";
-    __$("married").value = "<%= @person.parents_married%>";
-    __$("mother_nationality").value = "<%= @person.mother_nationality%>";
-    __$("father_nationality").value = "<%= @person.father_nationality%>";
-    __$("informant_relationship").value = "<%= @person.informant_relationship%>";
-    __$("informant_district").value = "<%= @person.informant_district%>";
-    __$("form_signed").value = "<%= @person.form_signed%>";
-    __$("date_of_marriage").value = "<%= @person.date_of_marriage%>";
-    __$("court_order").value = "<%= @person.court_order_attached%>";
-    __$("village_headman_signed").value = "<%= @person.village_headman_signed%>";
     <% else %>
 
     <% end %>
@@ -907,20 +856,6 @@
             maxDate: new Date()
         } );
 
-        tas('village_headman_ta', 'village_headman_district', [])
-
-        villages('village_headman_village', 'village_headman_district', 'village_headman_ta');
-
-        setTimeout(function(){
-            <% if !request.path.match("/edit")%>
-            __$("ta_name").value = "<%= @cur_location['ta']%>";
-            __$("village_name").value = "<%= @cur_location['village']%>";
-            <% else %>
-            __$("ta_name").value = "<%= @person.ta_created_at%>";
-            __$("village_name").value = "<%= @person.location_created_at%>";
-            <% end %>
-        }, 1000)
-
         checkRelationship();
 
     })
@@ -937,7 +872,7 @@
                     url: "/person/suggest?field=" + this.id + "&search_value=" + this.value,
                     success: function (data) {
                         jQuery("#" + list_id).empty();
-                        data = JSON.parse(data);
+                        data = data;
                         for (var i = 0; i < data.length; i++) {
                             var opt = document.createElement("option");
                             opt.innerHTML = data[i];
@@ -957,49 +892,6 @@
     table = null;
     initt = false;
 
-    function initTable(){
-        table =  $i('#example').DataTable(
-            {
-                "processing": true,
-                "serverSide": true,
-                "ordering": false,
-                "ajax": {
-                    "url": "/search_cases",
-                    "data": function(d){
-                        var ids =['ben', 'brn', 'last_name', 'middle_name', 'first_name', 'gender', 'status',
-                            'place_of_birth', 'district_of_birth', 'ta_of_birth', 'village_of_birth',
-                            'hospital_of_birth', 'other_birth_place','start_date','end_date'];
-
-                        for(var i = 0; i < ids.length; i++){
-                            var node = document.getElementById(ids[i]);
-                            d[node.getAttribute('name')] = node.value;
-                        }
-                    },
-                    dataFilter: function(data){
-                        var json = jQuery.parseJSON( data );
-                        for(var i = 0; i < json['data'].length; i ++){
-                            var last_index = json['data'][i].length - 1;
-                            var person_id = json['data'][i][last_index]
-                            json['data'][i][last_index] =   '<td class="act-btn"> ' +
-                                '<button onclick="javascript:location=\'/show_person/' + person_id + ' \'"     ' +
-
-                                '    class="action-btn btn btn-success btn-xs"><i class="fa fa-eye"></i></button></td>';
-                        }
-                        return JSON.stringify( json );
-                    }
-                }
-            }
-        );
-    }
-
-    function activeDate() {
-        jQuery(function() {
-            jQuery( "#start_date" ).datepicker({ dateFormat: 'dd/mm/yy' });
-        });
-        jQuery(function() {
-            jQuery( "#end_date" ).datepicker({ dateFormat: 'dd/mm/yy' });
-        });
-    }
     function enableField(fields){
         for(var i = 0 ; i< fields.length ; i++){
             jQuery("#"+fields[i]).removeAttr("disabled")
@@ -1119,11 +1011,11 @@
         jQuery("#ta_of_birth").empty();
         jQuery("#hospital_of_birth").empty();
 
-        if (__$('place_of_birth').value == 'Home') {
+        if (__$('place_of_birth').value === 'Home') {
             jQuery.ajax({
                 url: '/person/get_ta_complete?district=' + district_name,
                 success: function (result) {
-                    var list = JSON.parse(result);
+                    var list = result;
 
                     for (var i = 0; i < list.length; i++) {
                         var o = document.createElement('option');
@@ -1135,12 +1027,11 @@
             })
         }
 
-        if (__$('place_of_birth').value == 'Hospital') {
+        if (__$('place_of_birth').value === 'Hospital') {
             jQuery.ajax({
                 url: '/person/get_hospital_complete?district=' + district_name,
                 success: function (result) {
-                    var list = JSON.parse(result);
-
+                    var list = result;
 
                     for (var i = 0; i < list.length; i++) {
                         var o = document.createElement('option');
@@ -1160,7 +1051,7 @@
         jQuery.ajax({
             url: '/person/get_village_complete?district=' + district_name + "&ta=" + ta_name,
             success: function(result){
-                var list = JSON.parse(result);
+                var list = result;
                 jQuery("#village_of_birth").empty();
                 for(var i = 0; i < list.length; i++){
                     var o = document.createElement('option');
@@ -1172,7 +1063,7 @@
         })
     }
 
-    activeDate();
-
-
+    function clearMultipleBirths() {
+      multiple_births = false;
+    }
 </script>
