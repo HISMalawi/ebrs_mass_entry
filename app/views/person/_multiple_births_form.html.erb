@@ -187,181 +187,6 @@
 
   </fieldset>
 
-
-  <fieldset id="mother" style="display: none">
-    <legend>DETAILS OF MOTHER</legend>
-    <div data-row-span="2" class="row">
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Surname: <span style="color: red; ">*</span></label>
-        <input id="mother_last_name"  class="sentence-case" type="text" name="mother_last_name"  autocomplete="off" list="surname_list"
-               data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_last_name%>">
-
-      </div>
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>First Name: <span style="color: red; ">*</span></label>
-        <input id="mother_first_name"  class="sentence-case" type="text" name="mother_first_name" autocomplete="off" list="first_name_list"
-               data-validation="required length" data-validation-length="2-30" value="<%=@person.mother_first_name%>">
-      </div>
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Other Names:</label>
-        <input id="mother_middle_name"  class="sentence-case" type="text" name="mother_middle_name" autocomplete="off" list="middle_name_list"
-               value="<%=@person.mother_middle_name%>">
-      </div>
-    </div>
-
-    <div data-row-span="2" class="row">
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Nationality: <span style="color: red; ">*</span></label>
-        <select id="mother_nationality" name="mother_nationality" data-validation="required"
-                onchange = "nullify('mother_id_number', this)"
-                value="<%=@person.mother_nationality%>">
-          <option></option>
-        </select>
-      </div>
-      <div data-field-span="1" class="form-inline col-lg-3">
-
-        <label>ID Number: </label>
-        <input value="<%=@person.mother_id_number%>" id="mother_id_number" type="text" name="mother_id_number"
-
-               data-validation="mother_id_length mother_id_special_char father_mother_id_check" maxlength="8" size="8"
-               data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|," >
-      </div>
-    </div>
-
-    <div data-row-span="2" class="row" style="margin-bottom: 0px;">
-      <label style="color: gray;text-decoration: underline;">Residential Address</label>
-    </div>
-
-    <div data-row-span="2" class="row " style="margin-bottom: 35px;">
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label for="mother_country">Country: <span style="color: red; ">*</span></label>
-        <select id="mother_country" name="mother_country" data-validation="required" onchange="checkValue(this.value, 'country', 'mother')">
-          <option></option>
-        </select>
-      </div>
-    </div>
-
-  </fieldset>
-
-  <fieldset id="mother_continued" style="display: none">
-    <legend>DETAILS OF MOTHER CONTINUED</legend>
-    <div data-row-span="3" class="row" style="margin-bottom: 35px;">
-      <div data-field-span="4" class="form-inline col-lg-6">
-        <label>Number of prenatal visits</label>
-        <input type="number" name="prenatal_visits_number" id="prenatal_visits_number">
-      </div>
-      <div data-field-span="1"  class="form-inline col-lg-6">
-        <label>Level of Education:</label>
-        <select id="delivery_mode" type="text" name="delivery_mode" >
-          <option></option>
-          <option>None</option>
-          <option>Primary</option>
-          <option>Secondary</option>
-          <option>Higher Education</option>
-        </select>
-      </div>
-    </div>
-
-    <div data-row-span="2" class="row" style="margin-bottom: 35px;">
-      <div data-field-span="1" class="form-inline col-lg-6">
-        <label>Number of children born alive to the mother (including this child)</label>
-        <input type="number" name="born_alive_number" id="born_alive_number">
-      </div>
-      <div data-field-span="1" class="form-inline col-lg-6">
-        <label>Number of children born alive to the mother (and still living)</label>
-        <input type="number" name="born_alive_number_living" id="born_alive_number_living">
-      </div>
-    </div>
-  </fieldset>
-
-  <fieldset id="father" style="display: none">
-    <legend>DETAILS OF FATHER</legend>
-    <div data-row-span="2" class="row">
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Surname: </label>
-        <input type="text"  class="sentence-case" name="father_last_name"  autocomplete="off" list="surname_list"
-               data-validation="father" id="father_last_name" value="<%=@person.father_last_name%>">
-      </div>
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>First Name:</label>
-        <input type="text" name="father_first_name" id="father_first_name"  class="sentence-case"  autocomplete="off" list="first_name_list"
-               data-validation="father" value="<%=@person.father_first_name%>">
-      </div>
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Other Names:</label>
-        <input type="text" name="father_middle_name" id="father_middle_name"  class="sentence-case"  autocomplete="off" list="middle_name_list"
-               value="<%=@person.father_middle_name%>">
-      </div>
-    </div>
-
-    <div data-row-span="2" class="row">
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Nationality:</label>
-        <select id="father_nationality" name="father_nationality"  data-validation="father" value="<%=@person.father_nationality%>"
-                onchange = "nullify('father_id_number', this)">
-          <option></option>
-        </select>
-      </div>
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>ID Number:</label>
-        <input value="<%=@person.father_id_number%>" id="father_id_number" type="text" maxlength="8" size="8"
-               name="father_id_number"
-               data-validation="father_id_length father_id_special_char father_mother_id_check"
-               data-validation-ignore="o,i,-,!,$,%,^,&,*,(,),_,+,|,~,=,`,{,},\,[,\,],:,;,@,\,#,<,>,?,.,\,/,],|,">
-      </div>
-    </div>
-
-    <div data-row-span="2" class="row" style="margin-bottom: 0px;">
-      <label style="color: gray;text-decoration: underline;">Residential Address</label>
-    </div>
-
-    <div data-row-span="2" class="row " style="margin-bottom: 35px;">
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Country:</label>
-        <select id="father_country" name="father_country" data-validation="required"
-                onchange = "nullify('father_id_number', this)">
-          <option></option>
-        </select>
-      </div>
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>District:</label>
-        <select id="father_physical_district" type="text" name="father_physical_district" data-validation="required"
-                onchange="tas('father_physical_ta', this.value, ['father_physical_village'])"></select>
-      </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
-        <label>TA:</label>
-        <select id="father_physical_ta" type="text" name="father_physical_ta"
-                onchange="villages('father_physical_village', document.getElementById('father_physical_district').value, document.getElementById('father_physical_ta').value)"> </select>
-      </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
-        <label>Village:</label>
-        <select id="father_physical_village" type="text" name="father_physical_village" ></select>
-      </div>
-    </div>
-
-    <div data-row-span="2" class="row" style="margin-bottom: 0px;">
-      <label style="color: gray;text-decoration: underline;">Home Address</label>
-    </div>
-
-    <div data-row-span="2" class="row " style="margin-bottom: 35px;">
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>District:</label>
-        <select id="father_home_district" type="text" name="father_home_district" data-validation="required"
-                onchange="tas('father_home_ta', this.value, ['father_home_village'])"></select>
-      </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
-        <label>TA:</label>
-        <select id="father_home_ta" type="text" name="father_home_ta"
-                onchange="villages('father_home_village', __$('father_home_district').value, __$('father_home_ta').value)"> </select>
-      </div>
-      <div data-field-span="1"  class="form-inline col-lg-3">
-        <label>Village:</label>
-        <select id="father_home_village" type="text" name="father_home_village" ></select>
-      </div>
-    </div>
-
-  </fieldset>
-
   <div class="form-group actions-row" style="width: 100%;padding-right: 45%;">
     <button style="display: none" id="finish-btn" type="button" onclick="validateForm()" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Finish </button>
 
@@ -393,43 +218,6 @@
               <td class="labell">Child Date of Birth</td>
               <td style="text-align: left; padding-left:50px;" id="child_date_of_birth" class="edit 0">&nbsp;</td>
             </tr>
-            <tr>
-              <td class="labell">Child Place of Birth</td>
-              <td style="text-align: left; padding-left:50px;" id="child_place_of_birth" class="edit 0">&nbsp;</td>
-            </tr>
-            <tr>
-              <td class="labell">Mother Name</td>
-              <td style="text-align: left; padding-left:50px;" id="mother_name" class="edit 1 cap">&nbsp;</td>
-            </tr>
-            <tr>
-              <td class="labell">Nationality of Mother</td>
-              <td style="text-align: left; padding-left:50px;" id="mother_nationality" class="edit 1">&nbsp;</td>
-            </tr>
-            <tr>
-              <td class="labell">Mother National ID</td>
-              <td style="text-align: left; padding-left:50px;" id="mother_id_number" class="edit 1">&nbsp;</td>
-            </tr>
-            <tr>
-              <td class="labell">Father Name</td>
-              <td style="text-align: left; padding-left:50px;" id="father_name" class="edit 2 cap">&nbsp;</td>
-            </tr>
-            <tr>
-              <td class="labell">Nationality of Father</td>
-              <td style="text-align: left; padding-left:50px;" id="father_nationality" class="edit 2">&nbsp;</td>
-            </tr>
-            <tr>
-              <td class="labell">Father National ID</td>
-              <td style="text-align: left; padding-left:50px;" id="father_id_number" class="edit 2">&nbsp;</td>
-            </tr>
-            <tr>
-              <td class="labell">Parents Married to each Other?</td>
-              <td style="text-align: left; padding-left:50px;" id="parents_married" class="edit 0">&nbsp;</td>
-            </tr>
-            <tr>
-              <td class="labell">Parents signed?</td>
-              <td style="text-align: left; padding-left:50px;" id="form_signed" class="edit 3">&nbsp;</td>
-            </tr>
-
           </table>
         </span>
 
@@ -500,171 +288,10 @@
 
     }
 
-    function countries(id, dep){
-        for(var i = 0; i < dep.length; i++){
-            jQuery("#" + dep[i]).val("");
-            jQuery(document.getElementById(dep[i])).empty();
-        }
-
-        var node = document.getElementById(id);
-        jQuery(node).empty();
-
-        jQuery.ajax({
-            url: "/countries",
-            success: function(results){
-
-                var opts = results;
-                for(var i in opts){
-                    var option = document.createElement("option");
-                    option.innerHTML = opts[i];
-                    option.setAttribute("value", opts[i]);
-
-                    <% if request.path.match("/edit")%>
-                    if('<%= @person.district_of_birth%>' == opts[i] && id=="birth_district") {
-                        option.setAttribute("selected", "true");
-                        tas('birth_ta', opts[i], ['birth_village'])
-                    }
-
-                    if('<%= @person.informant_district%>' == opts[i] && id=="informant_district") {
-                        option.setAttribute("selected", "true");
-                        tas('informant_ta', opts[i], ['informant_village'])
-                    }
-                    <% end %>
-                    node.appendChild(option);
-                }
-
-            },
-            error: function(){
-
-            }
-        })
-    }
-
-    function districts(id, dep){
-        for(var i = 0; i < dep.length; i++){
-            jQuery("#" + dep[i]).val("");
-            jQuery(document.getElementById(dep[i])).empty();
-        }
-
-        var node = document.getElementById(id);
-        jQuery(node).empty();
-
-        jQuery.ajax({
-            url: "/districts",
-            success: function(results){
-
-                var opts = results;
-                for(var i in opts){
-                    var option = document.createElement("option");
-                    option.innerHTML = opts[i];
-                    option.setAttribute("value", opts[i]);
-
-                    <% if request.path.match("/edit")%>
-                    if('<%= @person.district_of_birth%>' == opts[i] && id=="birth_district") {
-                        option.setAttribute("selected", "true");
-                        tas('birth_ta', opts[i], ['birth_village'])
-                    }
-
-                    if('<%= @person.informant_district%>' == opts[i] && id=="informant_district") {
-                        option.setAttribute("selected", "true");
-                        tas('informant_ta', opts[i], ['informant_village'])
-                    }
-                    <% end %>
-                    node.appendChild(option);
-                }
-
-            },
-            error: function(){
-
-            }
-        })
-    }
-
-    function tas(id, parent, dep){
-        for(var i = 0; i < dep.length; i++){
-            jQuery("#" + dep[i]).val("");
-            jQuery(document.getElementById(dep[i])).empty();
-        }
-
-        var node = document.getElementById(id);
-        jQuery(node).empty();
-
-        jQuery.ajax({
-            url: ("/tas?parent=" + parent),
-            success: function(results){
-
-                var opts = results;
-                for(var i in opts){
-                    var option = document.createElement("option");
-                    option.innerHTML = opts[i];
-                    option.setAttribute("value", opts[i]);
-                    <% if request.path.match("/edit")%>
-
-                    if('<%= @person.ta_of_birth%>' == opts[i] && id=="birth_ta") {
-                        option.setAttribute("selected", "true");
-                        villages('birth_village', __$('birth_district').value, opts[i]);
-                    }
-
-                    if('<%= @person.informant_ta%>' == opts[i] && id=="informant_ta") {
-                        option.setAttribute("selected", "true");
-                        villages('informant_village', __$('informant_district').value, opts[i]);
-                    }
-                    <% end %>
-                    node.appendChild(option);
-                }
-
-            },
-            error: function(){
-
-            }
-        })
-    }
-
-    function villages(id, district, ta){
-
-        var node = document.getElementById(id);
-        jQuery(node).empty();
-
-        jQuery.ajax({
-            url: ("/villages?district=" + district + "&ta=" + ta),
-            success: function(results){
-
-                var opts = results;
-
-                for(var i in opts){
-                    var option = document.createElement("option");
-                    option.innerHTML = opts[i];
-                    option.setAttribute("value", opts[i]);
-
-                    <% if request.path.match("/edit")%>
-                    if('<%= @person.village_of_birth%>' == opts[i] && id=="birth_village") {
-                        option.setAttribute("selected", "true");
-                    }
-
-                    if('<%= @person.informant_village%>' == opts[i] && id=="informant_village") {
-                        option.setAttribute("selected", "true");
-                    }
-                    <% end %>
-                    node.appendChild(option);
-                }
-
-            },
-            error: function(){
-            }
-        })
-    }
-
     function validateForm(){
 
-        // jQuery(sets[cur_pos]).find("input, select").validate();
-        // if (jQuery(sets[cur_pos]).find(".error").length > 0) {
-        //     jQuery('#form-create-person').submit();
-        //     jQuery("fieldset .form-error").hide();
-        //     return;
-        // }
-
-        var hash = jQuery("#form-create-person").serializeHash();
-        for(var k in hash){
+        let hash = jQuery("#form-create-person").serializeHash();
+        for(let k in hash){
             if (hash[k] == null){
                 hash[k] = "";
             }
@@ -674,37 +301,10 @@
         $("#completeness_details #child_gender").html(hash['gender']);
         $("#completeness_details #child_date_of_birth").html(hash['date_of_birth']);
 
-        var arr = []
-        if (hash['birth_village']){
-            arr.push(hash['birth_village']);
-        }
-
-        if (hash['birth_ta']){
-            arr.push(hash['birth_ta']);
-        }
-
-        arr.push(hash['birth_district'])
-
-        $("#completeness_details #child_place_of_birth").html(arr.join(", "));
-
-        $("#completeness_details #mother_name").html(hash['mother_first_name'] + " " + hash['mother_middle_name'] + " " + hash["mother_last_name"]);
-        $("#completeness_details #father_name").html(hash['father_first_name'] + " " + hash['father_middle_name'] + " " + hash["father_last_name"]);
-
-        $("#completeness_details #mother_nationality").html(hash['mother_nationality']);
-        $("#completeness_details #father_nationality").html(hash['father_nationality']);
-
-        $("#completeness_details #mother_id_number").html(hash['mother_id_number']);
-        $("#completeness_details #father_id_number").html(hash['father_id_number']);
-
-        $("#completeness_details #parents_married").html(hash['parents_married']);
-        $("#completeness_details #form_signed").html(hash['form_signed']);
-
         jQuery('#completenessModal').modal('show');
     }
 
     function saveRecord(){
-        //jQuery('#form-create-person').submit(function(e){
-        //e.preventDefault();
 
         jQuery.ajax(
             {
@@ -728,40 +328,6 @@
         //})
     }
 
-    function lockFields(lockableFields){
-        for(var i = 0; i < lockableFields.length; i++){
-            __$(lockableFields[i]).setAttribute("disabled", "disabled");
-        }
-    }
-
-    function unlockFields(unlockableFields){
-        for(var i = 0; i < unlockableFields.length; i++){
-            __$(unlockableFields[i]).value = ""
-            __$(unlockableFields[i]).removeAttribute("disabled");
-        }
-    }
-
-    function checkRelationship(){
-        if (__$("informant_relationship").value == "Mother"){
-            copyMother(); lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
-        }else if(__$("informant_relationship").value == "Father") {
-            copyFather(); lockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"])
-        }else{
-            unlockFields(["informant_first_name", "informant_last_name", "informant_middle_name", "informant_id_number"]);
-        }
-    }
-
-    function nullify(id, field){
-        if (field.value.trim() != "Malawian"){
-            __$(id).value = "";
-            __$(id).setAttribute("disabled", "disabled")
-        }else{
-            __$(id).removeAttribute("disabled")
-        }
-    }
-
-    districts("birth_district", ['birth_ta', 'birth_village']);
-
     <% if request.path.match("/edit")
     %>
 
@@ -784,8 +350,6 @@
         } );
 
         dobpicker.setDate(new Date(<%= session[:temp_person_details]['date_of_birth'] %>));
-
-        checkRelationship();
 
     })
 
@@ -813,36 +377,6 @@
         }
     })
 
-    jQuery(".filters input, .filters select").attr('disabled', true).val('');
-    jQuery(".check").attr('disabled', false).val('');
-    jQuery(".home, .hospital, .other").hide().val('');
-
-    selected = [];
-    table = null;
-    initt = false;
-
-    function enableField(fields){
-        for(var i = 0 ; i< fields.length ; i++){
-            jQuery("#"+fields[i]).removeAttr("disabled")
-        }
-    }
-    function disableField(fields){
-        for(var i = 0 ; i< fields.length ; i++){
-            jQuery("#"+fields[i]).attr("disabled","disabled")
-            jQuery("#"+fields[i]).val("")
-        }
-    }
-    function check(node){
-        var nodes = jQuery(node).parent().children();
-
-        if(jQuery(node).is(':checked')){
-            nodes.attr('disabled', false)
-        }else{
-            nodes.attr('disabled', true).val('')
-        }
-
-        jQuery(node).attr('disabled', false)
-    }
     function loadData(data){
         var row = document.createElement('tr');
         __$('tbody').appendChild(row);
@@ -889,107 +423,9 @@
         row.appendChild(td);
     }
 
-    function showFields(select){
-        var clas = select.value.toLowerCase();
-        jQuery(".place").hide().val('');
-        jQuery("." + clas).show().val('');
-    }
-
-    function fields(select){
-        var clas = select.value.toLowerCase();
-        jQuery(".married").hide().val('');
-        jQuery("." + clas).show().val('');
-    }
-
-    function checkTypeOfBirth(typeOfBirthValue) {
-        if (typeOfBirthValue == 'Other') {
-            __$('specify_birth_type').style.visibility = 'visible';
-            __$('specify_type_of_birth').setAttribute('data-validation', 'required');
-        } else {
-            __$('specify_birth_type').style.visibility = 'hidden';
-            __$('specify_type_of_birth').removeAttribute('data-validation');
-            __$('specify_type_of_birth').value = '';
-        }
-    }
-
-    function reloadDataTable(node){
-
-        if (initt == true) {
-            table.ajax.reload();
-        }else{
-            initt = true;
-            initTable();
-        }
-
-
-    }
-
     function capitalize(string){
         string = string.replace(/\_/g, ' ');
         return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    function __$(id){
-        return document.getElementById(id);
-    }
-
-    function load_tas(district){
-        var district_name = district.options[district.selectedIndex].text;
-
-        jQuery("#village_of_birth").empty();
-        jQuery("#ta_of_birth").empty();
-        jQuery("#hospital_of_birth").empty();
-
-        if (__$('place_of_birth').value === 'Home') {
-            jQuery.ajax({
-                url: '/person/get_ta_complete?district=' + district_name,
-                success: function (result) {
-                    var list = result;
-
-                    for (var i = 0; i < list.length; i++) {
-                        var o = document.createElement('option');
-                        o.innerHTML = list[i][1];
-                        o.setAttribute('value', list[i][1]);
-                        __$('ta_of_birth').appendChild(o);
-                    }
-                }
-            })
-        }
-
-        if (__$('place_of_birth').value === 'Hospital') {
-            jQuery.ajax({
-                url: '/person/get_hospital_complete?district=' + district_name,
-                success: function (result) {
-                    var list = result;
-
-                    for (var i = 0; i < list.length; i++) {
-                        var o = document.createElement('option');
-                        o.innerHTML = list[i][1];
-                        o.setAttribute('value', list[i][0]);
-                        __$('hospital_of_birth').appendChild(o);
-                    }
-                }
-            })
-        }
-    }
-
-    function load_villages(ta){
-        var district_name = __$('district_of_birth').options[__$('district_of_birth').selectedIndex].text;
-        var ta_name = ta.options[ta.selectedIndex].text;
-
-        jQuery.ajax({
-            url: '/person/get_village_complete?district=' + district_name + "&ta=" + ta_name,
-            success: function(result){
-                var list = result;
-                jQuery("#village_of_birth").empty();
-                for(var i = 0; i < list.length; i++){
-                    var o = document.createElement('option');
-                    o.innerHTML = list[i][1];
-                    o.setAttribute('value', list[i][1]);
-                    __$('village_of_birth').appendChild(o);
-                }
-            }
-        })
     }
 
     // TODO: Make clear Multiple Birth Workflow intelligent when cancelling before finishing all births
