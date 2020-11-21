@@ -791,14 +791,15 @@
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Village Headman Signed?:</label>
-        <select id="village_headman_signed" name="village_headman_signed" data-validation="required" value="">
+        <select id="village_headman_signed" name="village_headman_signed" data-validation="required" value=""
+                onChange="hideSignInput(this.value, 'village_headman_name_div');">
           <option></option>
           <option>Yes</option>
           <option>No</option>
         </select>
       </div>
 
-      <div data-field-span="1" class="form-inline col-lg-3">
+      <div data-field-span="1" class="form-inline col-lg-3" id="village_headman_name_div">
         <label>Name of Village Headman:</label>
         <input id="village_headman_name" type="text" class="sentence-case"
                name="village_headman_name" value=""
@@ -809,17 +810,18 @@
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label for="senior_member_village_signed">Senior Member of Village Signed?:</label>
-        <select id="senior_member_village_signed" name="senior_member_village_signed" data-validation="required" value="">
+        <select id="senior_member_village_signed" name="senior_member_village_signed" data-validation="required"
+                value="" onchange="hideSignInput(this.value, 'senior_member_name_div');">
           <option></option>
           <option>Yes</option>
           <option>No</option>
         </select>
       </div>
 
-      <div data-field-span="1" class="form-inline col-lg-3">
+      <div data-field-span="1" class="form-inline col-lg-3" id="senior_member_name_div">
         <label for="senior_member_name">Name of Senior Member of Village:</label>
         <input id="senior_member_name" type="text" class="sentence-case"
-               name="senior_member_name" value=""
+               name="senior_member_name"
                data-validation="required length" data-validation-length="2-50" value="">
       </div>
     </div>
@@ -828,16 +830,17 @@
     <div data-row-span="2" class="row">
       <div data-field-span="1" class="form-inline col-lg-3">
         <label for="religious_leader_signed">Religious Leader Signed?:</label>
-        <select id="religious_leader_signed" name="religious_leader_signed" data-validation="required" value="">
+        <select id="religious_leader_signed" name="religious_leader_signed" data-validation="required" value=""
+                onchange="hideSignInput(this.value, 'religious_leader_name_div');">
           <option></option>
           <option>Yes</option>
           <option>No</option>
         </select>
       </div>
-      <div data-field-span="1" class="form-inline col-lg-3">
+      <div data-field-span="1" class="form-inline col-lg-3" id="religious_leader_name_div">
         <label for="religious_leader_name">Name of Religious Leader:</label>
         <input id="religious_leader_name" type="text" class="sentence-case"
-               name="religious_leader_name" value=""
+               name="religious_leader_name"
                data-validation="required length" data-validation-length="2-50" value="">
       </div>
     </div>
@@ -887,12 +890,12 @@
   </div>
 
   <div class="modal fade" id="dob_father" tabindex="-1" role="dialog" aria-labelledby="dobFatherLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document"">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="printerModalLabel" style="text-align: left; color: white; font-weight: bold; text-align: center;">
-            FATHER Date of Birth should at least be 8 years older than CHILD Date of Birth
+            Caution !
           </h4>
         </div>
         <div class="modal-body">
@@ -992,8 +995,21 @@
 <script src="/Pikaday/pikaday.js"></script>
 
 <script>
+
     function __$(id) {
         return document.getElementById(id);
+    }
+
+    function hideSignInput(value, elementToHide) {
+        if (value === 'No') {
+            __$(elementToHide).getElementsByTagName('input')[0].removeAttribute('data-validation');
+            __$(elementToHide).getElementsByTagName('input')[0].removeAttribute('data-validation-length');
+            __$(elementToHide).style.visibility = 'hidden';
+        } else {
+            __$(elementToHide).style.visibility = 'visible';
+            __$(elementToHide).getElementsByTagName('input')[0].setAttribute('data-validation', 'required length');
+            __$(elementToHide).getElementsByTagName('input')[0].setAttribute('data-validation-length', '0-25');
+        }
     }
 
     function checkResidenceSimilarity(parentID) {
