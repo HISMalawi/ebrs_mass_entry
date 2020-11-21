@@ -349,6 +349,7 @@ class PersonController < ApplicationController
 
   def set_details_to_temp_session(user, params)
     session[:temp_person_details] = {
+        date_of_birth: params[:date_of_birth].to_date.to_s(:db),
         child_id_number: params[:child_id_number],
         place_of_birth: params[:place_of_birth],
         district_of_birth: params[:district_of_birth],
@@ -490,6 +491,7 @@ class PersonController < ApplicationController
 
   def get_temp_details(person)
 
+    person.date_of_birth = session[:temp_person_details]['date_of_birth']
     person.place_of_birth = session[:temp_person_details]['place_of_birth']
     person.district_of_birth = session[:temp_person_details]['district_of_birth']
     person.ta_of_birth = session[:temp_person_details]['ta_of_birth']
@@ -554,11 +556,11 @@ class PersonController < ApplicationController
     person.middle_name        = params[:middle_name].titleize rescue nil
 
     person.gender             = params[:gender]
-    person.date_of_birth      = params[:date_of_birth].to_date.to_s(:db)
 
     if session[:temp_person_details]
       get_temp_details(person)
     else
+      person.date_of_birth      = params[:date_of_birth].to_date.to_s(:db)
       person.child_id_number    = params[:child_id_number]
 
       person.place_of_birth     = params[:place_of_birth]

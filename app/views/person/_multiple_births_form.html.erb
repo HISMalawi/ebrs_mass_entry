@@ -178,81 +178,8 @@
         </div>
       </div>
 
-    </div>
-
-    <legend>Place of Birth</legend>
-
-    <div data-row-span="2" class="row " style="margin-bottom: 30px;">
-
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label for="place">Place of birth <span style="color: red; ">*</span></label>
-        <select type="text" class="input-small"  id="place_of_birth" name="place_of_birth" onchange="showFields(this)">
-          <option></option>
-          <option>Home</option>
-          <option>Hospital</option>
-          <option>Other</option>
-        </select>
-      </div>
-
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label for="district_of_birth">District of birth</label>
-        <select type="text" class="input-small"  id="district_of_birth" name="district_of_birth" onchange="load_tas(this)">
-          <option></option>
-          <% @districts.each do |d|%>
-            <option value="<%= d.name%>"><%= d.name%></option>
-          <% end %>
-        </select>
-
-      </div>
-
-      <div data-field-span="1" class="form-inline col-lg-3">
-
-        <label for="ta_of_birth" class=" place home">TA of birth</label>
-        <select type="text" class="input-small  place home"  id="ta_of_birth" name="ta_of_birth" onchange="load_villages(this)">
-          <option></option>
-          <% @districts.each do |d|%>
-            <option value="<%= d.name%>"><%= d.name%></option>
-          <% end %>
-        </select>
-      </div>
-
-      <div data-field-span="1" class="form-inline col-lg-3">
-
-        <label for="village_of_birth" class=" place home">Village of birth</label>
-        <select type="text" class="input-small place home"  id="village_of_birth" name="village_of_birth">
-          <option></option>
-          <% @districts.each do |d|%>
-            <option value="<%= d.name%>"><%= d.name%></option>
-          <% end %>
-        </select>
-
-      </div>
-
-      <div data-field-span="1" class="form-inline col-lg-3">
-
-        <label for="hospital_of_birth" class=" place hospital">Hospital of birth</label>
-        <select type="text" class="input-small place hospital"  id="hospital_of_birth" name="hospital_of_birth">
-          <option></option>
-          <% @districts.each do |d|%>
-            <option value="<%= d.name%>"><%= d.name%></option>
-          <% end %>
-        </select>
-
-      </div>
-
-
-
-      <div data-field-span="1" class="form-inline col-lg-3">
-
-        <label for="other_birth_place" class=" place other">Specify other birth place</label>
-        <input type="text" class="input-small place other"  id="other_birth_place" name="other_birth_place">
-      </div>
-    </div>
-
-    <div data-row-span="2" class="row " style="margin-bottom: 35px;">
-
-      <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Birth Weight:</label>
+        <label for="birth_weight">Birth Weight:</label>
         <input id="birth_weight" type="text" name="birth_weight" data-validation-length="0-4" >
       </div>
 
@@ -855,6 +782,8 @@
             minDate: d,
             maxDate: new Date()
         } );
+
+        dobpicker.setDate(new Date(<%= session[:temp_person_details]['date_of_birth'] %>));
 
         checkRelationship();
 
