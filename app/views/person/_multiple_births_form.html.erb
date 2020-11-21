@@ -438,7 +438,7 @@
   <div class="form-group actions-row" style="width: 100%;padding-right: 45%;">
     <button style="display: none" id="finish-btn" type="button" onclick="validateForm()" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Finish </button>
 
-    <button type="button" class="btn btn-danger" style="margin-left: 10px;" onclick="clearMultipleBirths(); window.location = '/person/index?active_tab=person'; " ><b>Cancel</b></button>
+    <button type="button" class="btn btn-danger" style="margin-left: 10px;" onclick="window.location = '/person/index?active_tab=person'; " ><b>Cancel</b></button>
   </div>
 
   <div class="modal fade" id="completenessModal" tabindex="-1" role="dialog" aria-labelledby="completenessModalLabel" aria-hidden="true">
@@ -1063,7 +1063,14 @@
         })
     }
 
+    // TODO: Make clear Multiple Birth Workflow intelligent when cancelling before finishing all births
     function clearMultipleBirths() {
       multiple_births = false;
+        <%#
+          session.delete(:multiple_births)
+          session.delete(:multiple_births_value)
+          session.delete(:number_of_child)
+          session.delete(:temp_person_details)
+      %>
     }
 </script>
