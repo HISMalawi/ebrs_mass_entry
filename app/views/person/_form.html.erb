@@ -171,7 +171,7 @@
         <label>Date of Birth: <span style="color: red; ">*</span></label>
         <input id="date_of_birth" type="text" name="date_of_birth" value="<%= @person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil %>"
                class="datepicker" data-validation="required" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
-               onchange="compareWithDOB()">
+               onchange="compareWithDOB('child')">
       </div>
 
       <div data-field-span="1" class="form-inline col-lg-3">
@@ -313,8 +313,7 @@
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Date of marriage:</label>
         <input type="text" name="date_of_marriage" id="date_of_marriage" disabled="disabled"
-               class="datepicker" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
-               onchange="compareWithDOB()">
+               class="datepicker" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Court Order:</label>
@@ -363,7 +362,7 @@
         <label>Date of Birth:</label>
         <input id="mother_date_of_birth" type="text" name="mother_date_of_birth" value="<%= @person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil %>"
                class="datepicker" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
-               onchange="compareWithDOB()">
+               onchange="compareWithDOB('mother')">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Nationality: <span style="color: red; ">*</span></label>
@@ -542,7 +541,7 @@
         <label>Date of Birth:</label>
         <input id="father_date_of_birth" type="text" name="father_date_of_birth" value="<%= @person.date_of_birth.to_date.strftime("%d/%m/%Y") rescue nil %>"
                class="datepicker" data-validation-require-leading-zero="false" data-validation-format="dd/mm/yyyy"
-               onchange="compareWithDOB()">
+               onchange="compareWithDOB('father')">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Nationality:</label>
@@ -865,14 +864,45 @@
   </div>
 
 
-  <div class="modal fade" id="dob_marriage" tabindex="-1" role="dialog" aria-labelledby="completenessModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+  <div class="modal fade" id="dob_mother" tabindex="-1" role="dialog" aria-labelledby="dobMotherLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="printerModalLabel" style="text-align: left; color: white; font-weight: bold; text-align: center;">
-            Date of Marriage is Greater Than Date of Birth
+            Caution !
           </h4>
+        </div>
+        <div class="modal-body">
+          <p>
+            <strong>MOTHER</strong> Date of Birth should at least be <strong>8 years older</strong> than
+            <strong>CHILD</strong> Date of Birth
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Edit Mother Date</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="dob_father" tabindex="-1" role="dialog" aria-labelledby="dobFatherLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document"">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="printerModalLabel" style="text-align: left; color: white; font-weight: bold; text-align: center;">
+            FATHER Date of Birth should at least be 8 years older than CHILD Date of Birth
+          </h4>
+        </div>
+        <div class="modal-body">
+          <p>
+            <strong>FATHER</strong> Date of Birth should at least be <strong>8 years older</strong> than
+            <strong>CHILD</strong> Date of Birth
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Edit Father Date</button>
         </div>
       </div>
     </div>
@@ -1065,20 +1095,27 @@
     }
 
 
-    function compareWithDOB() {
+    function compareWithDOB(dobElement) {
 
-
-        if ((new Date(__$("date_of_marriage").value) == "Invalid Date") || (new Date(__$("date_of_marriage").value)) == undefined) {
-            __$("date_of_marriage").value = ""
+        if (dobElement === 'child') {
+            if ((new Date(__$("date_of_birth").value) === "Invalid Date") || (new Date(__$("date_of_birth").value)) === undefined) {
+                __$("date_of_birth").value = ""
+            }
+        } else if (dobElement === 'mother') {
+            if (ageDifference(new Date(__$("mother_date_of_birth").value), new Date(__$("date_of_birth").value)) < 8) {
+                jQuery("#dob_mother").modal("show");
+            }
+        } else if (dobElement === 'father') {
+            if (ageDifference(new Date(__$("father_date_of_birth").value), new Date(__$("date_of_birth").value)) < 8) {
+                jQuery("#dob_father").modal("show");
+            }
         }
+    }
 
-        if ((new Date(__$("date_of_birth").value) == "Invalid Date") || (new Date(__$("date_of_birth").value)) == undefined) {
-            __$("date_of_birth").value = ""
-        }
-
-        if (new Date(__$("date_of_marriage").value) > new Date(__$("date_of_birth").value)) {
-            jQuery("#dob_marriage").modal("show");
-        }
+    function ageDifference(child, parent) {
+        let childAge = new Date(child);
+        let parentAge = new Date(parent);
+        return parentAge.getFullYear() - childAge.getFullYear();
     }
 
     var sets = document.getElementsByTagName("fieldset");
