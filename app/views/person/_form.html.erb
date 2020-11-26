@@ -755,7 +755,8 @@
       <div data-field-span="1" class="form-inline col-lg-3">
         <label>Date of Reporting: <span style="color: red; ">*</span></label>
         <input id="date_reported" type="text" class="datepicker" name="date_reported"
-               data-validation="required" value="<%= @person.date_reported.to_date.strftime("%d/%m/%Y") rescue nil %>">
+               data-validation="required" value="<%= @person.date_reported.to_date.strftime("%d/%m/%Y") rescue nil %>"
+               onchange="compareWithDOB('date_reported')">
       </div>
     </div>
 
@@ -906,6 +907,29 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-dismiss="modal">Edit Father Date</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal fade" id="date_reported_alert" tabindex="-1" role="dialog" aria-labelledby="dateReportedAlertLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="printerModalLabel" style="text-align: left; color: white; font-weight: bold; text-align: center;">
+            Caution !
+          </h4>
+        </div>
+        <div class="modal-body">
+          <p>
+            <strong>Date of Reporting</strong> can not be <strong>before</strong>
+            <strong>CHILD</strong> Date of Birth
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Edit Date of Reporting</button>
         </div>
       </div>
     </div>
@@ -1124,6 +1148,10 @@
         } else if (dobElement === 'father') {
             if (ageDifference(new Date(__$("father_date_of_birth").value), new Date(__$("date_of_birth").value)) < 8) {
                 jQuery("#dob_father").modal("show");
+            }
+        } else if (dobElement === 'date_reported') {
+            if (new Date(__$("date_reported").value) < new Date(__$("date_of_birth").value)) {
+                jQuery("#date_reported_alert").modal("show");
             }
         }
     }
@@ -2020,7 +2048,6 @@
         drpicker = new Pikaday({
             field: document.getElementById('date_reported'),
             format: 'DD/MMM/YYYY',
-            minDate: (new Date("01/Sep/2018")),
             maxDate: new Date()
         });
 

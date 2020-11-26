@@ -22,4 +22,4 @@ Load new Location Metadata to your SQL database
 
 # TODO:
 
-- Integrate CI and Management apps i.e. (Trello, Slack)
+- Integrate CI and Management apps i.e. (Travis, Trello, Slack)
