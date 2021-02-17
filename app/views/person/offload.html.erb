@@ -255,6 +255,7 @@
                     "processing": true,
                     "serverSide": true,
                     "ordering": false,
+                    "lengthMenu": [[500, 1000, 3000, -1], [500, 1000, 5000, "All"]],
                     "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
 
                        // jQuery('td .action-btn', nRow).parent().parent().css('background', 'white');
@@ -341,15 +342,18 @@
     function syncSelected(){
         for(var i = 0 ; i < selected.length; i++){
           var url = sessionStorage.protocol+"://"+sessionStorage.remoteIP+":"+sessionStorage.remotePort+"/create_child_remote"
-          var data = people[selected[i]];
+          var person = people[selected[i]];
+          var data = {}
+          console.log(data);
+          data["person"] = person
           data["token"] = sessionStorage.remoteToken;
           data["remote_expires_at"] = sessionStorage.remoteExpiresAt;
           var span = document.getElementById(selected[i]);
           span.innerHTML = "";
           var img = document.createElement("img");
           img.src = "/assets/spinner.gif";
-          img.style.height ="40%";
-          img.style.width ="40%"
+          img.style.height ="35px";
+          img.style.width ="35px"
           span.appendChild(img);
           jQuery.ajax(
               {
@@ -363,9 +367,10 @@
                           {
                               url: upload_status_url,
                               type: "POST",
-                              data: { id: personData['remote_id'],upload_id: personData["person"]['person_id']},
+                              data: { id: personData['remote_id']},
                               success: function(response){
-                                  var uploadResponse = JSON.parse(response);                              
+                                  var uploadResponse = response;
+
                                   var uploadStatus = document.getElementById("upstatus"+uploadResponse['person_id']);
                                   uploadStatus.innerHTML ="UPLOADED";
                                   var span = document.getElementById(uploadResponse['person_id']);
