@@ -701,17 +701,17 @@
 
     <div data-row-span="2" class="row " style="margin-bottom: 35px;">
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>District:</label>
+        <label>District: <span style="color: red; ">*</span></label>
         <select id="informant_district" type="text" name="informant_district" data-validation="required"
                 onchange="tas('informant_ta', this.value, ['informant_village'])"></select>
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>TA:</label>
+        <label>TA: <span style="color: red; ">*</span></label>
         <select id="informant_ta" type="text" name="informant_ta" data-validation="required"
                 onchange="villages('informant_village', document.getElementById('informant_district').value, document.getElementById('informant_ta').value)"> </select>
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Village:</label>
+        <label>Village: <span style="color: red; ">*</span></label>
         <select id="informant_village" type="text" name="informant_village" data-validation="required"></select>
       </div>
     </div>
