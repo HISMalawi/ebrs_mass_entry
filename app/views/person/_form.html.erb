@@ -466,7 +466,7 @@
         <input id="gestation_age" type="number" name="gestation_age" placeholder="(in weeks)">
       </div>
       <div data-field-span="1" class="form-inline col-lg-3">
-        <label>Delivery Mode:</label>
+        <label>Delivery Mode: <span style="color: red; ">*</span></label>
         <select id="delivery_mode" type="text" name="delivery_mode" data-validation="required">
           <option></option>
           <option>SVD</option>
@@ -1562,7 +1562,8 @@
         }
         __$("progress-div").style.width = (cur_pos / sets.length) * 100 + "%";
 
-        checkRelationship();
+        // TODO: Same as on Document Ready. This should be checked if really needed else should be removed.
+        // checkRelationship();
     }
 
     function back() {
@@ -1583,7 +1584,8 @@
             jQuery("#finish-btn").hide();
         }
 
-        checkRelationship();
+        // TODO: Same as on Document Ready. This should be checked if really needed else should be removed.
+        // checkRelationship();
     }
 
     function clearForm() {
@@ -1829,7 +1831,8 @@
     }
 
     function validateForm() {
-        checkRelationship();
+        // TODO: this should only be done at informant level. Need to rework this
+        // checkRelationship();
 
         jQuery(sets[cur_pos]).find("input, select").validate();
         if (jQuery(sets[cur_pos]).find(".error").length > 0) {
@@ -2066,7 +2069,8 @@
             <% end %>
         }, 1000)
 
-        checkRelationship();
+        // TODO: Check if this method should really be called on document ready instead of just at relationship change.
+        // checkRelationship();
 
     })
 
