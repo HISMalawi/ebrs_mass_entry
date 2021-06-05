@@ -493,8 +493,8 @@
         <input type="number" name="prenatal_visits_number" id="prenatal_visits_number">
       </div>
       <div data-field-span="1" class="form-inline col-lg-6">
-        <label>Level of Education:</label>
-        <select id="level_of_education" type="text" name="level_of_education">
+        <label>Level of Education: <span style="color: red; ">*</span></label>
+        <select id="level_of_education" type="text" name="level_of_education" data-validation="required">
           <option></option>
           <option>None</option>
           <option>Primary</option>
@@ -506,12 +506,12 @@
 
     <div data-row-span="2" class="row" style="margin-bottom: 35px;">
       <div data-field-span="1" class="form-inline col-lg-6">
-        <label>Number of children born alive to the mother (including this child)</label>
-        <input type="number" name="born_alive_number" id="born_alive_number">
+        <label>Number of children born alive to the mother (including this child) <span style="color: red; ">*</span></label>
+        <input type="number" name="born_alive_number" id="born_alive_number" data-validation="required">
       </div>
       <div data-field-span="1" class="form-inline col-lg-6">
-        <label>Number of children born alive to the mother (and still living)</label>
-        <input type="number" name="born_alive_number_living" id="born_alive_number_living">
+        <label>Number of children born alive to the mother (and still living) <span style="color: red; ">*</span></label>
+        <input type="number" name="born_alive_number_living" id="born_alive_number_living" data-validation="required">
       </div>
     </div>
   </fieldset>
